@@ -1,2 +1,17 @@
-# seniorproject
-Room Draw
+# Luther College Online Room Draw
+
+This is the repo for all the main code for our senior project, which is to make Luther College's room draw process more paperless and provide a better experience for the students who have to register for housing every year.
+
+## Project Management Guidelines
+
+Here are just a few guidelines for using Github that will help make this project cleaner and easier to manage:
+
+1. **Concise and professional commit titles/messages** --- Making sure that we specify clearly what the purpose of each commit we make will make it much easier to find mistakes we may have accidentally introduced in the future; plus, it's more professional. This is kind of a no-brainer, but it's still good to have here.
+
+2. **Use Github issues to track TODOs and report bugs** --- Even with a small group, keeping track of who is working on what can sometimes get hectic. Github issues are great not only for reporting bugs, but for assigning tasks to people so that everyone knows who is working on what--this way, we don't end up accidentally fixing the same bug as someone else. Every time someone starts a new task (or even thinks of one), he/she should create an issue on Github, give it an appropriate label is necessary (ex. "bug"), then if that person is planning on working on that particular issue, he/she should assign that issue to himself/herself so that the others know that that feature/bug/enhancement is being worked on. Issues are also nice if you're working on something and notice some bug that you can't fix at the time, because you can just report the bug and someone else will notice the issue, assign it to himself/herself and fix it.
+
+3. **Push new code via merge requests, not by pushing to master** --- Another thing that makes debugging and rolling back much, much easier is to avoid pushing directly to master, even for small things. Instead, whenever you start on a new feature or start fixing a bug, create a new branch for that issue and when you are done, you can merge that branch to master. Another thing that really makes finding introduced bugs easier is to name branches according to what their purposes are. For example, if you are working on fixing a specific bug, you might name your branch 113-fix-map-bug. 113 would be the name of the Github issue you are working on, and fix-map-bug would be a reasonable description of what the branch is. Including the issue # is a little more work, but it really can make project maintenance much nicer. This also implies another thing: **_Don't use the same branch for everything_**. Try to create a new branch every time you start working on a new feature/bug. First of all, that's the point of branches, and it will also give you a chance to make new branch names that will make merge requests much more organized and maintainable.
+
+4. **Adhere to a certain formatting style** --- This applies mostly to spacing / tabs. When a bug is introduced and someone is trying to find what caused it by going through Github diffs, it is very helpful if the diffs are mostly showing just changes in actual code. However, diffs can sometimes get extremely disgusting if someone accidentally auto-formatted their code at one point, changing all the tabs from 2 spaces to 4 spaces, or vice versa. Scenarios like this are why agreeing to a few things (most importantly tab size) is extremely important.
+
+5. **Document your code** --- This one is also pretty obvious, but sometimes it can be easy to forget that extensive documentation via comments is extremely helpful for large-scale group projects, and it is **ESPECIALLY** important for us because we want this project to be maintained after we leave. Liberal use of comments is highly recommended. At any point any of us should be able to open someone else's code and understand from the comments what is happening without having to study the code very long.
