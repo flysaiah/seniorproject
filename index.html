@@ -1,0 +1,20 @@
+<html>
+<head>
+  <script src="./bower_components/angular/angular.min.js"></script>
+	<script src="./bower_components/angular-route/angular-route.js"></script>
+	<script src="navController.js"></script>
+</head>
+<body>
+	<div ng-app="roomDraw" ng-controller="navCtl">
+		<p>Navigate around campus!</p>
+    <div ng-repeat="building in allBuildings">
+      <a ng-href="#building?bname={{ building }}">{{ building }}</a>
+    </div>
+
+		<div id="main">
+			<!-- This is where the actual content is going to go -->
+			<div ng-view></div>
+		</div>
+	</div>
+</body>
+</html>
