@@ -1,0 +1,8 @@
+.floor-plan {
+  height: 1000px;
+  width: 1000px;
+}
+
+.clickable-building:hover {
+  cursor: pointer;
+}

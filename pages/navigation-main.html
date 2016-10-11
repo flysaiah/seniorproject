@@ -1,4 +1,14 @@
 <div>
-  <!-- Will eventually have clickable campus map -->
-  {{ message }}
+  <!-- Campus map -->
+  Click on a building on campus to look at available rooms!
+  <div>
+    <!-- TODO: Upload map of campus here -->
+    <img src="../img/mario.jpg" usemap="#clickableMap"></img>
+    <map name="clickableMap">
+      <area shape="rect" class="clickable-building" coords="0,0,150,150" ng-click="navigate('dieseth')"></rect>
+      <area shape="rect" class="clickable-building" coords="0,150,300,300" ng-click="navigate('miller')"></rect>
+      <!-- <rect x="0" y="0" width="150" height="150" ng-click="navigate('olson')"></rect>
+      <rect x="0" y="0" width="150" height="150" ng-click="navigate('larson')"></rect> -->
+    </svg>
+  </div>
 </div>

@@ -14,17 +14,34 @@ app.config(function($routeProvider) {
         })
 
 });
-app.controller("navCtl", function($scope) {
-  $scope.allBuildings = ["miller","dieseth","olson"];
+app.controller("navCtl", function($scope, $location) {
+
+  $scope.navigate = function(buildingName) {
+    // Navigates from campus map view to floor plan of whatever building was clicked on
+    $location.path("/building").search("bname", buildingName)
+  };
 });
 
 // For the campus map
 app.controller('mapCtl', function($scope) {
-    $scope.message = 'Luther College Room Draw:';
+    $scope.message = 'Luther College';
 });
 
 // For each individual building
 app.controller('buildingCtl', function($scope, $location) {
     // get name of building from query parameter
     $scope.buildingName = $location.search()["bname"];
+    $scope.getFloorNumbers = function() {
+      // TODO: Database query for number of floors
+      var answer = 5;
+      var res = [];
+      for (var i = 1; i <= answer; i++) {
+        res.push(i);
+      }
+      return res;
+    }
+    $scope.test = function () {
+      console.log($scope.floorNumber);
+    }
+
 });
