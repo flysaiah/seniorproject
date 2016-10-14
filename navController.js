@@ -32,16 +32,13 @@ app.controller('buildingCtl', function($scope, $location) {
     // get name of building from query parameter
     $scope.buildingName = $location.search()["bname"];
     $scope.getFloorNumbers = function() {
-      // TODO: Database query for number of floors
+      // TODO: Database query for number of floors; for now just assume floors 1-5
       var answer = 5;
       var res = [];
       for (var i = 1; i <= answer; i++) {
         res.push(i);
       }
       return res;
-    }
-    $scope.test = function () {
-      console.log($scope.floorNumber);
     }
 
 });

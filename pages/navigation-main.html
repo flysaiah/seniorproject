@@ -2,13 +2,12 @@
   <!-- Campus map -->
   Click on a building on campus to look at available rooms!
   <div>
-    <!-- TODO: Upload map of campus here -->
-    <img src="../img/mario.jpg" usemap="#clickableMap"></img>
+    <img src="../img/campus-map.jpg" usemap="#clickableMap"></img>
     <map name="clickableMap">
-      <area shape="rect" class="clickable-building" coords="0,0,150,150" ng-click="navigate('dieseth')"></rect>
-      <area shape="rect" class="clickable-building" coords="0,150,300,300" ng-click="navigate('miller')"></rect>
-      <!-- <rect x="0" y="0" width="150" height="150" ng-click="navigate('olson')"></rect>
-      <rect x="0" y="0" width="150" height="150" ng-click="navigate('larson')"></rect> -->
+      <area shape="poly" class="clickable-building" coords="291,361,297,367,291,387,273,400,265,394,270,375" ng-click="navigate('dieseth')"></rect>
+      <area shape="poly" class="clickable-building" coords="328,320,335,328,325,347,309,356,300,348,308,330" ng-click="navigate('miller')"></rect>
+      <area shape="poly" class="clickable-building" coords="357,745,262,746,264,757,357,756" ng-click="navigate('olson')"></rect>
+      <area shape="poly" class="clickable-building" coords="271,689,243,690,243,716,272,717" ng-click="navigate('larsen')"></rect>
     </svg>
   </div>
 </div>

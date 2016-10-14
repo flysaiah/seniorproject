@@ -1,7 +1,5 @@
 <div>
   <p>Welcome to {{ buildingName }}!</p>
-  <!-- TODO: Display floor plans plus dropdown that allows a student to pick which floor to view. -->
-
   <div class="form-group">
     <label for="floorpicker">Floor number:</label>
     <select class="form-control" id="floorpicker" ng-model="floorNumber" ng-init="floorNumber = '1'">
@@ -13,8 +11,5 @@
   <div>
     <img class="floor-plan" ng-src="../img/{{buildingName + floorNumber}}.png">
   </div>
-
-
-  <button ng-click="test()">Test</button>
 
 </div>
