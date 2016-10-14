@@ -1,0 +1,15 @@
+<div>
+  <p>Welcome to {{ buildingName }}!</p>
+  <div class="form-group">
+    <label for="floorpicker">Floor number:</label>
+    <select class="form-control" id="floorpicker" ng-model="floorNumber" ng-init="floorNumber = '1'">
+      <option ng-repeat="floorNum in getFloorNumbers()">{{ floorNum }}</option>
+    </select>
+  </div>
+
+  <!-- This is where we actually show the floor plan -->
+  <div>
+    <img class="floor-plan" ng-src="../img/{{buildingName + floorNumber}}.png">
+  </div>
+
+</div>
