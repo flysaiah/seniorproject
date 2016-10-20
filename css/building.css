@@ -3,6 +3,25 @@
   width: 1000px;
 }
 
+.campus-map {
+  background-image: url("../img/campus-map.jpg");
+  width: 696px;
+  height: 901px;
+  background-size: 696px 901px;
+}
+
+.campus-svg {
+  width: 696px;
+  height: 901px;
+}
+
+.clickable-building {
+  opacity: 0;
+}
+
 .clickable-building:hover {
+  opacity: .5;
   cursor: pointer;
+  stroke-width: 8px;
+  stroke: #0000ee;
 }
