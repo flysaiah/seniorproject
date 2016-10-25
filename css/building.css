@@ -1,14 +1,79 @@
 .floor-plan {
-  height: 1000px;
-  width: 1000px;
+  height: 700px;
+  width: 800px;
+  background-color: lightblue;
+  background-position: right;
+  border-style: inset;
+
+
 }
+
+.head {
+  background-color: blue;
+  border-style: outset;
+
+}
+span {
+  text-align: right;
+  text-decoration-color: white;
+}
+
+img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    position: relative;
+    left: 80px;
+}
+
+.alignright{
+  float: right;
+}
+h1 {
+  color: white;
+  text-align: left;
+}
+.form-control{
+  width: 800px;
+  height: 30px;
+  position: relative;
+  left: 230px;
+}
+
+label{
+  position: relative;
+  left:230px;
+}
+
+img{
+position: relative;
+left: 230px;
+}
+
+h3 {
+  text-align: center;
+  text-decoration: underline;
+  text-decoration-style: solid;
+}
+.footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #efefef;
+  text-align: center;
+  text-decoration-color: lightblue;
+}
+
+
 
 .campus-map {
   background-image: url("../img/campus-map.jpg");
   width: 696px;
   height: 901px;
   background-size: 696px 901px;
-}
+  }
 
 .campus-svg {
   width: 696px;
