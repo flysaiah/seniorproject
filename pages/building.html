@@ -1,15 +1,16 @@
 <div>
-  <p>Welcome to {{ buildingName }}!</p>
+  <h1 class = "head"> Room Draw Applications <span class="alignright"> Luther College </span> </h1>
+  <h3> Welcome to {{ buildingName }} Hall </h3>
   <div class="form-group">
-    <label for="floorpicker">Floor number:</label>
-    <select class="form-control" id="floorpicker" ng-model="floorNumber" ng-init="floorNumber = '1'">
+    <label for="floorpicker">Please select a Floor number:</label>  <span>   <select class="form-control" id="floorpicker" ng-model="floorNumber" ng-init="floorNumber = '1'">
       <option ng-repeat="floorNum in getFloorNumbers()">{{ floorNum }}</option>
     </select>
+  </span>
   </div>
 
   <!-- This is where we actually show the floor plan -->
   <div>
-    <img class="floor-plan" ng-src="../img/{{buildingName + floorNumber}}.png">
+    <img class="floor-plan"  ng-src="../img/{{buildingName + floorNumber}}.png">
   </div>
 
 </div>
