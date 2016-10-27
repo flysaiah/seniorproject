@@ -1,11 +1,9 @@
 .floor-plan {
-  height: 700px;
+  height: 620px;
   width: 800px;
   background-color: lightblue;
   background-position: right;
   border-style: inset;
-
-
 }
 
 .head {
