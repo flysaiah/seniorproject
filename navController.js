@@ -4,17 +4,17 @@ app.config(function($routeProvider) {
 
   // route for the home page
   .when('/', {
-    templateUrl : 'pages/navigation-main.html',
+    templateUrl : '/ProjectApp/pages/navigation-main.html',
     controller  : 'mapCtl'
   })
 
   .when('/building', {
-    templateUrl : 'pages/building.html',
+    templateUrl : '/ProjectApp/pages/building.html',
     controller  : 'buildingCtl'
   })
 
 });
-app.controller("navCtl", function($scope, $location) {
+app.controller("navCtl", function($scope, $location, $http) {
 
   $scope.navigate = function(buildingName) {
     // Navigates from campus map view to floor plan of whatever building was clicked on
@@ -29,6 +29,17 @@ app.controller('mapCtl', function($scope) {
 
 // For each individual building
 app.controller('buildingCtl', function($scope, $location) {
+
+  $scope.testB = function(){
+    $http({
+      url: '/testB',
+      method: "GET"
+    }).success(function(data) {
+      console.log(data);
+      $scope.testData = data;
+    });
+  };
+
   // get name of building from query parameter
   $scope.buildingName = $location.search()["bname"];
   $scope.getFloorNumbers = function() {

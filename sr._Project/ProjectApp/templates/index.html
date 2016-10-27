@@ -1,0 +1,19 @@
+<html>
+<head>
+  <script src="./bower_components/angular/angular.min.js"></script>
+	<script src="./bower_components/angular-route/angular-route.js"></script>
+	<script src="navController.js"></script>
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/building.css">
+
+</head>
+<body>
+	<div ng-app="roomDraw" ng-controller="navCtl">
+		<div id="main">
+			<!-- This is where the actual content is going to go -->
+			<div ng-view></div>
+		</div>
+	</div>
+</body>
+</html>

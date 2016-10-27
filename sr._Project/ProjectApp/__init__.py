@@ -19,3 +19,4 @@ from ProjectApp import models
 
 # db.drop_all()
 db.create_all()
+import ProjectApp.controllers
