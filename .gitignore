@@ -1,2 +1,4 @@
 bower_components/
 node_modules/
+sr._Project/ProjectApp/__pycache__/
+sr._Project/testQuerries.sql
