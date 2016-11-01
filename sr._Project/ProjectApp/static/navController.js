@@ -4,17 +4,22 @@ app.config(function($routeProvider) {
 
   // route for the home page
   .when('/', {
-    templateUrl : 'pages/navigation-main.html',
+    templateUrl : '/static/pages/navigation-main.html',
     controller  : 'mapCtl'
   })
 
   .when('/building', {
-    templateUrl : 'pages/building.html',
+    templateUrl : '/static/pages/building.html',
     controller  : 'buildingCtl'
   })
 
 });
-app.controller("navCtl", function($scope, $location) {
+
+
+
+app.controller("navCtl", function($scope, $location, $http) {
+
+  console.log($location.url())
 
   $scope.navigate = function(buildingName) {
     // Navigates from campus map view to floor plan of whatever building was clicked on
@@ -28,17 +33,28 @@ app.controller('mapCtl', function($scope) {
 });
 
 // For each individual building
-app.controller('buildingCtl', function($scope, $location) {
-  // get name of building from query parameter
+app.controller('buildingCtl', function($scope, $location, $http) {
+
+    // get name of building from query parameter
   $scope.buildingName = $location.search()["bname"];
+
   $scope.getFloorNumbers = function() {
+    // TODO: getting called too many times.
     // TODO: Database query for number of floors; for now just assume floors 1-5
-    var answer = 5;
-    var res = [];
-    for (var i = 1; i <= answer; i++) {
-      res.push(i);
+    console.log($scope.buildingName)
+    $http({
+      url: '/testB',
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      data: {fun: $scope.buildingName}
+    }).success(function(response) {
+      console.log(response)
+      var res = [];
+      for (var i = 1; i <= parseInt(response); i++) {
+        res.push(i);
     }
     return res;
-  }
+    });
+  };
 
 });
