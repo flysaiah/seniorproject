@@ -35,22 +35,8 @@ app.controller('mapCtl', function($scope) {
 // For each individual building
 app.controller('buildingCtl', function($scope, $location, $http) {
 
-  $scope.testData = "GINGA"
     // get name of building from query parameter
   $scope.buildingName = $location.search()["bname"];
-
-  $scope.testB = function(){
-    console.log($scope.buildingName)
-    $http({
-      url: '/testB',
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      data: {fun: $scope.buildingName}
-    }).success(function(response) {
-      console.log($location);
-      $scope.testData = response;
-    });
-  };
 
   $scope.getFloorNumbers = function() {
     // TODO: getting called too many times.
