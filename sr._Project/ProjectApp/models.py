@@ -24,6 +24,7 @@ class Groups(db.Model):
 	__tablename__ = 'Groups'
 	groupId = db.Column(INTEGER, nullable=False, primary_key=True, autoincrement=True)
 	isRegistered = db.Column(BOOLEAN, nullable=False, server_default=('0'))
+	drawDate = db.Column(DATETIME)
 
 	def __repr__(self):
 		# formats/manually creates the JSON object
@@ -37,7 +38,6 @@ class Users(db.Model):
 	gId = db.Column(INTEGER, db.ForeignKey(Groups.groupId))
 	credits = db.Column(INTEGER, nullable=False)
 	roomDrawNum = db.Column(INTEGER, nullable=False)
-	drawDate = db.Column(DATETIME)
 
 	def __repr__(self):
 		# formats/manually creates the JSON object

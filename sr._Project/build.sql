@@ -52,7 +52,8 @@ USE projectdb;
 
 CREATE TABLE Groups (
   groupId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  isRegistered BOOLEAN NOT NULL DEFAULT false)
+  isRegistered BOOLEAN NOT NULL DEFAULT false,
+  drawDate DATETIME)
 ENGINE = InnoDB;
 
 CREATE TABLE Users (
@@ -62,7 +63,6 @@ CREATE TABLE Users (
   gId INT,
   credits INT NOT NULL,
   roomDrawNum INT NOT NULL,
-  drawDate DATETIME,
     FOREIGN KEY (gId)
     REFERENCES Groups (groupId)
     ON DELETE NO ACTION            # can be used to specify action on foreign key deletion
@@ -91,6 +91,9 @@ CREATE TABLE Rooms (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+CREATE VIEW groupsWithAverage AS
+select groupID, isRegistered, drawDate, AVG(Users.roomDrawNum) groupRoomDraw from Users, Groups where Users.gId = Groups.groupId group by groupId;
 
 ####################################
 ##   Calling populateTables.sql   ##

@@ -28,16 +28,15 @@ select userName, isRegistered from Users, Groups where Users.gID=Groups.groupId;
 -- | saudih01 |            0 |
 -- +----------+--------------+
 
-update Users set drawDate=NOW() where userName='mayeis01';
-select * from Users;
+update Groups set drawDate=NOW() where groupId=2;
+select * from Groups;
 #expected output
--- +----------+-----------+-----------+------+---------+-------------+---------------------+
--- | userName | firstName | lastName  | gId  | credits | roomDrawNum | drawDate            |
--- +----------+-----------+-----------+------+---------+-------------+---------------------+
--- | mayeis01 | Isaiah    | Mayerchak |    2 |     120 |           1 | 2016-10-25 13:22:20 |
--- | saudih01 | Ihab      | Saud      |    2 |      85 |           2 | NULL                |
--- | smitze01 | Zechariah | Smith     |    1 |      65 |           3 | NULL                |
--- +----------+-----------+-----------+------+---------+-------------+---------------------+
+-- +---------+--------------+---------------------+
+-- | groupId | isRegistered | drawDate            |
+-- +---------+--------------+---------------------+
+-- |       1 |            0 | NULL                |
+-- |       2 |            0 | 2016-10-27 13:08:02 |
+-- +---------+--------------+---------------------+
 
 select AVG(roomDrawNum)from Users where gId=2;
 #expected output
@@ -46,3 +45,4 @@ select AVG(roomDrawNum)from Users where gId=2;
 -- +------------------+
 -- |           1.5000 |
 -- +------------------+
+select * from groupsWithAverage;
