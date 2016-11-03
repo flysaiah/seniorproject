@@ -10,7 +10,7 @@
 DEBUG = True
 
 import os
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))  
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://master:qwerty@localhost/projectdb?charset=utf8'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
