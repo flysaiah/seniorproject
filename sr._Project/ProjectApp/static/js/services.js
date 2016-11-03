@@ -15,12 +15,12 @@ app.factory('getGroupInfo', function($http) {
           {
             "FirstName": "Isaiah",
             "LastName": "Mayerchak",
-            "ID": "mayeis01"
+            "userID": "mayeis01"
           },
           {
             "FirstName": "Testy",
             "LastName": "Tester",
-            "ID": "testuser01"
+            "userID": "testuser01"
           }
         ];
 
@@ -28,12 +28,12 @@ app.factory('getGroupInfo', function($http) {
           {
             "FirstName": "Zeke",
             "LastName": "Smith",
-            "ID": "smitze01"
+            "userID": "smitze01"
           },
           {
             "FirstName": "Ihab",
             "LastName": "Saud",
-            "ID": "saudih01"
+            "userID": "saudih01"
           }
         ];
         data = {"groupMembers": testGroupMembers, "requestingMembers": testRequestingMembers}
@@ -58,17 +58,17 @@ app.factory('updateGroupInfo', function($http) {
       });
       return promise;
     }, rejectRequest: function(userID) {
-          // Reject group membership request of member; remove user from pending
-          var body = {
-            "userID": userID
-          }
-          var promise = $http.post('/rejectGroupRequest', body).error(function(response) {
-            console.log(response);
-          });
-          return promise;
-        }
+      // Reject group membership request of member; remove user from pending
+      var body = {
+        "userID": userID
+      }
+      var promise = $http.post('/rejectGroupRequest', body).error(function(response) {
+        console.log(response);
+      });
+      return promise;
+    }
   };
-  return getGroupInfo;
+  return updateGroupInfo;
 });
 
 app.factory('getFloorInfo', function($http) {
@@ -91,4 +91,33 @@ app.factory('getFloorInfo', function($http) {
     }
   };
   return getFloorInfo;
+});
+
+app.factory('getAllUsers', function($http) {
+  // Return list of all active user objects
+  var getAllUsers = {
+    fetchData: function() {
+      var promise = $http.get('/getAllUsers').then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = [
+          {
+            "firstName": "Isaiah",
+            "lastName": "Mayerchak",
+            "userID": "mayeis01"
+          },
+          {
+            "firstName": "Testy",
+            "lastName": "Tester",
+            "userID": "testuser01"
+          }
+        ];
+
+        return {"allUsers": testData};
+      });
+      return promise;
+    }
+  };
+  return getAllUsers;
 });
