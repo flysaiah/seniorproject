@@ -29,11 +29,11 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo) {
   });
 
   $scope.acceptRequest = function(userID) {
-    updateGroupInfo.acceptRequest(userID, "testGroup");
+    updateGroupInfo.acceptRequest(userID);
   };
 
   $scope.rejectRequest = function(userID) {
-    updateGroupInfo.rejectRequest(userID, "testGroup");
+    updateGroupInfo.rejectRequest(userID);
   };
 
   $scope.navigate = function(buildingName) {

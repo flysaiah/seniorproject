@@ -48,21 +48,19 @@ app.factory('getGroupInfo', function($http) {
 app.factory('updateGroupInfo', function($http) {
   // Updates group metadata
   var updateGroupInfo = {
-    acceptRequest: function(userID, groupID) {
+    acceptRequest: function(userID) {
       // Accept group membership request of member
       var body = {
-        "userID": userID,
-        "groupID": groupID
+        "userID": userID
       }
       var promise = $http.post('/acceptGroupRequest', body).error(function(response) {
         console.log(response);
       });
       return promise;
-    }, rejectRequest: function(userID, groupID) {
+    }, rejectRequest: function(userID) {
           // Reject group membership request of member; remove user from pending
           var body = {
-            "userID": userID,
-            "groupID": groupID
+            "userID": userID
           }
           var promise = $http.post('/rejectGroupRequest', body).error(function(response) {
             console.log(response);
