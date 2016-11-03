@@ -66,6 +66,16 @@ app.factory('updateGroupInfo', function($http) {
         console.log(response);
       });
       return promise;
+    }, sendGroupRequest: function(sendingUserID, recevingUserID) {
+      // Add user to "pending" of the group associated with this userID
+      var body = {
+        "sendingUserID": sendingUserID,   // ID of the person sending the request
+        "recevingUserID": recevingUserID  // ID of the person whose group is receiving the request
+      }
+      var promise = $http.post('/sendGroupRequest', body).error(function(response) {
+        console.log(response);
+      });
+      return promise;
     }
   };
   return updateGroupInfo;

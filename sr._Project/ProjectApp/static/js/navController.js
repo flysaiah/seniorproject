@@ -22,9 +22,6 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, u
   $scope.isLoggedIn = true;
   $scope.hasGroup = false;
 
-  $scope.searchText = "";   // Used for group search autocomplete
-
-
   getGroupInfo.fetchGroupMembers("testUser").then(function(res) {
     // fetches info about current group members and requesting group members
     $scope.groupMembers = res.groupMembers;
@@ -64,6 +61,11 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, u
       return results;
     };
   });
+
+  $scope.requestMembership = function(userObj) {
+    // request to be added to the group of the person currently selected in autocomplete
+    updateGroupInfo.sendGroupRequest(userObj.userID);
+  }
 
 });
 

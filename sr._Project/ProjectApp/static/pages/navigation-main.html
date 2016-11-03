@@ -45,9 +45,11 @@
               <span md-highlight-text="searchText" md-highlight-flags="^i">{{ user.displayName }}</span>
             </md-item-template>
             <md-not-found>
-              No groups matching "{{ctrl.searchText}}" were found.
+              No users matching "{{searchText}}" were found.
             </md-not-found>
           </md-autocomplete>
+          <md-button class="md-accent md-raised" aria-label="Send request" ng-click="requestMembership(selectedItem)"
+          ng-disabled="allUsers.indexOf(selectedItem) === -1">Send request</md-button>
           <br/>
         </form>
       </md-content>
