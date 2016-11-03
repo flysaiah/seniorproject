@@ -11,12 +11,12 @@
         <md-tabs md-dynamic-height md-border-bottom>
           <md-tab label="Current Group Members">
             <md-content class="md-padding">
-              <p ng-repeat="groupMember in groupMembers">{{ groupMember.FirstName }} {{ groupMember.LastName }} ({{ groupMember.ID }})</p>
+              <p ng-repeat="groupMember in groupMembers">{{ groupMember.FirstName }} {{ groupMember.LastName }} ({{ groupMember.userID }})</p>
             </md-content>
           </md-tab>
           <md-tab label="Requests">
             <md-content class="md-padding">
-              <p ng-repeat="requestingMember in requestingMembers">{{ requestingMember.FirstName }} {{ requestingMember.LastName }} ({{ requestingMember.ID }})
+              <p ng-repeat="requestingMember in requestingMembers">{{ requestingMember.FirstName }} {{ requestingMember.LastName }} ({{ requestingMember.userID }})
                 <md-button ng-click="accceptRequest(requestingMember.ID)" class="md-icon-button" aria-label="Favorite">
                   <md-icon md-svg-icon="/static/img/icons/accept.svg"></md-icon>
                 </md-button>
