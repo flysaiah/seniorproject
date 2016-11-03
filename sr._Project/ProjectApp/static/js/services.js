@@ -48,10 +48,11 @@ app.factory('getGroupInfo', function($http) {
 app.factory('updateGroupInfo', function($http) {
   // Updates group metadata
   var updateGroupInfo = {
-    acceptRequest: function(userID) {
+    acceptRequest: function(userID, groupID) {
       // Accept group membership request of member
       var body = {
-        "userID": userID
+        "userID": userID,
+        "groupID": groupID
       }
       var promise = $http.post('/acceptGroupRequest', body).error(function(response) {
         console.log(response);
@@ -60,4 +61,26 @@ app.factory('updateGroupInfo', function($http) {
     }
   };
   return getGroupInfo;
+});
+
+app.factory('getFloorInfo', function($http) {
+  // Gets information about how many floors there are in each building, as well as if ther eis a basement or not
+  var getFloorInfo = {
+    fetchData: function(bName) {
+      // Using building name, get floor info
+      var body = {
+        "buildingName": bName
+      }
+      var promise = $http.get('/getFloorInfo', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {"floorList": ["B", "1", "2", "3", "4", "5", "6", "7"]};
+
+        return testData;
+      });
+      return promise;
+    }
+  };
+  return getFloorInfo;
 });
