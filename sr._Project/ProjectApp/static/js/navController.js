@@ -17,23 +17,23 @@ app.config(function($routeProvider) {
 app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo) {
 
   // for testing
+  // TODO: Integrate authentication
   $scope.isLoggedIn = true;
   $scope.hasGroup = true;
 
 
-  getGroupInfo.fetchGroupMembers().then(function(res) {
+  getGroupInfo.fetchGroupMembers("testUser").then(function(res) {
     // fetches info about current group members and requesting group members
     $scope.groupMembers = res.groupMembers;
     $scope.requestingMembers = res.requestingMembers;
   });
 
   $scope.acceptRequest = function(userID) {
-    // TODO: implement
-
+    updateGroupInfo.acceptRequest(userID, "testGroup");
   };
 
   $scope.rejectRequest = function(userID) {
-    // TODO: implement
+    updateGroupInfo.rejectRequest(userID, "testGroup");
   };
 
   $scope.navigate = function(buildingName) {

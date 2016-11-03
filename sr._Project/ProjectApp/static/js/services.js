@@ -58,7 +58,17 @@ app.factory('updateGroupInfo', function($http) {
         console.log(response);
       });
       return promise;
-    }
+    }, rejectRequest: function(userID, groupID) {
+          // Reject group membership request of member; remove user from pending
+          var body = {
+            "userID": userID,
+            "groupID": groupID
+          }
+          var promise = $http.post('/rejectGroupRequest', body).error(function(response) {
+            console.log(response);
+          });
+          return promise;
+        }
   };
   return getGroupInfo;
 });

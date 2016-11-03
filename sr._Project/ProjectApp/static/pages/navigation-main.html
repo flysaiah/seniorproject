@@ -11,19 +11,15 @@
         <md-tabs md-dynamic-height md-border-bottom>
           <md-tab label="Current Group Members">
             <md-content class="md-padding">
-              <!-- TODO: Get list of current group members -->
               <p ng-repeat="groupMember in groupMembers">{{ groupMember.FirstName }} {{ groupMember.LastName }} ({{ groupMember.ID }})</p>
             </md-content>
           </md-tab>
           <md-tab label="Requests">
             <md-content class="md-padding">
-              <!-- TODO: Get list of requests -->
               <p ng-repeat="requestingMember in requestingMembers">{{ requestingMember.FirstName }} {{ requestingMember.LastName }} ({{ requestingMember.ID }})
-                <!-- TODO: Accept group request -->
                 <md-button ng-click="accceptRequest(requestingMember.ID)" class="md-icon-button" aria-label="Favorite">
                   <md-icon md-svg-icon="/static/img/icons/accept.svg"></md-icon>
                 </md-button>
-                <!-- TODO: Reject group request -->
                 <!-- TODO: Better styling for these buttons, keep them in a line -->
                 <md-button ng-click="rejectRequest(requestingMember.ID)" class="md-icon-button" aria-label="Favorite">
                   <md-icon md-svg-icon="/static/img/icons/reject.svg"></md-icon>
