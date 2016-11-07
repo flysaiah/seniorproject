@@ -5,9 +5,9 @@ app.factory('getGroupInfo', function($http) {
     fetchGroupMembers: function(userID) {
       // Return group members of the group this user belongs to
       var body = {
-        "userID": userID
+        "userID": 'mayeis01'
       }
-      var promise = $http.get('/getGroupMembers', body).then(function (response) {
+      var promise = $http.post('/getGroupMembers', body).then(function (response) {
         return response.data;
       }, function (err) {
         // for testing
@@ -15,12 +15,12 @@ app.factory('getGroupInfo', function($http) {
           {
             "FirstName": "Isaiah",
             "LastName": "Mayerchak",
-            "ID": "mayeis01"
+            "userID": "mayeis01"
           },
           {
             "FirstName": "Testy",
             "LastName": "Tester",
-            "ID": "testuser01"
+            "userID": "testuser01"
           }
         ];
 
@@ -28,12 +28,12 @@ app.factory('getGroupInfo', function($http) {
           {
             "FirstName": "Zeke",
             "LastName": "Smith",
-            "ID": "smitze01"
+            "userID": "smitze01"
           },
           {
             "FirstName": "Ihab",
             "LastName": "Saud",
-            "ID": "saudih01"
+            "userID": "saudih01"
           }
         ];
         data = {"groupMembers": testGroupMembers, "requestingMembers": testRequestingMembers}
@@ -48,19 +48,37 @@ app.factory('getGroupInfo', function($http) {
 app.factory('updateGroupInfo', function($http) {
   // Updates group metadata
   var updateGroupInfo = {
-    acceptRequest: function(userID, groupID) {
+    acceptRequest: function(userID) {
       // Accept group membership request of member
       var body = {
-        "userID": userID,
-        "groupID": groupID
+        "userID": userID
       }
       var promise = $http.post('/acceptGroupRequest', body).error(function(response) {
         console.log(response);
       });
       return promise;
+    }, rejectRequest: function(userID) {
+      // Reject group membership request of member; remove user from pending
+      var body = {
+        "userID": userID
+      }
+      var promise = $http.post('/rejectGroupRequest', body).error(function(response) {
+        console.log(response);
+      });
+      return promise;
+    }, sendGroupRequest: function(sendingUserID, recevingUserID) {
+      // Add user to "pending" of the group associated with this userID
+      var body = {
+        "sendingUserID": sendingUserID,   // ID of the person sending the request
+        "recevingUserID": recevingUserID  // ID of the person whose group is receiving the request
+      }
+      var promise = $http.post('/sendGroupRequest', body).error(function(response) {
+        console.log(response);
+      });
+      return promise;
     }
   };
-  return getGroupInfo;
+  return updateGroupInfo;
 });
 
 app.factory('getFloorInfo', function($http) {
@@ -69,9 +87,9 @@ app.factory('getFloorInfo', function($http) {
     fetchData: function(bName) {
       // Using building name, get floor info
       var body = {
-        "buildingName": bName
+        "buildingName": 'miller'
       }
-      var promise = $http.get('/getFloorInfo', body).then(function (response) {
+      var promise = $http.post('/getFloorInfo', body).then(function (response) {
         return response.data;
       }, function (err) {
         // for testing
@@ -83,4 +101,33 @@ app.factory('getFloorInfo', function($http) {
     }
   };
   return getFloorInfo;
+});
+
+app.factory('getAllUsers', function($http) {
+  // Return list of all active user objects
+  var getAllUsers = {
+    fetchData: function() {
+      var promise = $http.get('/getAllUsers').then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = [
+          {
+            "firstName": "Isaiah",
+            "lastName": "Mayerchak",
+            "userID": "mayeis01"
+          },
+          {
+            "firstName": "Testy",
+            "lastName": "Tester",
+            "userID": "testuser01"
+          }
+        ];
+
+        return {"allUsers": testData};
+      });
+      return promise;
+    }
+  };
+  return getAllUsers;
 });
