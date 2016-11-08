@@ -5,7 +5,7 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, u
   // for testing
   // TODO: Integrate authentication
   $scope.isLoggedIn = true;
-  $scope.currentUserID = "saudih01";
+  $scope.currentUserID = "smitze01";
 
   function refresh() {
     // re-fetch all data that might have been altered by user action
