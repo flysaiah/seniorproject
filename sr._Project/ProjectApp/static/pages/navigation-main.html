@@ -13,6 +13,7 @@
             <md-content class="md-padding">
               <p ng-repeat="groupMember in groupMembers">{{ groupMember.FirstName }} {{ groupMember.LastName }} ({{ groupMember.userID }})</p>
             </md-content>
+            <md-button class="md-warn md-raised" aria-label="Leave Group" ng-click="leaveGroup()">Leave Group</md-button>
           </md-tab>
           <md-tab label="Requests">
             <md-content class="md-padding">

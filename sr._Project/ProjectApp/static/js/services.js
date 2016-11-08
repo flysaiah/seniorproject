@@ -89,6 +89,15 @@ app.factory('updateGroupInfo', function($http) {
         console.log(response);
       });
       return promise;
+    }, leaveGroup: function(userID) {
+      // Removes user from group
+      var body = {
+        "userID": userID
+      }
+      var promise = $http.post('/leaveGroup', body).error(function(response) {
+        console.log(response);
+      });
+      return promise;
     }
   };
   return updateGroupInfo;

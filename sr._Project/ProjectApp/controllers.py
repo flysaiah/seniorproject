@@ -62,7 +62,7 @@ def SendUserRequest():
 def leaveGroup():
 	req = request.get_json()
 	uID = req['userID']
-	db.engine.execute(text('update Users set isPending=0, gId="NULL" where userName="'+str(req_uID)+'";'))
+	db.engine.execute(text('update Users set isPending=0, gId=NULL where userName="'+str(uID)+'";'))
 	return ""
 
 

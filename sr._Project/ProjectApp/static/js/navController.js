@@ -5,14 +5,15 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, u
   // for testing
   // TODO: Integrate authentication
   $scope.isLoggedIn = true;
-  $scope.currentUserID = "smitze01"; //mayeis01
-
-  getGroupInfo.isUserInGroup($scope.currentUserID).then(function(res) {
-    $scope.hasGroup = res.hasGroup;
-  })
+  $scope.currentUserID = "saudih01";
 
   function refresh() {
     // re-fetch all data that might have been altered by user action
+    getGroupInfo.isUserInGroup($scope.currentUserID).then(function(res) {
+      // Determine if user is currently in a group; used to decide what information panels to display in UI
+      $scope.hasGroup = res.hasGroup;
+    });
+
     getGroupInfo.fetchGroupMembers($scope.currentUserID).then(function(res) {
       // fetches info about current group members and requesting group members
       $scope.groupMembers = res.groupMembers;
@@ -30,6 +31,11 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, u
     updateGroupInfo.rejectRequest(userID);
     refresh();
   };
+
+  $scope.leaveGroup = function() {
+    updateGroupInfo.leaveGroup($scope.currentUserID);
+    refresh();
+  }
 
   $scope.navigate = function(buildingName) {
     // Navigates from campus map view to floor plan of whatever building was clicked on
