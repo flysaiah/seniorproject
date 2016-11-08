@@ -82,7 +82,7 @@ def getGroupMembers():
 	print(pending_user_List)
 	return jsonify(groupMembers=user_List, requestingMembers=pending_user_List)
 
-@app.route('/getFloorInfo', methods=['GET'])
+@app.route('/getAllUsers', methods=['GET'])
 def getAllUsers():
 	user_List = []
 	query = db.engine.execute(text('select firstName, lastName, userName, isPending from Users;'))
