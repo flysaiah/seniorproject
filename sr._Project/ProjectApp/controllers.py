@@ -80,9 +80,24 @@ def getGroupMembers():
 		elif row.userName != uID:
 			pending_user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, userID=row.userName))
 
-	print(user_List)
-	print(pending_user_List)
 	return jsonify(groupMembers=user_List, requestingMembers=pending_user_List)
+
+@app.route('/isUserInGroup', methods=['POST'])
+def isUserInGroup():
+	req = request.get_json()
+	uID = req['userID']
+	print(uID)
+	print("IM HEre")
+	query = db.engine.execute(text('select gId, isPending from Users where gId="' +str(uID)+'";'))
+	print(query)
+	print("now im here")
+	ans = False
+	for row in query:
+		print("YES")
+		print(row.gId)
+		if row.isPending != 1:
+			ans = True
+	return jsonify(hasGroup=ans)
 
 @app.route('/getAllUsers', methods=['GET'])
 def getAllUsers():
