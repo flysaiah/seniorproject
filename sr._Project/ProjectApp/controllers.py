@@ -48,10 +48,9 @@ def regectRequest():
 def SendUserRequest():
 	req = request.get_json()
 	req_uID = req['sendingUserID']
-	rec_uID = 
+	rec_uID = req['recevingUserID']
 
-	        "sendingUserID": sendingUserID,   // ID of the person sending the request
-        "recevingUserID": recevingUserID 
+
 
 @app.route('/getGroupMembers', methods=['POST'])
 def getGroupMembers():

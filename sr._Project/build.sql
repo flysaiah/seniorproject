@@ -63,7 +63,7 @@ CREATE TABLE Users (
   gId INT,
   credits INT NOT NULL,
   roomDrawNum INT NOT NULL,
-  isPending BOOLEAN NOT NULL DEFAULT false),
+  isPending BOOLEAN NOT NULL DEFAULT false,
     FOREIGN KEY (gId)
     REFERENCES Groups (groupId)
     ON DELETE NO ACTION            # can be used to specify action on foreign key deletion
