@@ -20,9 +20,10 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, u
   // for testing
   // TODO: Integrate authentication
   $scope.isLoggedIn = true;
-  $scope.hasGroup = false;
+  $scope.hasGroup = true;
+  $scope.currentUserID = "mayeis01";
 
-  getGroupInfo.fetchGroupMembers("mayeis01").then(function(res) {
+  getGroupInfo.fetchGroupMembers($scope.currentUserID).then(function(res) {
     // fetches info about current group members and requesting group members
     $scope.groupMembers = res.groupMembers;
     $scope.requestingMembers = res.requestingMembers;
@@ -64,7 +65,7 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, u
 
   $scope.requestMembership = function(userObj) {
     // request to be added to the group of the person currently selected in autocomplete
-    updateGroupInfo.sendGroupRequest(userObj.userID);
+    updateGroupInfo.sendGroupRequest($scope.currentUserID, userObj.searchID);
   }
 
 });

@@ -38,23 +38,25 @@ def acceptRequst():
 	req = request.get_json()
 	uID = req['userID']
 	db.engine.execute(text('update Users set isPending=0 where userName="'+str(uID)+'";'))
+	return ""
 
 @app.route('/rejectGroupRequest', methods=['POST'])
-def regectRequest():
+def rejectRequest():
 	req = request.get_json()
 	uID = req['userID']
 	db.engine.execute(text('update Users set isPending=0, gID=NULL where userName="'+str(uID)+'";'))
+	return ""
 
 @app.route('/sendGroupRequest', methods=['POST'])
 def SendUserRequest():
 	req = request.get_json()
 	req_uID = req['sendingUserID']
-	rec_uID = req['recevingUserID']
+	rec_uID = req['receivingUserID']
 	group_id_query = db.engine.execute(text('select gId from Users where userName="'+ str(rec_uID) +'";'))
 	for row in group_id_query:
-		group_id = row.gID
-	db.engine.execute(text('update Users set isPending=1, gID="'+str(group_id)+'" where userName="'+str(req_uID)+'";'))
-
+		group_id = row.gId
+	db.engine.execute(text('update Users set isPending=1, gId="'+str(group_id)+'" where userName="'+str(req_uID)+'";'))
+	return ""
 
 
 @app.route('/getGroupMembers', methods=['POST'])
@@ -91,7 +93,6 @@ def getAllUsers():
 	return jsonify(allUsers=user_List)
 
 
-
 @app.route('/getFloorInfo', methods=['POST'])
 def getFloorInfo():
 	floor_List = []
@@ -111,8 +112,3 @@ def getFloorInfo():
 					floor_List.append(str(i+1))
 
 	return jsonify(floorList=floor_List)
-
-
-
-
-	
