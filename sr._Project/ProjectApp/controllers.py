@@ -45,6 +45,18 @@ def regectRequest():
 	uID = req['userID']
 	db.engine.execute(text('update Users set isPending=0, gID=NULL where userName="'+str(uID)+'";'))
 
+@app.route('/sendGroupRequest', methods=['POST'])
+def SendUserRequest():
+	req = request.get_json()
+	req_uID = req['sendingUserID']
+	rec_uID = req['recevingUserID']
+	group_id_query = db.engine.execute(text('select gId from Users where userName="'+ str(rec_uID) +'";'))
+	for row in group_id_query:
+		group_id = row.gID
+	db.engine.execute(text('update Users set isPending=1, gID="'+str(group_id)+'" where userName="'+str(req_uID)+'";'))
+
+
+
 @app.route('/getGroupMembers', methods=['POST'])
 def getGroupMembers():
 	user_List = []
