@@ -105,8 +105,8 @@ def getAllUsers():
 	user_List = []
 	query = db.engine.execute(text('select firstName, lastName, userName, isPending, gId from Users;'))
 	for row in query:
-		print(userName,row.gId)
-		if row.gId != None and isPending == 0:
+		print(row.userName,row.gId)
+		if row.gId != None and row.isPending == 0:
 			user_List.append(dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName))
 	return jsonify(allGroupUsers=user_List)
 
