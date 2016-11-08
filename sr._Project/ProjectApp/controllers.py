@@ -77,7 +77,7 @@ def getGroupMembers():
 	for row in query:
 		if row.isPending == 0:
 			user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, userID=row.userName))
-		else:
+		elif row.userName != uID:
 			pending_user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, userID=row.userName))
 
 	print(user_List)

@@ -20,21 +20,29 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, u
   // for testing
   // TODO: Integrate authentication
   $scope.isLoggedIn = true;
-  $scope.hasGroup = true;
-  $scope.currentUserID = "mayeis01";
+  $scope.hasGroup = false;
+  $scope.currentUserID = "smitze01";
 
-  getGroupInfo.fetchGroupMembers($scope.currentUserID).then(function(res) {
-    // fetches info about current group members and requesting group members
-    $scope.groupMembers = res.groupMembers;
-    $scope.requestingMembers = res.requestingMembers;
-  });
+  function refresh() {
+    // re-fetch all data that might have been altered by user action
+    getGroupInfo.fetchGroupMembers($scope.currentUserID).then(function(res) {
+      // fetches info about current group members and requesting group members
+      $scope.groupMembers = res.groupMembers;
+      $scope.requestingMembers = res.requestingMembers;
+    });
+  }
+  refresh();
+
+
 
   $scope.acceptRequest = function(userID) {
     updateGroupInfo.acceptRequest(userID);
+    refresh();
   };
 
   $scope.rejectRequest = function(userID) {
     updateGroupInfo.rejectRequest(userID);
+    refresh();
   };
 
   $scope.navigate = function(buildingName) {
