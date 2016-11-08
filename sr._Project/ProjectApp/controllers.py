@@ -58,6 +58,13 @@ def SendUserRequest():
 	db.engine.execute(text('update Users set isPending=1, gId="'+str(group_id)+'" where userName="'+str(req_uID)+'";'))
 	return ""
 
+@app.route('/leaveGroup', methods=['POST'])
+def leaveGroup():
+	req = request.get_json()
+	uID = req['userID']
+	db.engine.execute(text('update Users set isPending=0, gId="NULL" where userName="'+str(req_uID)+'";'))
+	return ""
+
 
 @app.route('/getGroupMembers', methods=['POST'])
 def getGroupMembers():

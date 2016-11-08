@@ -5,7 +5,7 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, u
   // for testing
   // TODO: Integrate authentication
   $scope.isLoggedIn = true;
-  $scope.currentUserID = "smitze01";
+  $scope.currentUserID = "smitze01"; //mayeis01
 
   getGroupInfo.isUserInGroup($scope.currentUserID).then(function(res) {
     $scope.hasGroup = res.hasGroup;
