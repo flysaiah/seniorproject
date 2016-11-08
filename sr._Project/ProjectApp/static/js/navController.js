@@ -1,19 +1,4 @@
-var app = angular.module("roomDraw", ["ngRoute", "ngMaterial", "services"]);
-app.config(function($routeProvider) {
-  $routeProvider
-
-  // route for the home page
-  .when('/', {
-    templateUrl : '/static/pages/navigation-main.html',
-    controller  : null
-  })
-
-  .when('/building', {
-    templateUrl : '/static/pages/building.html',
-    controller  : 'buildingCtl'
-  })
-
-});
+var app = angular.module("navigation", ["ngMaterial", "services"]);
 
 app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, updateGroupInfo, getAllUsers) {
 
@@ -35,8 +20,6 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, u
     });
   }
   refresh();
-
-
 
   $scope.acceptRequest = function(userID) {
     updateGroupInfo.acceptRequest(userID);
@@ -78,17 +61,5 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, u
     // request to be added to the group of the person currently selected in autocomplete
     updateGroupInfo.sendGroupRequest($scope.currentUserID, userObj.searchID);
   }
-
-});
-
-// For each individual building
-app.controller('buildingCtl', function($scope, $location, getFloorInfo) {
-  // get name of building from query parameter
-  $scope.buildingName = $location.search()["bname"];
-
-  getFloorInfo.fetchData($scope.buildingName).then(function(res) {
-    // fetches info about current group members and requesting group members
-    $scope.floorList = res.floorList;
-  });
 
 });
