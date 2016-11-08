@@ -88,6 +88,7 @@ def getAllUsers():
 	query = db.engine.execute(text('select firstName, lastName, userName, isPending from Users;'))
 	for row in query:
 		user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, ID=row.userName))
+	return jsonify(allUsers=user_List)
 
 
 
