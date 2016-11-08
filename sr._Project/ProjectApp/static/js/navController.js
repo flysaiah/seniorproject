@@ -20,8 +20,11 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, u
   // for testing
   // TODO: Integrate authentication
   $scope.isLoggedIn = true;
-  $scope.hasGroup = false;
   $scope.currentUserID = "smitze01";
+
+  getGroupInfo.isUserInGroup($scope.currentUserID).then(function(res) {
+    $scope.hasGroup = res.hasGroup;
+  })
 
   function refresh() {
     // re-fetch all data that might have been altered by user action

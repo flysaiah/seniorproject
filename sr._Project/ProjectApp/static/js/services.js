@@ -36,7 +36,20 @@ app.factory('getGroupInfo', function($http) {
             "userID": "saudih01"
           }
         ];
-        data = {"groupMembers": testGroupMembers, "requestingMembers": testRequestingMembers}
+        var data = {"groupMembers": testGroupMembers, "requestingMembers": testRequestingMembers}
+        return data;
+      });
+      return promise;
+    }, isUserInGroup: function(userID) {
+      // Returns a boolean: true if user is in a group, false otherwise
+      var body = {
+        "userID": userID
+      }
+      var promise = $http.post('/isUserInGroup', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var data = {"hasGroup": true};
         return data;
       });
       return promise;
