@@ -98,6 +98,15 @@ app.factory('updateGroupInfo', function($http) {
         console.log(response);
       });
       return promise;
+    }, createGroup: function(userID) {
+      // Creates group with user as single member
+      var body = {
+        "userID": userID
+      }
+      var promise = $http.post('/createGroup', body).error(function(response) {
+        console.log(response);
+      });
+      return promise;
     }
   };
   return updateGroupInfo;
@@ -125,11 +134,11 @@ app.factory('getFloorInfo', function($http) {
   return getFloorInfo;
 });
 
-app.factory('getAllUsers', function($http) {
-  // Return list of all active user objects
-  var getAllUsers = {
+app.factory('getAllGroupUsers', function($http) {
+  // Return list of all active users who are in groups
+  var getAllGroupUsers = {
     fetchData: function() {
-      var promise = $http.get('/getAllUsers').then(function (response) {
+      var promise = $http.get('/getAllGroupUsers').then(function (response) {
         return response.data;
       }, function (err) {
         // for testing
@@ -146,10 +155,10 @@ app.factory('getAllUsers', function($http) {
           }
         ];
 
-        return {"allUsers": testData};
+        return {"allGroupUsers": testData};
       });
       return promise;
     }
   };
-  return getAllUsers;
+  return getAllGroupUsers;
 });

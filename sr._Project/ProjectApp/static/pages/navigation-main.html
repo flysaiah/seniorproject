@@ -33,7 +33,7 @@
       </md-card-content>
       <md-card-content ng-show="isLoggedIn && !hasGroup">
         <md-content class="md-padding">
-          You are not currently in a group.
+          You are not currently in a group. Find a group below, or create your own group.
           <form ng-submit="$event.preventDefault()">
             <br>
             <md-autocomplete
@@ -51,8 +51,9 @@
             </md-not-found>
           </md-autocomplete>
           <md-button class="md-accent md-raised" aria-label="Send request" ng-click="requestMembership(selectedItem)"
-          ng-disabled="allUsers.indexOf(selectedItem) === -1">Send request</md-button>
-          <br/>
+          ng-disabled="allGroupUsers.indexOf(selectedItem) === -1">Send request</md-button>
+          <md-button class="md-primary md-raised" aria-label="Create Group" ng-click="createGroup()">Create Group</md-button>
+          <br>
         </form>
       </md-content>
     </md-card-content>

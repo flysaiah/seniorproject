@@ -1,11 +1,11 @@
 var app = angular.module("navigation", ["ngMaterial", "services"]);
 
-app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, updateGroupInfo, getAllUsers) {
+app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, updateGroupInfo, getAllGroupUsers) {
 
   // for testing
   // TODO: Integrate authentication
   $scope.isLoggedIn = true;
-  $scope.currentUserID = "saudih01";
+  $scope.currentUserID = "mayeis01";
 
   function refresh() {
     // re-fetch all data that might have been altered by user action
@@ -42,9 +42,9 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, u
     $location.path("/building").search("bname", buildingName)
   };
 
-  getAllUsers.fetchData().then(function(res) {
+  getAllGroupUsers.fetchData().then(function(res) {
     // get list of all users for autocomplete
-    $scope.allUsers = res.allUsers.map(function(user) {
+    $scope.allGroupUsers = res.allGroupUsers.map(function(user) {
       return {
         displayName: user.firstName + " " + user.lastName + " (" + user.userID + ")",
         searchName: angular.lowercase(user.firstName) + " " + angular.lowercase(user.lastName),
@@ -54,14 +54,19 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo, u
 
     $scope.querySearch = function(query) {
       // filter query for autocomplete based on entered text
-      var results = query ? $scope.allUsers.filter( function(user) {
+      var results = query ? $scope.allGroupUsers.filter( function(user) {
         return (user.searchName.indexOf(angular.lowercase(query)) === 0)
         || (user.searchID.indexOf(angular.lowercase(query)) === 0)
-      } ) : $scope.allUsers,
+      } ) : $scope.allGroupUsers,
       deferred;
       return results;
     };
   });
+
+  $scope.createGroup = function() {
+    updateGroupInfo.createGroup($scope.currentUserID);
+    refresh();
+  }
 
   $scope.requestMembership = function(userObj) {
     // request to be added to the group of the person currently selected in autocomplete
