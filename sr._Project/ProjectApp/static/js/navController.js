@@ -18,7 +18,7 @@ app.controller("navCtl", function($scope, $location, $rootScope, getGroupInfo) {
 
   // for testing
   $scope.isLoggedIn = true;
-  $scope.hasGroup = true;
+  $scope.hasGroup = false;
 
 
   getGroupInfo.fetchGroupMembers().then(function(res) {
