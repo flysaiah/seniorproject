@@ -11,19 +11,15 @@
         <md-tabs md-dynamic-height md-border-bottom>
           <md-tab label="Current Group Members">
             <md-content class="md-padding">
-              <!-- TODO: Get list of current group members -->
-              <p ng-repeat="groupMember in groupMembers">{{ groupMember.FirstName }} {{ groupMember.LastName }} ({{ groupMember.ID }})</p>
+              <p ng-repeat="groupMember in groupMembers">{{ groupMember.FirstName }} {{ groupMember.LastName }} ({{ groupMember.userID }})</p>
             </md-content>
           </md-tab>
           <md-tab label="Requests">
             <md-content class="md-padding">
-              <!-- TODO: Get list of requests -->
-              <p ng-repeat="requestingMember in requestingMembers">{{ requestingMember.FirstName }} {{ requestingMember.LastName }} ({{ requestingMember.ID }})
-                <!-- TODO: Accept group request -->
+              <p ng-repeat="requestingMember in requestingMembers">{{ requestingMember.FirstName }} {{ requestingMember.LastName }} ({{ requestingMember.userID }})
                 <md-button ng-click="accceptRequest(requestingMember.ID)" class="md-icon-button" aria-label="Favorite">
                   <md-icon md-svg-icon="/static/img/icons/accept.svg"></md-icon>
                 </md-button>
-                <!-- TODO: Reject group request -->
                 <!-- TODO: Better styling for these buttons, keep them in a line -->
                 <md-button ng-click="rejectRequest(requestingMember.ID)" class="md-icon-button" aria-label="Favorite">
                   <md-icon md-svg-icon="/static/img/icons/reject.svg"></md-icon>
@@ -36,21 +32,40 @@
       <md-card-content ng-show="isLoggedIn && !hasGroup">
         <md-content class="md-padding">
           You are not currently in a group.
-          <!-- TODO: Autocomplete with possible group names -->
-        </md-content>
-      </md-card-content>
-    </md-card>
+          <form ng-submit="$event.preventDefault()">
+            <br>
+            <md-autocomplete
+            md-selected-item="selectedItem"
+            md-search-text="searchText"
+            md-items="user in querySearch(searchText)"
+            md-item-text="user.displayName"
+            md-min-length="0"
+            placeholder="Enter the name of a person here">
+            <md-item-template>
+              <span md-highlight-text="searchText" md-highlight-flags="^i">{{ user.displayName }}</span>
+            </md-item-template>
+            <md-not-found>
+              No users matching "{{searchText}}" were found.
+            </md-not-found>
+          </md-autocomplete>
+          <md-button class="md-accent md-raised" aria-label="Send request" ng-click="requestMembership(selectedItem)"
+          ng-disabled="allUsers.indexOf(selectedItem) === -1">Send request</md-button>
+          <br/>
+        </form>
+      </md-content>
+    </md-card-content>
+  </md-card>
   <!-- Campus map -->
-  </div>
-  <div class="campus-map">
-    <svg class="campus-svg">
-      <polygon class="clickable-building" points="291,361 297,367 291,387 273,400 265,394 270,375" ng-click="navigate('dieseth')"></polygon>
-      <polygon class="clickable-building" points="328,320 335,328 325,347 309,356 300,348 308,330" ng-click="navigate('miller')"></polygon>
-      <polygon class="clickable-building" points="357,745 262,746 264,757 357,756" ng-click="navigate('olson')"></polygon>
-      <polygon class="clickable-building" points="271,689 243,690 243,716 272,717" ng-click="navigate('larsen')"></polygon>
-    </svg>
-  </div>
-  <!-- <div class = "footer" > <h4> Luther College  700 College Drive  Decorah, Iowa 52101  USA </h4>
-  <h4> 563-387-2000  800-4-LUTHER (800-458-8437) </h4>
+</div>
+<div class="campus-map">
+  <svg class="campus-svg">
+    <polygon class="clickable-building" points="291,361 297,367 291,387 273,400 265,394 270,375" ng-click="navigate('dieseth')"></polygon>
+    <polygon class="clickable-building" points="328,320 335,328 325,347 309,356 300,348 308,330" ng-click="navigate('miller')"></polygon>
+    <polygon class="clickable-building" points="357,745 262,746 264,757 357,756" ng-click="navigate('olson')"></polygon>
+    <polygon class="clickable-building" points="271,689 243,690 243,716 272,717" ng-click="navigate('larsen')"></polygon>
+  </svg>
+</div>
+<!-- <div class = "footer" > <h4> Luther College  700 College Drive  Decorah, Iowa 52101  USA </h4>
+<h4> 563-387-2000  800-4-LUTHER (800-458-8437) </h4>
 </div> -->
 </div>
