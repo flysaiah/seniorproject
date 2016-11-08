@@ -74,9 +74,9 @@ def getGroupMembers():
 
 	for row in query:
 		if row.isPending == 0:
-			user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, ID=row.userName))
+			user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, userID=row.userName))
 		else:
-			pending_user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, ID=row.userName))
+			pending_user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, userID=row.userName))
 
 	print(user_List)
 	print(pending_user_List)
@@ -87,7 +87,7 @@ def getAllUsers():
 	user_List = []
 	query = db.engine.execute(text('select firstName, lastName, userName, isPending from Users;'))
 	for row in query:
-		user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, ID=row.userName))
+		user_List.append(dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName))
 	return jsonify(allUsers=user_List)
 
 
