@@ -86,16 +86,10 @@ def getGroupMembers():
 def isUserInGroup():
 	req = request.get_json()
 	uID = req['userID']
-	print(uID)
-	print("IM HEre")
-	query = db.engine.execute(text('select gId, isPending from Users where gId="' +str(uID)+'";'))
-	print(query)
-	print("now im here")
+	query = db.engine.execute(text('select gId, isPending from Users where userName="' +str(uID)+'";'))
 	ans = False
 	for row in query:
-		print("YES")
-		print(row.gId)
-		if row.isPending != 1:
+		if row.isPending != 1 and row.gId !=None:
 			ans = True
 	return jsonify(hasGroup=ans)
 
