@@ -5,7 +5,7 @@ app.factory('getGroupInfo', function($http) {
     fetchGroupMembers: function(userID) {
       // Return group members of the group this user belongs to
       var body = {
-        "userID": 'mayeis01'
+        "userID": userID
       }
       var promise = $http.post('/getGroupMembers', body).then(function (response) {
         return response.data;
@@ -87,7 +87,7 @@ app.factory('getFloorInfo', function($http) {
     fetchData: function(bName) {
       // Using building name, get floor info
       var body = {
-        "buildingName": 'miller'
+        "buildingName": bName
       }
       var promise = $http.post('/getFloorInfo', body).then(function (response) {
         return response.data;
