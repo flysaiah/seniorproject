@@ -1,6 +1,7 @@
 var app = angular.module("roomDraw", ["ngRoute", "navigation", "building"]);
 
-app.config(function($routeProvider) {
+app.config(function($routeProvider, $locationProvider) {
+  $locationProvider.html5Mode(true);
   $routeProvider
 
   // route for the home page
@@ -12,6 +13,6 @@ app.config(function($routeProvider) {
   .when('/building', {
     templateUrl : '/static/pages/building.html',
     controller  : 'buildingCtl'
-  })
-
+  });
+  
 });

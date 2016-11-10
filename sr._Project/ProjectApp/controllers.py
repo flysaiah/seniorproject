@@ -100,6 +100,21 @@ def isUserInGroup():
 			ans = True
 	return jsonify(hasGroup=ans)
 
+@app.route('/createGroup', methods=['POST'])
+def createGroup():
+	req = request.get_json()
+	uID = req['userID']
+	group = db.engine.execute(text(('INSERT INTO Groups() VALUES ();')))
+	query = db.engine.execute(text('select * from Groups;'))
+	groupID=0
+	for row in query:
+		if row.groupId > groupID:
+			groupID = row.groupId
+	db.engine.execute(text('update Users set isPending=0, gId='+str(groupID)+' where userName="'+str(uID)+'";'))
+	return ''
+
+		
+
 @app.route('/getAllGroupUsers', methods=['GET'])
 def getAllUsers():
 	user_List = []
