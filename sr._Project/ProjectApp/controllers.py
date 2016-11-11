@@ -33,8 +33,16 @@ def view_of_test():
 	response.headers['Expires'] = format_date_time(time.mktime(expires_time.timetuple()))
 	return response
 
+@app.route('/getUserLogin', methods=['GET'])
+def getUserLogin():
+	if 'google_token' in session:
+		me = google.get('userinfo')
+		return jsonify({"userInfo": me.data})
+	return jsonify({"userInfo": ""})
+
+
 @app.route('/acceptGroupRequest', methods=['POST'])
-def acceptRequst():
+def acceptRequest():
 	req = request.get_json()
 	uID = req['userID']
 	db.engine.execute(text('update Users set isPending=0 where userName="'+str(uID)+'";'))
@@ -113,7 +121,6 @@ def createGroup():
 	db.engine.execute(text('update Users set isPending=0, gId='+str(groupID)+' where userName="'+str(uID)+'";'))
 	return ''
 
-		
 
 @app.route('/getAllGroupUsers', methods=['GET'])
 def getAllUsers():
@@ -145,3 +152,63 @@ def getFloorInfo():
 					floor_List.append(str(i+1))
 
 	return jsonify(floorList=floor_List)
+
+from flask import Flask, redirect, url_for, session, request, jsonify
+import json
+from flask_oauthlib.client import OAuth
+
+
+app.config['GOOGLE_ID'] = "939208226876-tq27jm9fuoga0iqlu4u1m5a8k4reg1os.apps.googleusercontent.com"
+app.config['GOOGLE_SECRET'] = "yc0GgVovPebsgDK2SakWtd_I"
+app.debug = True
+app.secret_key = 'development'
+oauth = OAuth(app)
+
+google = oauth.remote_app(
+    'google',
+    consumer_key=app.config.get('GOOGLE_ID'),
+    consumer_secret=app.config.get('GOOGLE_SECRET'),
+    request_token_params={
+        'scope': 'email'
+    },
+    base_url='https://www.googleapis.com/oauth2/v1/',
+    request_token_url=None,
+    access_token_method='POST',
+    access_token_url='https://accounts.google.com/o/oauth2/token',
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+)
+
+@app.route('/login')
+def login():
+    return google.authorize(callback=url_for('authorized', _external=True))
+
+@app.route('/logout')
+def logout():
+    session.pop('google_token', None)
+    return redirect('/')
+
+@app.route('/login/authorized')
+def authorized():
+    resp = google.authorized_response()
+    if resp is None:
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error_reason'],
+            request.args['error_description']
+        )
+
+    session['google_token'] = (resp['access_token'], '')
+    # me = google.get('userinfo')
+    # # print("======================")
+    # # print(me.data['email'])
+    # if me.data['email'].split('@')[-1] != 'luther.edu':
+    #     # session.revoke(httplib2.Http())
+    #     session.pop('google_token', None)
+    #     # return redirect(url_for('index'))
+    # # print("======================")
+    return redirect('/')
+
+
+
+@google.tokengetter
+def get_google_oauth_token():
+    return session.get('google_token')

@@ -19,7 +19,7 @@
   <div ng-app="roomDraw">
     <div id="main">
       <md-toolbar class="main-navbar">
-        <div class="md-toolbar-tools">
+        <div class="md-toolbar-tools" ng-controller="navCtl">
           <h1>
             <span>LUTHER COLLEGE | Room Draw</span>
           </h1>
@@ -28,8 +28,14 @@
             Learn More
           </md-button>-->
           <!-- TODO: Only show this when user is logged in -->
-          <md-button>
-            Hello, user01
+          <md-button ng-show="isLoggedIn">
+            Hello, {{ currentUserName }}
+          </md-button>
+          <md-button ng-show="isLoggedIn" ng-click="logout()">
+            Logout
+          </md-button>
+          <md-button ng-show="!isLoggedIn" ng-click="login()">
+            Login
           </md-button>
         </div>
       </md-toolbar>

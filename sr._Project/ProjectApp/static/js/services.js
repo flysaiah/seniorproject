@@ -162,3 +162,16 @@ app.factory('getAllGroupUsers', function($http) {
   };
   return getAllGroupUsers;
 });
+
+app.factory('loginService', function($http) {
+  // Login services
+  var loginService = {
+    getUserLogin: function() {
+      var promise = $http.get('/getUserLogin').then(function (response) {
+        return response.data;
+      });
+      return promise;
+    }
+  };
+  return loginService;
+});
