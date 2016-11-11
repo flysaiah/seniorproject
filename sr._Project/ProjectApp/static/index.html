@@ -1,19 +1,47 @@
 <html>
 <head>
+  <base href="/">
   <script src="/static/bower_components/angular/angular.min.js"></script>
-	<script src="/static/bower_components/angular-route/angular-route.js"></script>
-	<script src="/static/navController.js"></script>
-  <!-- bootstrap -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="/static/bower_components/angular-route/angular-route.js"></script>
+  <script src="/static/bower_components/angular-aria/angular-aria.js"></script>
+  <script src="/static/bower_components/angular-animate/angular-animate.js"></script>
+  <script src="/static/bower_components/angular-material/angular-material.js"></script>
+  <script src="/static/js/services.js"></script>
+  <script src="/static/js/buildingCtl.js"></script>
+  <script src="/static/js/navController.js"></script>
+  <script src="/static/js/appConfig.js"></script>
+
+  <link rel="stylesheet" href="/static/bower_components/angular-material/angular-material.css">
   <link rel="stylesheet" href="/static/css/building.css">
 
 </head>
 <body>
-	<div ng-app="roomDraw" ng-controller="navCtl">
-		<div id="main">
-			<!-- This is where the actual content is going to go -->
-			<div ng-view></div>
-		</div>
-	</div>
+  <div ng-app="roomDraw">
+    <div id="main">
+      <md-toolbar class="main-navbar">
+        <div class="md-toolbar-tools" ng-controller="navCtl">
+          <h1>
+            <span>LUTHER COLLEGE | Room Draw</span>
+          </h1>
+          <span flex></span>
+          <!-- <md-button class="md-raised" aria-label="Learn More">
+            Learn More
+          </md-button>-->
+          <!-- TODO: Only show this when user is logged in -->
+          <md-button ng-show="isLoggedIn">
+            Hello, {{ currentUserName }}
+          </md-button>
+          <md-button ng-show="isLoggedIn" ng-click="logout()">
+            Logout
+          </md-button>
+          <md-button ng-show="!isLoggedIn" ng-click="login()">
+            Login
+          </md-button>
+        </div>
+      </md-toolbar>
+      <!-- This is where the actual content is going to go -->
+      <div ng-view></div>
+    </div>
+  </div>
 </body>
 </html>

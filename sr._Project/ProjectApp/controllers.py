@@ -1,3 +1,4 @@
+
 import os
 import datetime
 import time
@@ -7,6 +8,7 @@ from wsgiref.handlers import format_date_time
 from flask import Flask, request, Response
 from flask import render_template, url_for, redirect, send_from_directory
 from flask import send_file, make_response, abort, jsonify
+
 
 from sqlalchemy import text, func
 
@@ -31,17 +33,182 @@ def view_of_test():
 	response.headers['Expires'] = format_date_time(time.mktime(expires_time.timetuple()))
 	return response
 
-@app.route('/signin')
-def index():
-	return "Yo, Sign In", 200
+@app.route('/getUserLogin', methods=['GET'])
+def getUserLogin():
+	if 'google_token' in session:
+		me = google.get('userinfo')
+		return jsonify({"userInfo": me.data})
+	return jsonify({"userInfo": ""})
 
-@app.route('/testB', methods=['POST'])
-def testButton():
+
+@app.route('/acceptGroupRequest', methods=['POST'])
+def acceptRequest():
 	req = request.get_json()
-	build = req['fun'].capitalize()
-	query = db.engine.execute(text('select numFloors from Buildings where name="' +str(build)+'";'))
-	for item in query:
-		print(item.numFloors)
-		return str(item.numFloors)
+	uID = req['userID']
+	db.engine.execute(text('update Users set isPending=0 where userName="'+str(uID)+'";'))
+	return ""
 
-	
+@app.route('/rejectGroupRequest', methods=['POST'])
+def rejectRequest():
+	req = request.get_json()
+	uID = req['userID']
+	db.engine.execute(text('update Users set isPending=0, gID=NULL where userName="'+str(uID)+'";'))
+	return ""
+
+@app.route('/sendGroupRequest', methods=['POST'])
+def SendUserRequest():
+	req = request.get_json()
+	req_uID = req['sendingUserID']
+	rec_uID = req['receivingUserID']
+	group_id_query = db.engine.execute(text('select gId from Users where userName="'+ str(rec_uID) +'";'))
+	for row in group_id_query:
+		group_id = row.gId
+	db.engine.execute(text('update Users set isPending=1, gId="'+str(group_id)+'" where userName="'+str(req_uID)+'";'))
+	return ""
+
+@app.route('/leaveGroup', methods=['POST'])
+def leaveGroup():
+	req = request.get_json()
+	uID = req['userID']
+	db.engine.execute(text('update Users set isPending=0, gId=NULL where userName="'+str(uID)+'";'))
+	return ""
+
+
+@app.route('/getGroupMembers', methods=['POST'])
+def getGroupMembers():
+	user_List = []
+	pending_user_List = []
+
+	req = request.get_json()
+	uID = req['userID']
+
+	group_id_query = db.engine.execute(text('select gId from Users where ' + ' userName="'+str(uID)+'";'))
+
+	for row in group_id_query:
+		group_id = row.gId
+
+	query = db.engine.execute(text('select firstName, lastName, userName, isPending from Users where ' + ' gId="'+str(group_id) +'";'))
+
+	for row in query:
+		if row.isPending == 0:
+			user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, userID=row.userName))
+		elif row.userName != uID:
+			pending_user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, userID=row.userName))
+
+	return jsonify(groupMembers=user_List, requestingMembers=pending_user_List)
+
+@app.route('/isUserInGroup', methods=['POST'])
+def isUserInGroup():
+	req = request.get_json()
+	uID = req['userID']
+	query = db.engine.execute(text('select gId, isPending from Users where userName="' +str(uID)+'";'))
+	ans = False
+	for row in query:
+		if row.isPending != 1 and row.gId !=None:
+			ans = True
+	return jsonify(hasGroup=ans)
+
+@app.route('/createGroup', methods=['POST'])
+def createGroup():
+	req = request.get_json()
+	uID = req['userID']
+	group = db.engine.execute(text(('INSERT INTO Groups() VALUES ();')))
+	query = db.engine.execute(text('select * from Groups;'))
+	groupID=0
+	for row in query:
+		if row.groupId > groupID:
+			groupID = row.groupId
+	db.engine.execute(text('update Users set isPending=0, gId='+str(groupID)+' where userName="'+str(uID)+'";'))
+	return ''
+
+
+@app.route('/getAllGroupUsers', methods=['GET'])
+def getAllUsers():
+	user_List = []
+	query = db.engine.execute(text('select firstName, lastName, userName, isPending, gId from Users;'))
+	for row in query:
+		print(row.userName,row.gId)
+		if row.gId != None and row.isPending == 0:
+			user_List.append(dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName))
+	return jsonify(allGroupUsers=user_List)
+
+
+@app.route('/getFloorInfo', methods=['POST'])
+def getFloorInfo():
+	floor_List = []
+	req = request.get_json()
+	build = req['buildingName'].capitalize()
+	query = db.engine.execute(text('select numFloors, hasBasement from Buildings where name="' +str(build)+'";'))
+	for row in query:
+		nFloors = row.numFloors
+		hBasement = row.hasBasement
+	if hBasement == 1:
+		floor_List.append('B')
+
+	for i in range(1,int(nFloors)):
+
+		floor_List.append(str(i))
+		if i == int(nFloors)-1 and hBasement == 0:
+					floor_List.append(str(i+1))
+
+	return jsonify(floorList=floor_List)
+
+from flask import Flask, redirect, url_for, session, request, jsonify
+import json
+from flask_oauthlib.client import OAuth
+
+
+app.config['GOOGLE_ID'] = "939208226876-tq27jm9fuoga0iqlu4u1m5a8k4reg1os.apps.googleusercontent.com"
+app.config['GOOGLE_SECRET'] = "yc0GgVovPebsgDK2SakWtd_I"
+app.debug = True
+app.secret_key = 'development'
+oauth = OAuth(app)
+
+google = oauth.remote_app(
+    'google',
+    consumer_key=app.config.get('GOOGLE_ID'),
+    consumer_secret=app.config.get('GOOGLE_SECRET'),
+    request_token_params={
+        'scope': 'email'
+    },
+    base_url='https://www.googleapis.com/oauth2/v1/',
+    request_token_url=None,
+    access_token_method='POST',
+    access_token_url='https://accounts.google.com/o/oauth2/token',
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+)
+
+@app.route('/login')
+def login():
+    return google.authorize(callback=url_for('authorized', _external=True))
+
+@app.route('/logout')
+def logout():
+    session.pop('google_token', None)
+    return redirect('/')
+
+@app.route('/login/authorized')
+def authorized():
+    resp = google.authorized_response()
+    if resp is None:
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error_reason'],
+            request.args['error_description']
+        )
+
+    session['google_token'] = (resp['access_token'], '')
+    # me = google.get('userinfo')
+    # # print("======================")
+    # # print(me.data['email'])
+    # if me.data['email'].split('@')[-1] != 'luther.edu':
+    #     # session.revoke(httplib2.Http())
+    #     session.pop('google_token', None)
+    #     # return redirect(url_for('index'))
+    # # print("======================")
+    return redirect('/')
+
+
+
+@google.tokengetter
+def get_google_oauth_token():
+    return session.get('google_token')
