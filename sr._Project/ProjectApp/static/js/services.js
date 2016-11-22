@@ -186,6 +186,19 @@ app.factory('registrationService', function($http) {
   return registrationService;
 });
 
+app.factory('loginService', function($http) {
+  // Login services
+  var loginService = {
+    getUserLogin: function() {
+      var promise = $http.get('/getUserLogin').then(function (response) {
+        return response.data;
+      });
+      return promise;
+    }
+  };
+  return loginService;
+});
+
 app.factory('getRoomInfo', function($http) {
   // Get information regarding rooms
   var getRoomInfo = {
