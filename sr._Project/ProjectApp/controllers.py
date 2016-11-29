@@ -104,8 +104,11 @@ def isUserInGroup():
 	query = db.engine.execute(text('select gId, isPending from Users where userName="' +str(uID)+'";'))
 	ans = False
 	for row in query:
-		if row.isPending != 1 and row.gId !=None:
+		gID = row.gId
+		if row.isPending != 1 and gID !=None:
 			ans = True
+	if ans == True:
+		return jsonify(hasGroup=ans, groupID=gID)
 	return jsonify(hasGroup=ans)
 
 @app.route('/createGroup', methods=['POST'])
@@ -202,7 +205,7 @@ def authorized():
     # print("======================")
     # print(me.data['email'])
     # if me.data['email'].split('@')[-1] != 'luther.edu':
-    #     # session.revoke(httplib2.Http())
+    #     credentials.revoke(httplib2.Http())
     #     session.pop('google_token', None)
     #     return redirect(url_for('index'))
     # print("======================")
