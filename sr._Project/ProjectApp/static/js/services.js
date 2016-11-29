@@ -49,7 +49,7 @@ app.factory('getGroupInfo', function($http) {
         return response.data;
       }, function (err) {
         // for testing
-        var data = {"hasGroup": true};
+        var data = {"hasGroup": true, "groupID": 0};
         return data;
       });
       return promise;

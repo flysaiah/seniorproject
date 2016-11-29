@@ -153,6 +153,7 @@ def getFloorInfo():
 
 	return jsonify(floorList=floor_List)
 
+@app.route('/registerForRoom', methods=['POST'])
 def registerForRoom():
 	req = request.get_json()
 	groupID = req['groupID']

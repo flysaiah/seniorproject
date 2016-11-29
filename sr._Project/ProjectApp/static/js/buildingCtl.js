@@ -1,8 +1,24 @@
 // For each individual building
 var app = angular.module("building", ["ngMaterial", "services"]);
-app.controller('buildingCtl', function($scope, $location, getFloorInfo, getRoomInfo, registrationService, $mdSidenav) {
+app.controller('buildingCtl', function($scope, $location, getFloorInfo, getRoomInfo, getGroupInfo, registrationService, loginService, $mdSidenav) {
   // get name of building from query parameter
   $scope.buildingName = $location.search()["bname"];
+
+  // Check if user is logged in and has a group; if not, he/she can't register
+
+  loginService.getUserLogin().then(function(res) {
+    if (res.userInfo) {
+      var currentUserID = res.userInfo.email.substring(0, res.userInfo.email.indexOf("@"));
+      getGroupInfo.isUserInGroup(currentUserID).then(function(res) {
+        if (res.hasGroup) {
+          $scope.groupID = res.groupID;
+          if ($scope.groupID) {
+            $scope.canRegister = true;
+          }
+        }
+      });
+    }
+  });
 
   getFloorInfo.fetchData($scope.buildingName).then(function(res) {
     // fetches info about current group members and requesting group members
@@ -20,6 +36,7 @@ app.controller('buildingCtl', function($scope, $location, getFloorInfo, getRoomI
   }
 
   $scope.registerForRoom = function() {
+    if ($)
     registrationService.registerForRoom($scope.groupID, $scope.buildingName, $scope.roomNumber).then(function(res) {
       if (!res.wasSuccessful) {
         console.log("ERROR registering for room");
@@ -28,9 +45,8 @@ app.controller('buildingCtl', function($scope, $location, getFloorInfo, getRoomI
   }
 
 })
-.controller('RightCtrl', function ($scope, $timeout, $mdSidenav, $log) {
+.controller('RightCtrl', function ($scope, $mdSidenav) {
   $scope.close = function () {
-    // Component lookup should always be available since we are not using `ng-if`
     $mdSidenav('right').close();
   };
 });
