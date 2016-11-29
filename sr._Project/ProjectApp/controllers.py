@@ -153,13 +153,25 @@ def getFloorInfo():
 
 	return jsonify(floorList=floor_List)
 
+def registerForRoom():
+	req = request.get_json()
+	groupID = req['groupID']
+	build = req['buildingName'].capitalize()
+	roomNum = req['roomNumber']
+	query = db.engine.execute(text('select isTaken from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+	for row in query:
+		if row.isTaken == 0:
+			return jsonify(wasSuccessful=False)
+	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(groupID)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+	return jsonify(wasSuccessful=True)
+
 @app.route('/getRoomOccupants', methods=['POST'])
 def getRoomOccupants():
 	user_List = []
 	req = request.get_json()
 	build = req['buildingName'].capitalize()
 	roomNum = req['roomNumber']
-	query = db.engine.execute(text('select firstName, lastName, userID from Rooms, Users where roomNum="'+str(roomNum)+'" and building="'+str(build)+'" and Users.gId=Rooms.gId;'))
+	query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where roomNum="'+str(roomNum)+'" and building="'+str(build)+'" and Users.gId=Rooms.gId;'))
 	for row in query:
 		x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 		user_List.append(x)
