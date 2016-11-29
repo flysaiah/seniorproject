@@ -159,7 +159,7 @@ def getRoomOccupants():
 	req = request.get_json()
 	build = req['buildingName'].capitalize()
 	roomNum = req['roomNumber']
-	query = db.engine.execute(text('select firstName, lastName, userID from Rooms, Users where roomNum="'+str(roomNum)+'" and building="'+str(build)+'" and Users.gId=Rooms.gId;'))
+	query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where roomNum="'+str(roomNum)+'" and building="'+str(build)+'" and Users.gId=Rooms.gId;'))
 	for row in query:
 		x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 		user_List.append(x)
