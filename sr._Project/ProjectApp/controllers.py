@@ -5,14 +5,14 @@ import time
 import json
 from wsgiref.handlers import format_date_time
 
-from flask import Flask, request, Response
+from flask import Flask, request, Response, session
 from flask import render_template, url_for, redirect, send_from_directory
 from flask import send_file, make_response, abort, jsonify
 
 
 from sqlalchemy import text, func
 
-from ProjectApp import app, db, models
+from ProjectApp import app, db, models, google
 
 @app.after_request
 def add_header(response):
@@ -153,30 +153,18 @@ def getFloorInfo():
 
 	return jsonify(floorList=floor_List)
 
-from flask import Flask, redirect, url_for, session, request, jsonify
-import json
-from flask_oauthlib.client import OAuth
+@app.route('/getRoomOccupants', methods=['POST'])
+def getRoomOccupants():
+	user_List = []
+	req = request.get_json()
+	build = req['buildingName'].capitalize()
+	roomNum = req['roomNumber']
+	query = db.engine.execute(text('select firstName, lastName, userID from Rooms, Users where roomNum="'+str(roomNum)+'" and building="'+str(build)+'" and Users.gId=Rooms.gId;'))
+	for row in query:
+		x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
+		user_List.append(x)
+	return jsonify(roomOccupants=user_List)
 
-
-app.config['GOOGLE_ID'] = "939208226876-tq27jm9fuoga0iqlu4u1m5a8k4reg1os.apps.googleusercontent.com"
-app.config['GOOGLE_SECRET'] = "yc0GgVovPebsgDK2SakWtd_I"
-app.debug = True
-app.secret_key = 'development'
-oauth = OAuth(app)
-
-google = oauth.remote_app(
-    'google',
-    consumer_key=app.config.get('GOOGLE_ID'),
-    consumer_secret=app.config.get('GOOGLE_SECRET'),
-    request_token_params={
-        'scope': 'email'
-    },
-    base_url='https://www.googleapis.com/oauth2/v1/',
-    request_token_url=None,
-    access_token_method='POST',
-    access_token_url='https://accounts.google.com/o/oauth2/token',
-    authorize_url='https://accounts.google.com/o/oauth2/auth',
-)
 
 @app.route('/login')
 def login():
@@ -198,13 +186,13 @@ def authorized():
 
     session['google_token'] = (resp['access_token'], '')
     # me = google.get('userinfo')
-    # # print("======================")
-    # # print(me.data['email'])
+    # print("======================")
+    # print(me.data['email'])
     # if me.data['email'].split('@')[-1] != 'luther.edu':
     #     # session.revoke(httplib2.Http())
     #     session.pop('google_token', None)
-    #     # return redirect(url_for('index'))
-    # # print("======================")
+    #     return redirect(url_for('index'))
+    # print("======================")
     return redirect('/')
 
 
