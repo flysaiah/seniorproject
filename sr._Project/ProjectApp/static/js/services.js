@@ -191,6 +191,9 @@ app.factory('loginService', function($http) {
   var loginService = {
     getUserLogin: function() {
       var promise = $http.get('/getUserLogin').then(function (response) {
+        if (response.data.userInfo.error) {
+          return {};
+        }
         return response.data;
       });
       return promise;
