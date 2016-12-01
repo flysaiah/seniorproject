@@ -61,7 +61,20 @@
   height: 901px;
   background-size: 696px 901px;
   float:left;
-  }
+}
+
+.temporary {
+  background-image: url("../img/temp.jpg");
+  width: 500px;
+  height: 500px;
+  background-size: 500px 500px;
+  float:left;
+}
+
+.temporary-svg {
+  width: 500px;
+  height: 500px;
+}
 
 .campus-svg {
   width: 696px;

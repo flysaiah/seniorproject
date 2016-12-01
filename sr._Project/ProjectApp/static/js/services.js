@@ -49,7 +49,7 @@ app.factory('getGroupInfo', function($http) {
         return response.data;
       }, function (err) {
         // for testing
-        var data = {"hasGroup": true};
+        var data = {"hasGroup": true, "groupID": 0};
         return data;
       });
       return promise;
@@ -163,15 +163,75 @@ app.factory('getAllGroupUsers', function($http) {
   return getAllGroupUsers;
 });
 
+app.factory('registrationService', function($http) {
+  // Perform services dealing with registration
+  var registrationService = {
+    registerForRoom: function(groupID, buildingName, roomNumber) {
+      // Assign room to group; return bool regarding whether registration was successful
+      var body = {
+        "groupID": groupID,
+        "buildingName": buildingName,
+        "roomNumber": roomNumber
+      }
+      var promise = $http.post('/registerForRoom', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var data = {"wasSuccessful": true};
+        return data;
+      });
+      return promise;
+    }
+  };
+  return registrationService;
+});
+
 app.factory('loginService', function($http) {
   // Login services
   var loginService = {
     getUserLogin: function() {
       var promise = $http.get('/getUserLogin').then(function (response) {
+        if (response.data.userInfo.error) {
+          return {};
+        }
         return response.data;
       });
       return promise;
     }
   };
   return loginService;
+});
+
+app.factory('getRoomInfo', function($http) {
+  // Get information regarding rooms
+  var getRoomInfo = {
+    getOccupants: function(buildingName, roomNumber) {
+      // Return list of current occupants of room
+      var body = {
+        "buildingName": buildingName,
+        "roomNumber": roomNumber
+      }
+      var promise = $http.post('/getRoomOccupants', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = [
+          {
+            "firstName": "Isaiah",
+            "lastName": "Mayerchak",
+            "userID": "mayeis01"
+          },
+          {
+            "firstName": "Testy",
+            "lastName": "Tester",
+            "userID": "testuser01"
+          }
+        ];
+
+        return {"roomOccupants": testData};
+      });
+      return promise;
+    }
+  };
+  return getRoomInfo;
 });
