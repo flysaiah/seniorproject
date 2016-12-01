@@ -1,17 +1,46 @@
 var app = angular.module("navigation", ["ngMaterial", "services"]);
 
-app.controller("navCtl", function($scope, $window, $location, $rootScope, getGroupInfo, updateGroupInfo, getAllGroupUsers, loginService) {
+app.controller("navCtl", function($scope, $location, $window, getGroupInfo, updateGroupInfo, getAllGroupUsers, loginService, getFloorInfo, registrationService, getRoomInfo, $mdSidenav) {
+
+  // List of all building names in order (according to number on campus map)
+  $scope.buildingList = ["Dieseth", "Miller", "Larsen", "Olson"];
+  // used to apply CSS rules on campus map buildings
+  // we can't just use CSS because of dumb HTML rules
+  $scope.buildingDict = {
+    "Dieseth": false,
+    "Miller": false,
+    "Larsen": false,
+    "Olson": false
+  };
+
+  // Determines which floor plan we see in the nav window--defaults to campus map
+  $scope.currentBuilding = "campus";
+
+  $scope.navigate = function(building) {
+    // Navigate to certain building on campus
+    $scope.currentBuilding = building;
+    if (building !== 'campus') {
+      getFloorInfo.fetchData(building.toLowerCase()).then(function(res) {
+        // fetches info about current group members and requesting group members
+        $scope.floorList = res.floorList;
+      });
+    }
+  }
+
+  $scope.reload = function() {
+    $window.location.reload();
+  }
 
   $scope.logout = function() {
     $location.path("/logout");
     $window.location.reload();
-  }
+  };
 
   $scope.login = function() {
     // let user login with google credentials
     $location.path("/login");
     $window.location.reload();
-  }
+  };
 
   loginService.getUserLogin().then(function(res) {
     // Determine if user is logged in; if so, get group information from refresh()
@@ -33,6 +62,13 @@ app.controller("navCtl", function($scope, $window, $location, $rootScope, getGro
       getGroupInfo.isUserInGroup($scope.currentUserID).then(function(res) {
         // Determine if user is currently in a group; used to decide what information panels to display in UI
         $scope.hasGroup = res.hasGroup;
+        // Check if logged-in user has a group; if not, he/she can't register
+        if (res.hasGroup) {
+          $scope.groupID = res.groupID;
+          if ($scope.groupID) {
+            $scope.canRegister = true;
+          }
+        }
       });
 
       getGroupInfo.fetchGroupMembers($scope.currentUserID).then(function(res) {
@@ -41,7 +77,7 @@ app.controller("navCtl", function($scope, $window, $location, $rootScope, getGro
         $scope.requestingMembers = res.requestingMembers;
       });
     }
-  }
+  };
 
   $scope.acceptRequest = function(userID) {
     updateGroupInfo.acceptRequest(userID);
@@ -56,11 +92,6 @@ app.controller("navCtl", function($scope, $window, $location, $rootScope, getGro
   $scope.leaveGroup = function() {
     updateGroupInfo.leaveGroup($scope.currentUserID);
     refresh();
-  }
-
-  $scope.navigate = function(buildingName) {
-    // Navigates from campus map view to floor plan of whatever building was clicked on
-    $location.path("/building").search("bname", buildingName)
   };
 
   getAllGroupUsers.fetchData().then(function(res) {
@@ -87,11 +118,36 @@ app.controller("navCtl", function($scope, $window, $location, $rootScope, getGro
   $scope.createGroup = function() {
     updateGroupInfo.createGroup($scope.currentUserID);
     refresh();
-  }
+  };
 
   $scope.requestMembership = function(userObj) {
     // request to be added to the group of the person currently selected in autocomplete
     updateGroupInfo.sendGroupRequest($scope.currentUserID, userObj.searchID);
+  };
+
+  $scope.toggleRight = function(roomNum1, roomNum2) {
+    $scope.roomNumber = roomNum1.toString() + roomNum2.toString();
+    $scope.headerTitle = $scope.buildingName + " " + $scope.roomNumber;
+
+    getRoomInfo.getOccupants($scope.buildingName, $scope.roomNumber).then(function(res) {
+      $scope.roomOccupants = res.roomOccupants;
+    });
+    $mdSidenav('right').toggle();
   }
 
+  $scope.registerForRoom = function() {
+    if ($scope.canRegister) {
+      registrationService.registerForRoom($scope.groupID, $scope.buildingName, $scope.roomNumber).then(function(res) {
+        if (!res.wasSuccessful) {
+          console.log("ERROR registering for room");
+        }
+      })
+    }
+  };
+
+})
+.controller('RightCtrl', function ($scope, $mdSidenav) {
+  $scope.close = function () {
+    $mdSidenav('right').close();
+  };
 });

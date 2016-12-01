@@ -27,9 +27,9 @@
   text-decoration-color: lightblue;
 }
 
-.right-panel {
-  float: right;
-  width: 40%;
+.right-nav-panel {
+  float: left;
+  width: 300px;
 }
 
 .group-info {
@@ -56,33 +56,39 @@
 }
 
 .campus-map {
-  background-image: url("../img/campus-map.jpg");
-  width: 696px;
-  height: 901px;
-  background-size: 696px 901px;
+  background-image: url("../img/campus-map.png");
+  width: 732px;
+  height: 659px;
+  background-size: 779px 659px;
   float:left;
-}
-
-.temporary {
-  background-image: url("../img/temp.jpg");
-  width: 500px;
-  height: 500px;
-  background-size: 500px 500px;
-  float:left;
-}
-
-.temporary-svg {
-  width: 500px;
-  height: 500px;
 }
 
 .campus-svg {
-  width: 696px;
-  height: 901px;
+  width: 779px;
+  height: 659px;
+}
+
+.miller-odd {
+  background-image: url("../img/miller-odd.png");
+  width: 970px;
+  height: 456px;
+  background-size: 970px 456px;
+  float:left;
+}
+
+.miller-odd-svg {
+  /*width: 500px;
+  height: 500px;*/
 }
 
 .clickable-building {
   opacity: 0;
+}
+
+.clickable-building-hover {
+  opacity: .5;
+  stroke-width: 8px;
+  stroke: #0000ee;
 }
 
 .clickable-building:hover {
