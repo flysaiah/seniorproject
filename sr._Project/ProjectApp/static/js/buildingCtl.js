@@ -30,20 +30,20 @@ app.controller('buildingCtl', function($scope, $location, getFloorInfo, getRoomI
     $scope.headerTitle = $scope.buildingName + " " + $scope.roomNumber;
 
     getRoomInfo.getOccupants($scope.buildingName, $scope.roomNumber).then(function(res) {
-      $scope.currentOccupants = res;
+      $scope.roomOccupants = res.roomOccupants;
     });
     $mdSidenav('right').toggle();
   }
 
   $scope.registerForRoom = function() {
-    if ($)
-    registrationService.registerForRoom($scope.groupID, $scope.buildingName, $scope.roomNumber).then(function(res) {
-      if (!res.wasSuccessful) {
-        console.log("ERROR registering for room");
-      }
-    })
-  }
-
+    if ($scope.canRegister) {
+      registrationService.registerForRoom($scope.groupID, $scope.buildingName, $scope.roomNumber).then(function(res) {
+        if (!res.wasSuccessful) {
+          console.log("ERROR registering for room");
+        }
+      })
+    }
+  };
 })
 .controller('RightCtrl', function ($scope, $mdSidenav) {
   $scope.close = function () {

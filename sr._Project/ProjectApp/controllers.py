@@ -164,7 +164,7 @@ def registerForRoom():
 	roomNum = req['roomNumber']
 	query = db.engine.execute(text('select isTaken from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
 	for row in query:
-		if row.isTaken == 0:
+		if row.isTaken == 1:
 			return jsonify(wasSuccessful=False)
 	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(groupID)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
 	return jsonify(wasSuccessful=True)
