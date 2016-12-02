@@ -70,15 +70,52 @@
 
 .miller-odd {
   background-image: url("../img/miller-odd.png");
-  width: 970px;
-  height: 456px;
-  background-size: 970px 456px;
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
   float:left;
 }
 
 .miller-odd-svg {
-  /*width: 500px;
-  height: 500px;*/
+  width: 820px;
+  height: 385px;
+}
+.miller-even {
+  background-image: url("../img/miller-even.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+
+.miller-even-svg {
+  width: 820px;
+  height: 385px;
+}
+
+.dieseth-odd {
+  background-image: url("../img/dieseth-odd.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+
+.dieseth-odd-svg {
+  width: 820px;
+  height: 385px;
+}
+.dieseth-even {
+  background-image: url("../img/dieseth-even.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+
+.dieseth-even-svg {
+  width: 820px;
+  height: 385px;
 }
 
 .clickable-building {
@@ -87,7 +124,7 @@
 
 .clickable-building-hover {
   opacity: .5;
-  stroke-width: 8px;
+  stroke-width: 5px;
   stroke: #0000ee;
 }
 

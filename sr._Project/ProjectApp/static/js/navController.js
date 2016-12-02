@@ -127,9 +127,9 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, upda
 
   $scope.toggleRight = function(roomNum1, roomNum2) {
     $scope.roomNumber = roomNum1.toString() + roomNum2.toString();
-    $scope.headerTitle = $scope.buildingName + " " + $scope.roomNumber;
+    $scope.headerTitle = $scope.currentBuilding.toLowerCase() + " " + $scope.roomNumber;
 
-    getRoomInfo.getOccupants($scope.buildingName, $scope.roomNumber).then(function(res) {
+    getRoomInfo.getOccupants($scope.currentBuilding.toLowerCase(), $scope.roomNumber).then(function(res) {
       $scope.roomOccupants = res.roomOccupants;
     });
     $mdSidenav('right').toggle();
@@ -137,9 +137,12 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, upda
 
   $scope.registerForRoom = function() {
     if ($scope.canRegister) {
-      registrationService.registerForRoom($scope.groupID, $scope.buildingName, $scope.roomNumber).then(function(res) {
+      registrationService.registerForRoom($scope.groupID, $scope.currentBuilding.toLowerCase(), $scope.roomNumber).then(function(res) {
         if (!res.wasSuccessful) {
           console.log("ERROR registering for room");
+        } else {
+          // if they registered successfully, refresh login info so we disable the remaining "REGISTER" buttons
+          refresh();
         }
       })
     }
