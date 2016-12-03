@@ -27,8 +27,11 @@
           </md-content>
         </md-tab>
         <md-tab label="Registration Information">
-          <md-content class="md-padding">
-            This is where registration info will go.
+          <md-content class="md-padding" ng-show="registrationTime">
+            Registration time: {{ registrationTime }}
+          </md-content>
+          <md-content class="md-padding" ng-show="!registrationTime">
+            You have not received a registration time yet. Please wait for administration to assign you a time.
           </md-content>
         </md-tab>
       </md-tabs>

@@ -177,7 +177,19 @@ app.factory('registrationService', function($http) {
         return response.data;
       }, function (err) {
         // for testing
-        var data = {"wasSuccessful": true};
+        var data = {"wasSuccessful": false, "reason": "time"};  // reason can be: 'time', 'taken'
+        return data;
+      });
+      return promise;
+    }, getRegistrationTime: function(groupID) {
+      var body = {
+        "groupID": groupID,
+      }
+      var promise = $http.post('/getRegistrationTime', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var data = {"registrationTime": "3/9/16 at 9:30pm"};
         return data;
       });
       return promise;

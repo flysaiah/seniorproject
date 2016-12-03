@@ -12,7 +12,7 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
     "Larsen": false,
     "Olson": false
   };
-  
+
   // Determines which floor plan we see in the nav window--defaults to campus map
   $scope.currentBuilding = "campus";
 
@@ -95,10 +95,11 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
         if (!res.wasSuccessful) {
           $mdToast.show(
             $mdToast.simple()
-            .textContent('Registration was not successful.')
+            .textContent('Registration unsuccessful. ' + (res.reason === 'time' ? "Please wait until your registration time." : "This room is no longer available."))
             .position('top right')
             .hideDelay(5000)
-          );        } else {
+          );
+        } else {
           $mdToast.show(
             $mdToast.simple()
             .textContent('You have registered successfully!')

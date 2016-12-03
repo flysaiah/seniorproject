@@ -1,6 +1,6 @@
 var app = angular.module("groupinfo", ["ngMaterial", "services"]);
 
-app.controller("groupCtl", function($scope, getGroupInfo, updateGroupInfo, getAllGroupUsers, loginService) {
+app.controller("groupCtl", function($scope, getGroupInfo, updateGroupInfo, getAllGroupUsers, loginService, registrationService) {
   loginService.getUserLogin().then(function(res) {
     // Determine if user is logged in; if so, get group information from refresh()
     if (res.userInfo) {
@@ -24,7 +24,9 @@ app.controller("groupCtl", function($scope, getGroupInfo, updateGroupInfo, getAl
         if (res.hasGroup) {
           $scope.groupID = res.groupID;
           if ($scope.groupID) {
-            $scope.canRegister = true;
+            registrationService.getRegistrationClearance($scope.groupID).then(function(res) {
+              $scope.registrationTime = res.registrationTime;
+            });
           }
         }
       });
