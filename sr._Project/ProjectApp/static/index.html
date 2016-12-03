@@ -8,6 +8,7 @@
   <script src="/static/bower_components/angular-material/angular-material.js"></script>
   <script src="/static/js/services.js"></script>
   <script src="/static/js/navController.js"></script>
+  <script src="/static/js/groupController.js"></script>
   <script src="/static/js/appConfig.js"></script>
 
   <link rel="stylesheet" href="/static/bower_components/angular-material/angular-material.css">
@@ -20,7 +21,7 @@
       <md-toolbar class="main-navbar">
         <div class="md-toolbar-tools" ng-controller="navCtl">
           <h1>
-            <a href="" ng-click="reload();">LUTHER COLLEGE | Room Draw</a>
+            <a href="/" ng-click="reload();">LUTHER COLLEGE | Room Draw</a>
           </h1>
           <span flex></span>
           <!-- <md-button class="md-raised" aria-label="Learn More">
@@ -29,6 +30,9 @@
           <!-- TODO: Only show this when user is logged in -->
           <md-button ng-show="isLoggedIn">
             Hello, {{ currentUserName }}
+          </md-button>
+          <md-button href="/groupInfo" aria-label="Group Info" ng-show="isLoggedIn">
+            Group Info
           </md-button>
           <md-button ng-show="isLoggedIn" ng-click="logout()">
             Logout
@@ -39,7 +43,7 @@
         </div>
       </md-toolbar>
       <!-- This is where the actual content is going to go -->
-      <div ng-view></div>
+      <div class="centered" ng-view></div>
     </div>
   </div>
 </body>

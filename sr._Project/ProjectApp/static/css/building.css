@@ -1,12 +1,5 @@
-.floor-plan {
-  height: 620px;
-  width: 800px;
-  background-color: lightblue;
-  background-position: right;
-  border-style: inset;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 5px;
+.centered {
+  margin-left: 50px;
 }
 
 .main-nav-subtitle {
@@ -33,26 +26,12 @@
 }
 
 .group-info {
-  margin-left: auto;
   margin-right: auto;
-}
-
-.group-info-left {
-  border-right: 1px solid gray;
-  text-align: center;
-}
-
-.group-info-right {
-  border-left: 1px solid gray;
-  text-align: center;
+  width: 55%
 }
 
 .group-member {
   list-style: none;
-}
-
-.hr-card {
-  width: 90%;
 }
 
 .campus-map {

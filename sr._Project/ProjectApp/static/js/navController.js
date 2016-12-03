@@ -1,6 +1,6 @@
 var app = angular.module("navigation", ["ngMaterial", "services"]);
 
-app.controller("navCtl", function($scope, $location, $window, getGroupInfo, updateGroupInfo, getAllGroupUsers, loginService, getFloorInfo, registrationService, getRoomInfo, $mdSidenav) {
+app.controller("navCtl", function($scope, $location, $window, getGroupInfo, loginService, getFloorInfo, registrationService, getRoomInfo, $mdSidenav, $mdToast) {
 
   // List of all building names in order (according to number on campus map)
   $scope.buildingList = ["Dieseth", "Miller", "Larsen", "Olson"];
@@ -12,7 +12,7 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, upda
     "Larsen": false,
     "Olson": false
   };
-
+  
   // Determines which floor plan we see in the nav window--defaults to campus map
   $scope.currentBuilding = "campus";
 
@@ -79,52 +79,6 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, upda
     }
   };
 
-  $scope.acceptRequest = function(userID) {
-    updateGroupInfo.acceptRequest(userID);
-    refresh();
-  };
-
-  $scope.rejectRequest = function(userID) {
-    updateGroupInfo.rejectRequest(userID);
-    refresh();
-  };
-
-  $scope.leaveGroup = function() {
-    updateGroupInfo.leaveGroup($scope.currentUserID);
-    refresh();
-  };
-
-  getAllGroupUsers.fetchData().then(function(res) {
-    // get list of all users for autocomplete
-    $scope.allGroupUsers = res.allGroupUsers.map(function(user) {
-      return {
-        displayName: user.firstName + " " + user.lastName + " (" + user.userID + ")",
-        searchName: angular.lowercase(user.firstName) + " " + angular.lowercase(user.lastName),
-        searchID: angular.lowercase(user.userID)
-      }
-    });
-
-    $scope.querySearch = function(query) {
-      // filter query for autocomplete based on entered text
-      var results = query ? $scope.allGroupUsers.filter( function(user) {
-        return (user.searchName.indexOf(angular.lowercase(query)) === 0)
-        || (user.searchID.indexOf(angular.lowercase(query)) === 0)
-      } ) : $scope.allGroupUsers,
-      deferred;
-      return results;
-    };
-  });
-
-  $scope.createGroup = function() {
-    updateGroupInfo.createGroup($scope.currentUserID);
-    refresh();
-  };
-
-  $scope.requestMembership = function(userObj) {
-    // request to be added to the group of the person currently selected in autocomplete
-    updateGroupInfo.sendGroupRequest($scope.currentUserID, userObj.searchID);
-  };
-
   $scope.toggleRight = function(roomNum1, roomNum2) {
     $scope.roomNumber = roomNum1.toString() + roomNum2.toString();
     $scope.headerTitle = $scope.currentBuilding.toLowerCase() + " " + $scope.roomNumber;
@@ -133,14 +87,24 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, upda
       $scope.roomOccupants = res.roomOccupants;
     });
     $mdSidenav('right').toggle();
-  }
+  };
 
   $scope.registerForRoom = function() {
     if ($scope.canRegister) {
       registrationService.registerForRoom($scope.groupID, $scope.currentBuilding.toLowerCase(), $scope.roomNumber).then(function(res) {
         if (!res.wasSuccessful) {
-          console.log("ERROR registering for room");
-        } else {
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('Registration was not successful.')
+            .position('top right')
+            .hideDelay(5000)
+          );        } else {
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('You have registered successfully!')
+            .position('top right')
+            .hideDelay(5000)
+          );
           // if they registered successfully, refresh login info so we disable the remaining "REGISTER" buttons
           refresh();
         }

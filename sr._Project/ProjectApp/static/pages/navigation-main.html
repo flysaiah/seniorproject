@@ -19,7 +19,7 @@
     </div>
 
     <!-- This is where we actually show the floor plan -->
-
+    
     <div class="miller-odd" ng-show="currentBuilding === 'Miller' && floorNumber % 2">
       <svg class="miller-odd-svg">
         <polygon class="clickable-building" points="7,133 99,118 108,190 16,189" ng-click="toggleRight(floorNumber, '01')"></polygon>
@@ -129,114 +129,51 @@
 </div>
 
 
-  <div class="right-nav-panel" flex-gt-sm="50" flex>
+<div class="right-nav-panel" flex-gt-sm="50" flex>
 
-    <md-toolbar layout="row" class="main-navbar">
-      <div class="md-toolbar-tools">
-        <span>Buildings</span>
+  <md-toolbar layout="row" class="main-navbar">
+    <div class="md-toolbar-tools">
+      <span>Buildings</span>
+    </div>
+  </md-toolbar>
+  <md-list flex>
+    <md-subheader class="md-no-sticky">Select a building to navigate to it</md-subheader>
+    <md-list-item class="md-3-line" ng-repeat="building in buildingList track by $index" ng-click="navigate(building)" ng-mouseover="buildingDict[building] = true;" ng-mouseleave="buildingDict[building] = false;">
+      <img ng-src="./static/img/icons/circle-{{ $index + 1 }}.png" class="md-avatar" alt="{{ $index }}"/>
+      <div class="md-list-item-text" layout="column">
+        <h3>{{ building }}</h3>
       </div>
-    </md-toolbar>
-    <md-list flex>
-      <md-subheader class="md-no-sticky">Select a building to navigate to it</md-subheader>
-      <md-list-item class="md-3-line" ng-repeat="building in buildingList track by $index" ng-click="navigate(building)" ng-mouseover="buildingDict[building] = true;" ng-mouseleave="buildingDict[building] = false;">
-        <img ng-src="./static/img/icons/circle-{{ $index + 1 }}.png" class="md-avatar" alt="{{ $index }}"/>
-        <div class="md-list-item-text" layout="column">
-          <h3>{{ building }}</h3>
-        </div>
-        <md-divider></md-divider>
-      </md-list-item>
-    </md-list>
-  </div>
-  <!-- Side nav with registration info -->
-  <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="right">
-
-      <md-toolbar class="md-theme-light">
-        <h1 class="md-toolbar-tools">{{ headerTitle }}</h1>
-      </md-toolbar>
-      <md-content ng-controller="RightCtrl" layout-padding>
-
-        <div ng-show="roomOccupants.length === 0">
-          Room currently available.
-          <md-button class="md-primary md-raised" ng-disabled="!canRegister" aria-label="Register" ng-click="registerForRoom()">Register</md-button>
-        </div>
-
-        <div ng-show="roomOccupants.length !== 0">
-          Room unavailable. Current occupants:
-          <ul>
-            <li ng-repeat="occupant in roomOccupants">{{ occupant.firstName }} {{ occupant.lastName }} ({{ occupant.userID }})</li>
-          </ul>
-        </div>
-
-        <md-button ng-click="close()" class="md-primary">
-          Close SideNav
-        </md-button>
-      </md-content>
-
-    </md-sidenav>
-  <!-- <div class = "footer" > <h4> Luther College  700 College Drive  Decorah, Iowa 52101  USA </h4>
-  <h4> 563-387-2000  800-4-LUTHER (800-458-8437) </h4>
-</div> -->
-
-
-<!--
-<div class="right-panel">
-  <md-card class="group-info" ng-show="isLoggedIn">
-    <md-card-title>
-      <md-card-title-text>
-        <span class="md-headline">Group Information</span>
-      </md-card-title-text>
-    </md-card-title>
-    <md-card-content ng-show="isLoggedIn && hasGroup">
-      <md-tabs md-dynamic-height md-border-bottom>
-        <md-tab label="Current Group Members">
-          <md-content class="md-padding">
-            <p ng-repeat="groupMember in groupMembers">{{ groupMember.FirstName }} {{ groupMember.LastName }} ({{ groupMember.userID }})</p>
-          </md-content>
-          <md-button class="md-warn md-raised" aria-label="Leave Group" ng-click="leaveGroup()">Leave Group</md-button>
-        </md-tab>
-        <md-tab label="Requests">
-          <md-content class="md-padding">
-            <p ng-repeat="requestingMember in requestingMembers">{{ requestingMember.FirstName }} {{ requestingMember.LastName }} ({{ requestingMember.userID }})
-              <md-button ng-click="acceptRequest(requestingMember.userID)" class="md-icon-button" aria-label="Favorite">
-                <md-icon md-svg-icon="/static/img/icons/accept.svg"></md-icon>
-              </md-button>
-              <md-button ng-click="rejectRequest(requestingMember.userID)" class="md-icon-button" aria-label="Favorite">
-                <md-icon md-svg-icon="/static/img/icons/reject.svg"></md-icon>
-              </md-button>
-            </p>
-            <p ng-show="requestingMembers.length === 0">You have no group requests.</p>
-          </md-content>
-        </md-tab>
-      </md-tabs>
-    </md-card-content>
-    <md-card-content ng-show="isLoggedIn && !hasGroup">
-      <md-content class="md-padding">
-        You are not currently in a group. Find a group below, or create your own group.
-        <form ng-submit="$event.preventDefault()">
-          <br>
-          <md-autocomplete
-          md-selected-item="selectedItem"
-          md-search-text="searchText"
-          md-items="user in querySearch(searchText)"
-          md-item-text="user.displayName"
-          md-min-length="0"
-          placeholder="Enter the name of a person here">
-          <md-item-template>
-            <span md-highlight-text="searchText" md-highlight-flags="^i">{{ user.displayName }}</span>
-          </md-item-template>
-          <md-not-found>
-            No users matching "{{searchText}}" were found.
-          </md-not-found>
-        </md-autocomplete>
-        <md-button class="md-accent md-raised" aria-label="Send request" ng-click="requestMembership(selectedItem)"
-        ng-disabled="allGroupUsers.indexOf(selectedItem) === -1">Send request</md-button>
-        <md-button class="md-primary md-raised" aria-label="Create Group" ng-click="createGroup()">Create Group</md-button>
-        <br>
-      </form>
-    </md-content>
-  </md-card-content>
-</md-card>
+      <md-divider></md-divider>
+    </md-list-item>
+  </md-list>
 </div>
+<!-- Side nav with registration info -->
+<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="right">
 
- -->
+  <md-toolbar class="md-theme-light main-navbar">
+    <h1 class="md-toolbar-tools">{{ headerTitle }}</h1>
+  </md-toolbar>
+  <md-content ng-controller="RightCtrl" layout-padding>
+
+    <div ng-show="roomOccupants.length === 0">
+      Room currently available.
+      <md-button class="md-primary md-raised" ng-disabled="!canRegister" aria-label="Register" ng-click="registerForRoom()">Register</md-button>
+    </div>
+
+    <div ng-show="roomOccupants.length !== 0">
+      Room unavailable. Current occupants:
+      <ul>
+        <li ng-repeat="occupant in roomOccupants">{{ occupant.firstName }} {{ occupant.lastName }} ({{ occupant.userID }})</li>
+      </ul>
+    </div>
+
+    <md-button ng-click="close()" class="md-primary">
+      Close SideNav
+    </md-button>
+  </md-content>
+
+</md-sidenav>
+<!-- <div class = "footer" > <h4> Luther College  700 College Drive  Decorah, Iowa 52101  USA </h4>
+<h4> 563-387-2000  800-4-LUTHER (800-458-8437) </h4>
+</div> -->
 </div>
