@@ -2,6 +2,45 @@ var app = angular.module("navigation", ["ngMaterial", "services"]);
 
 app.controller("navCtl", function($scope, $location, $window, getGroupInfo, loginService, getFloorInfo, registrationService, getRoomInfo, $mdSidenav, $mdToast) {
 
+  // hardcoded room lists
+  var room_dict = {
+    'Miller': {
+      "allFloorsAreSame": "true",
+      "givenInRangeFormat": "true",
+      "floors": [01, 23]
+    },     'Dieseth': {
+      "allFloorsAreSame": "true",
+      "givenInRangeFormat": "true",
+      "floors": [01, 23]
+    }
+  }//,  'Larsen': {
+    //   "allFloorsAreSame": "true",
+    //   "givenInRangeFormat": "true",
+    //   "floors": [01, 23]
+    // },    'Olson': {
+    //   "allFloorsAreSame": "true",
+    //   "givenInRangeFormat": "true",
+    //   "floors": [01, 23]
+    // },
+
+  function generateRoomList(buildingName, floorNumber) {
+    // generate list of room numbers to be used in service call for getting room occupants
+    var building = room_dict[buildingName];
+    // if all floor plans are identical with room names then floor number isn't as important
+    if (building.allFloorsAreSame) {
+      if (building.givenInRangeFormat) {
+        var arr = [];
+        for (var i = building.floors[0]; i < building.floors[1] + 1; i++) {
+          var floorNum = parseInt(floorNumber) * 100;
+          arr.push(floorNum + i)
+        }
+        return arr;
+      }
+    } else {
+      // TODO: see if we need this
+    }
+  };
+
   // List of all building names in order (according to number on campus map)
   $scope.buildingList = ["Dieseth", "Miller", "Larsen", "Olson"];
   // used to apply CSS rules on campus map buildings
@@ -77,15 +116,18 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
         $scope.requestingMembers = res.requestingMembers;
       });
     }
+    // if we're looking at a floor plan, get information about room occupants of that floor
+    if ($scope.currentBuilding !== 'campus' && $scope.floorNumber) {
+      var roomList = generateRoomList($scope.currentBuilding, $scope.floorNumber);
+      getRoomInfo.getOccupantsDict($scope.currentBuilding, roomList).then(function(res) {
+        $scope.occupantsDict = res.occupantsDict;
+      });
+    }
   };
 
   $scope.toggleRight = function(roomNum1, roomNum2) {
     $scope.roomNumber = roomNum1.toString() + roomNum2.toString();
     $scope.headerTitle = $scope.currentBuilding.toLowerCase() + " " + $scope.roomNumber;
-
-    getRoomInfo.getOccupants($scope.currentBuilding.toLowerCase(), $scope.roomNumber).then(function(res) {
-      $scope.roomOccupants = res.roomOccupants;
-    });
     $mdSidenav('right').toggle();
   };
 

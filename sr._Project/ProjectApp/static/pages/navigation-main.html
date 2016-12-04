@@ -155,15 +155,15 @@
   </md-toolbar>
   <md-content ng-controller="RightCtrl" layout-padding>
 
-    <div ng-show="roomOccupants.length === 0">
+    <div ng-show="occupantsDict[roomNumber].length === 0">
       Room currently available.
       <md-button class="md-primary md-raised" ng-disabled="!canRegister" aria-label="Register" ng-click="registerForRoom()">Register</md-button>
     </div>
 
-    <div ng-show="roomOccupants.length !== 0">
+    <div ng-show="occupantsDict[roomNumber].length !== 0">
       Room unavailable. Current occupants:
       <ul>
-        <li ng-repeat="occupant in roomOccupants">{{ occupant.firstName }} {{ occupant.lastName }} ({{ occupant.userID }})</li>
+        <li ng-repeat="occupant in occupantsDict[roomNumber].length">{{ occupant.firstName }} {{ occupant.lastName }} ({{ occupant.userID }})</li>
       </ul>
     </div>
 
