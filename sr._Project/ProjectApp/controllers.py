@@ -148,11 +148,8 @@ def getFloorInfo():
 	if hBasement == 1:
 		floor_List.append('B')
 
-	for i in range(1,int(nFloors)):
-
+	for i in range(1,int(nFloors)+1):
 		floor_List.append(str(i))
-		if i == int(nFloors)-1 and hBasement == 0:
-					floor_List.append(str(i+1))
 
 	return jsonify(floorList=floor_List)
 

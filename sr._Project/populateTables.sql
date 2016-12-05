@@ -31,9 +31,9 @@ INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES (
 INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test12","Testy","Testeese", 12, 15);
 INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test13","Testy","Testington", 13, 16);
 
-INSERT INTO Buildings(name, numFloors, hasBasement) VALUES("Miller", 9, true);
-INSERT INTO Buildings(name, numFloors, hasBasement) VALUES("Dieseth", 9, true);
-INSERT INTO Buildings(name, numFloors) VALUES("Larsen",3);
+INSERT INTO Buildings(name, numFloors) VALUES("Miller", 8);
+INSERT INTO Buildings(name, numFloors) VALUES("Dieseth", 8);
+INSERT INTO Buildings(name, numFloors, hasBasement) VALUES("Larsen",3, true);
 INSERT INTO Buildings(name, numFloors) VALUES("Olson",3);
 
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(302, "Olson", 2);
