@@ -64,6 +64,7 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
         $scope.floorList = res.floorList;
       });
     }
+    refreshRoomInfo();
   }
 
   $scope.reload = function() {
@@ -120,14 +121,19 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
         $scope.requestingMembers = res.requestingMembers;
       });
     }
+    refreshRoomInfo();
+  };
+
+  function refreshRoomInfo() {
     // if we're looking at a floor plan, get information about room occupants of that floor
     if ($scope.currentBuilding !== 'campus' && $scope.floorNumber) {
       var roomList = generateRoomList($scope.currentBuilding, $scope.floorNumber);
       getRoomInfo.getOccupantsDict($scope.currentBuilding, roomList).then(function(res) {
         $scope.occupantsDict = res.occupantsDict;
+        console.log(res.occupantsDict);
       });
     }
-  };
+  }
 
   $scope.toggleRight = function(roomNum1, roomNum2) {
     $scope.roomNumber = roomNum1.toString() + roomNum2.toString();
