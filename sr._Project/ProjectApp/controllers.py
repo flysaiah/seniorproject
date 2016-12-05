@@ -167,6 +167,7 @@ def registerForRoom():
 		if row.isTaken == 1:
 			return jsonify(wasSuccessful=False)
 	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(groupID)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+	db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(groupID)+'";'))
 	return jsonify(wasSuccessful=True)
 
 @app.route('/getRoomOccupants', methods=['POST'])
@@ -180,6 +181,16 @@ def getRoomOccupants():
 		x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 		user_List.append(x)
 	return jsonify(roomOccupants=user_List)
+	
+@app.route('/getRegistrationTime', methods=['POST'])
+def getRegistrationTime():
+	req = request.get_json()
+	groupID = req['groupID']
+	query = db.engine.execute(text('select drawDate from Groups where groupId=S"'+str(groupID)+'";'))
+	for row in query:
+		regTime = row.drawDate
+	return jsonify(registrationTime=regTime)
+
 
 
 @app.route('/login')
