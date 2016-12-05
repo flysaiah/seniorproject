@@ -31,7 +31,7 @@
           <md-button ng-show="isLoggedIn">
             Hello, {{ currentUserName }}
           </md-button>
-          <md-button href="/groupInfo" aria-label="Group Info" ng-show="isLoggedIn">
+          <md-button ng-click="groupInfo()" aria-label="Group Info" ng-show="isLoggedIn">
             Group Info
           </md-button>
           <md-button ng-show="isLoggedIn" ng-click="logout()">

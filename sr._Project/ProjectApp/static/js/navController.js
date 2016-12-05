@@ -60,7 +60,7 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
     $scope.currentBuilding = building;
     if (building !== 'campus') {
       getFloorInfo.fetchData(building.toLowerCase()).then(function(res) {
-        // fetches info about current group members and requesting group members
+        // fetches info about number of floor sfor a given building
         $scope.floorList = res.floorList;
       });
     }
@@ -68,6 +68,10 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
 
   $scope.reload = function() {
     $window.location.reload();
+  }
+
+  $scope.groupInfo = function() {
+    $location.path("/groupInfo");
   }
 
   $scope.logout = function() {
