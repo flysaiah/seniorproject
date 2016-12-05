@@ -167,6 +167,7 @@ def registerForRoom():
 		if row.isTaken == 1:
 			return jsonify(wasSuccessful=False)
 	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(groupID)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+	db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(groupID)+'";'))
 	return jsonify(wasSuccessful=True)
 
 @app.route('/getRoomOccupants', methods=['POST'])
