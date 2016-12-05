@@ -158,13 +158,18 @@ def getFloorInfo():
 
 @app.route('/registerForRoom', methods=['POST'])
 def registerForRoom():
+	now = datetime.datetime.now()
 	req = request.get_json()
 	groupID = req['groupID']
 	build = req['buildingName'].capitalize()
 	roomNum = req['roomNumber']
 	query = db.engine.execute(text('select isTaken from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+	query2 = db.engine.execute(text('select drawDate from Groups where groupId="'+str(groupID)+'";'))
 	for row in query:
 		if row.isTaken == 1:
+			return jsonify(wasSuccessful=False)
+	for row in query:
+		if row.drawDate > now:
 			return jsonify(wasSuccessful=False)
 	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(groupID)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
 	db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(groupID)+'";'))
@@ -181,12 +186,12 @@ def getRoomOccupants():
 		x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 		user_List.append(x)
 	return jsonify(roomOccupants=user_List)
-	
+
 @app.route('/getRegistrationTime', methods=['POST'])
 def getRegistrationTime():
 	req = request.get_json()
 	groupID = req['groupID']
-	query = db.engine.execute(text('select drawDate from Groups where groupId=S"'+str(groupID)+'";'))
+	query = db.engine.execute(text('select drawDate from Groups where groupId="'+str(groupID)+'";'))
 	for row in query:
 		regTime = row.drawDate
 	return jsonify(registrationTime=regTime)
