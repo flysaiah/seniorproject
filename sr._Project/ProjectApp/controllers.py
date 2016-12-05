@@ -186,6 +186,29 @@ def getRoomOccupants():
 		x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 		user_List.append(x)
 	return jsonify(roomOccupants=user_List)
+	
+@app.route('/getRoomOccupantsDict', methods=['POST'])
+def getRoomOccupantsDict():
+	req = request.get_json()
+	roomDict = {}
+	build = req["buildingName"]
+	roomList = req["roomArray"]
+	for room in roomList:
+		personList = []
+		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(room)+ '"and building="'+str(build)+'";'))
+		if check == None:
+			roomDict[room] = []
+
+		else:
+			query = db.engine.execute(text('select firstName, lastName, userId from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			for row in query:
+				x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userId)
+				personList.append(x)
+			roomDict[room] = personList
+	return jsonify(occupantsDict=roomDict)
+
+
+
 
 @app.route('/getRegistrationTime', methods=['POST'])
 def getRegistrationTime():
