@@ -177,7 +177,7 @@ app.factory('registrationService', function($http) {
         return response.data;
       }, function (err) {
         // for testing
-        var data = {"wasSuccessful": false, "reason": "time"};  // reason can be: 'time', 'taken'
+        var data = {"wasSuccessful": false, "reason": "time"};  // reason can be: 'time', 'taken', 'size'
         return data;
       });
       return promise;
@@ -217,30 +217,34 @@ app.factory('loginService', function($http) {
 app.factory('getRoomInfo', function($http) {
   // Get information regarding rooms
   var getRoomInfo = {
-    getOccupants: function(buildingName, roomNumber) {
-      // Return list of current occupants of room
+    getOccupantsDict: function(buildingName, roomArray) {
+      // Return list of current occupants of each room
       var body = {
         "buildingName": buildingName,
-        "roomNumber": roomNumber
+        "roomArray": roomArray
       }
-      var promise = $http.post('/getRoomOccupants', body).then(function (response) {
+      var promise = $http.post('/getRoomOccupantsDict', body).then(function (response) {
         return response.data;
       }, function (err) {
         // for testing
-        var testData = [
-          {
-            "firstName": "Isaiah",
-            "lastName": "Mayerchak",
-            "userID": "mayeis01"
-          },
-          {
-            "firstName": "Testy",
-            "lastName": "Tester",
-            "userID": "testuser01"
-          }
-        ];
+        var testData = {
+          "101":         [
+            {
+              "firstName": "Isaiah",
+              "lastName": "Mayerchak",
+              "userID": "mayeis01"
+            },
+            {
+              "firstName": "Testy",
+              "lastName": "Tester",
+              "userID": "testuser01"
+            }
+          ],
+          "102": [],
+          "103": []
+        }
 
-        return {"roomOccupants": testData};
+        return {"occupantsDict": testData};
       });
       return promise;
     }
