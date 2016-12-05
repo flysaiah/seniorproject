@@ -130,7 +130,7 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
       var roomList = generateRoomList($scope.currentBuilding, $scope.floorNumber);
       getRoomInfo.getOccupantsDict($scope.currentBuilding, roomList).then(function(res) {
         $scope.occupantsDict = res.occupantsDict;
-        console.log(res.occupantsDict);
+        console.log($scope.occupantsDict[$scope.floorNumber + '05'].length);
       });
     }
   }
@@ -138,6 +138,7 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
   $scope.toggleRight = function(roomNum1, roomNum2) {
     $scope.roomNumber = roomNum1.toString() + roomNum2.toString();
     $scope.headerTitle = $scope.currentBuilding.toLowerCase() + " " + $scope.roomNumber;
+    $scope.roomOccupants = $scope.occupantsDict[$scope.roomNumber];
     $mdSidenav('right').toggle();
   };
 

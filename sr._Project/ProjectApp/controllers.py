@@ -167,10 +167,10 @@ def registerForRoom():
 	query2 = db.engine.execute(text('select drawDate from Groups where groupId="'+str(groupID)+'";'))
 	for row in query:
 		if row.isTaken == 1:
-			return jsonify(wasSuccessful=False)
-	for row in query:
+			return jsonify(wasSuccessful=False, reason='taken')
+	for row in query2:
 		if row.drawDate > now:
-			return jsonify(wasSuccessful=False)
+			return jsonify(wasSuccessful=False, reason='time')
 	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(groupID)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
 	db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(groupID)+'";'))
 	return jsonify(wasSuccessful=True)
@@ -186,7 +186,7 @@ def getRoomOccupants():
 		x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 		user_List.append(x)
 	return jsonify(roomOccupants=user_List)
-	
+
 @app.route('/getRoomOccupantsDict', methods=['POST'])
 def getRoomOccupantsDict():
 	req = request.get_json()
@@ -200,9 +200,9 @@ def getRoomOccupantsDict():
 			roomDict[room] = []
 
 		else:
-			query = db.engine.execute(text('select firstName, lastName, userId from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
 			for row in query:
-				x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userId)
+				x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 				personList.append(x)
 			roomDict[room] = personList
 	return jsonify(occupantsDict=roomDict)

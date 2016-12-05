@@ -33,6 +33,19 @@
 .group-member {
   list-style: none;
 }
+.veggie-option {
+  box-sizing: border-box;
+  padding: 0 8px; }
+
+.veggie-option .md-item-text {
+  padding: 8px;
+  background: #f0f0f0;
+  border-radius: 3px; }
+
+.veggie-option .md-item-text h3,
+.veggie-option .md-item-text p {
+  padding: 0;
+  margin: 0; }
 
 .campus-map {
   background-image: url("../img/campus-map.png");
@@ -104,11 +117,25 @@
   outline: none;
 }
 
-
 .clickable-building-hover {
   opacity: .5;
   stroke-width: 5px;
   stroke: #0000ee;
+}
+
+.clickable-room {
+  opacity: 0;
+}
+.clickable-room:focus {
+  outline: none;
+}
+.clickable-room:hover {
+  opacity: .5;
+  cursor: pointer;
+}
+
+.room-taken {
+  opacity: .6 !important;
 }
 
 .clickable-building:hover {
