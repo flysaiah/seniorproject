@@ -181,6 +181,16 @@ def getRoomOccupants():
 		x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 		user_List.append(x)
 	return jsonify(roomOccupants=user_List)
+	
+@app.route('/getRegistrationTime', methods=['POST'])
+def getRegistrationTime():
+	req = request.get_json()
+	groupID = req['groupID']
+	query = db.engine.execute(text('select drawDate from Groups where groupId=S"'+str(groupID)+'";'))
+	for row in query:
+		regTime = row.drawDate
+	return jsonify(registrationTime=regTime)
+
 
 
 @app.route('/login')
