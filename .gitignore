@@ -3,3 +3,4 @@ node_modules/
 sr._Project/ProjectApp/__pycache__/
 sr._Project/testQuerries.sql
 sr._Project/ProjectApp/__init__.pyc
+sr._Project/ProjectApp/static/npm-debug.log

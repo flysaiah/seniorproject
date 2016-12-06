@@ -97,6 +97,41 @@
   height: 385px;
 }
 
+.larsen1 {
+  background-image: url("../img/larsen1.png");
+  width: 850px;
+  height: 385px;
+  background-size: 850px 385px;
+  float:left;
+}
+.larsen1-svg {
+  width: 850px;
+  height: 385px;
+}
+
+.larsen2 {
+  background-image: url("../img/larsen2.png");
+  width: 850px;
+  height: 385px;
+  background-size: 850px 385px;
+  float:left;
+}
+.larsen2-svg {
+  width: 850px;
+  height: 385px;
+}
+
+.larsen3 {
+  background-image: url("../img/larsen3.png");
+  width: 850px;
+  height: 385px;
+  background-size: 850px 385px;
+  float:left;
+}
+.larsen3-svg {
+  width: 820px;
+  height: 385px;
+}
 .clickable-building {
   opacity: 0;
 }
