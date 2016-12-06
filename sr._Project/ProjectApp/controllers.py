@@ -148,25 +148,28 @@ def getFloorInfo():
 	if hBasement == 1:
 		floor_List.append('B')
 
-	for i in range(1,int(nFloors)):
-
+	for i in range(1,int(nFloors)+1):
 		floor_List.append(str(i))
-		if i == int(nFloors)-1 and hBasement == 0:
-					floor_List.append(str(i+1))
 
 	return jsonify(floorList=floor_List)
 
 @app.route('/registerForRoom', methods=['POST'])
 def registerForRoom():
+	now = datetime.datetime.now()
 	req = request.get_json()
 	groupID = req['groupID']
 	build = req['buildingName'].capitalize()
 	roomNum = req['roomNumber']
 	query = db.engine.execute(text('select isTaken from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+	query2 = db.engine.execute(text('select drawDate from Groups where groupId="'+str(groupID)+'";'))
 	for row in query:
 		if row.isTaken == 1:
-			return jsonify(wasSuccessful=False)
+			return jsonify(wasSuccessful=False, reason='taken')
+	for row in query2:
+		if row.drawDate > now:
+			return jsonify(wasSuccessful=False, reason='time')
 	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(groupID)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+	db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(groupID)+'";'))
 	return jsonify(wasSuccessful=True)
 
 @app.route('/getRoomOccupants', methods=['POST'])
@@ -180,6 +183,39 @@ def getRoomOccupants():
 		x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 		user_List.append(x)
 	return jsonify(roomOccupants=user_List)
+
+@app.route('/getRoomOccupantsDict', methods=['POST'])
+def getRoomOccupantsDict():
+	req = request.get_json()
+	roomDict = {}
+	build = req["buildingName"]
+	roomList = req["roomArray"]
+	for room in roomList:
+		personList = []
+		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(room)+ '"and building="'+str(build)+'";'))
+		if check == None:
+			roomDict[room] = []
+
+		else:
+			query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			for row in query:
+				x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
+				personList.append(x)
+			roomDict[room] = personList
+	return jsonify(occupantsDict=roomDict)
+
+
+
+
+@app.route('/getRegistrationTime', methods=['POST'])
+def getRegistrationTime():
+	req = request.get_json()
+	groupID = req['groupID']
+	query = db.engine.execute(text('select drawDate from Groups where groupId="'+str(groupID)+'";'))
+	for row in query:
+		regTime = row.drawDate
+	return jsonify(registrationTime=regTime)
+
 
 
 @app.route('/login')

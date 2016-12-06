@@ -22,6 +22,7 @@
 
     <div class="miller-odd" ng-show="currentBuilding === 'Miller' && floorNumber % 2">
       <svg class="miller-odd-svg">
+<<<<<<< HEAD
         <polygon class="clickable-building" points="7,133 99,118 108,190 16,189" ng-click="toggleRight(floorNumber, '01')"></polygon>
         <text x="12" y="120">{{ floorNumber }}01</text>
         <polygon class="clickable-building" points="95,57 149,48 163,133 108,142" ng-click="toggleRight(floorNumber, '03')"></polygon>
@@ -117,12 +118,63 @@
         <text x="690" y="354">{{ floorNumber }}20</text>
         <polygon class="clickable-building" points="712,195 805,195 813,252 721,266" ng-click="toggleRight(floorNumber, '22')"></polygon>
         <text x="760" y="280">{{ floorNumber }}22</text>
+=======
+        <polygon class="clickable-room" points="7,133 99,118 108,190 16,189" ng-click="toggleRight(floorNumber, '01')"></polygon>
+        <polygon class="clickable-room" points="95,57 149,48 163,133 108,142" ng-click="toggleRight(floorNumber, '03')"></polygon>
+        <polygon class="clickable-room" ng-class="{'room-taken' : occupantsDict[floorNumber + '05'].length}" points="152,47 208,38 223,124 167,133" ng-click="toggleRight(floorNumber, '05')"></polygon>
+        <polygon class="clickable-room" points="213,38 270,30 284,114 226,123" ng-click="toggleRight(floorNumber, '07')"></polygon>
+        <polygon class="clickable-room" points="275,28 329,20 344,104 288,113" ng-click="toggleRight(floorNumber, '09')"></polygon>
+        <polygon class="clickable-room" points="431,10 487,19 471,101 417,91" ng-click="toggleRight(floorNumber, '13')"></polygon>
+        <polygon class="clickable-room" points="491,19 547,28 535,113 476,102" ng-click="toggleRight(floorNumber, '15')"></polygon>
+        <polygon class="clickable-room" points="607,38 551,29 538,113 595,122" ng-click="toggleRight(floorNumber, '17')"></polygon>
+        <polygon class="clickable-room" points="612,38 669,47 653,132 598,122" ng-click="toggleRight(floorNumber, '19')"></polygon>
+        <polygon class="clickable-room" points="672,48 727,57 715,142 657,132" ng-click="toggleRight(floorNumber, '21')"></polygon>
+        <polygon class="clickable-room" points="722,121 813,135 805,190 712,190" ng-click="toggleRight(floorNumber, '23')"></polygon>
+        <polygon class="clickable-room" points="107,194 15,195 6,252 97,266" ng-click="toggleRight(floorNumber, '02')"></polygon>
+        <polygon class="clickable-room" points="104,246 162,256 147,338 92,330" ng-click="toggleRight(floorNumber, '04')"></polygon>
+        <polygon class="clickable-room" points="165,256 222,266 207,348 150,339" ng-click="toggleRight(floorNumber, '06')"></polygon>
+        <polygon class="clickable-room" points="225,266 283,275 268,357 211,348" ng-click="toggleRight(floorNumber, '08')"></polygon>
+        <polygon class="clickable-room" points="287,276 341,285 327,367 272,358" ng-click="toggleRight(floorNumber, '10')"></polygon>
+        <polygon class="clickable-room" points="416,296 431,376 487,367 472,287" ng-click="toggleRight(floorNumber, '12')"></polygon>
+        <polygon class="clickable-room" points="477,287 491,367 547,358 534,276" ng-click="toggleRight(floorNumber, '14')"></polygon>
+        <polygon class="clickable-room" points="538,276 593,267 607,348 551,357" ng-click="toggleRight(floorNumber, '16')"></polygon>
+        <polygon class="clickable-room" points="597,266 653,256 667,338 611,348" ng-click="toggleRight(floorNumber, '18')"></polygon>
+        <polygon class="clickable-room" points="657,256 714,246 728,329 671,338" ng-click="toggleRight(floorNumber, '20')"></polygon>
+        <polygon class="clickable-room" points="712,195 805,195 813,252 721,266" ng-click="toggleRight(floorNumber, '22')"></polygon>
+      </svg>
+    </div>
+    <div class="miller-even" ng-show="currentBuilding === 'Miller' && !(floorNumber % 2)">
+      <svg class="miller-even-svg">
+        <polygon class="clickable-room" points="7,133 99,118 108,190 16,189" ng-click="toggleRight(floorNumber, '01')"></polygon>
+        <polygon class="clickable-room" points="95,57 149,48 163,133 108,142" ng-click="toggleRight(floorNumber, '03')"></polygon>
+        <polygon class="clickable-room" points="152,47 208,38 223,124 167,133" ng-click="toggleRight(floorNumber, '05')"></polygon>
+        <polygon class="clickable-room" points="213,38 270,30 284,114 226,123" ng-click="toggleRight(floorNumber, '07')"></polygon>
+        <polygon class="clickable-room" points="275,28 329,20 344,104 288,113" ng-click="toggleRight(floorNumber, '09')"></polygon>
+        <polygon class="clickable-room" points="431,10 487,19 471,101 417,91" ng-click="toggleRight(floorNumber, '13')"></polygon>
+        <polygon class="clickable-room" points="491,19 547,28 535,113 476,102" ng-click="toggleRight(floorNumber, '15')"></polygon>
+        <polygon class="clickable-room" points="607,38 551,29 538,113 595,122" ng-click="toggleRight(floorNumber, '17')"></polygon>
+        <polygon class="clickable-room" points="612,38 669,47 653,132 598,122" ng-click="toggleRight(floorNumber, '19')"></polygon>
+        <polygon class="clickable-room" points="672,48 727,57 715,142 657,132 " ng-click="toggleRight(floorNumber, '21')"></polygon>
+        <polygon class="clickable-room" points="722,121 813,135 805,190 712,190" ng-click="toggleRight(floorNumber, '23')"></polygon>
+        <polygon class="clickable-room" points="107,194 15,195 6,252 97,266" ng-click="toggleRight(floorNumber, '02')"></polygon>
+        <polygon class="clickable-room" points="104,246 162,256 147,338 92,330" ng-click="toggleRight(floorNumber, '04')"></polygon>
+        <polygon class="clickable-room" points="165,256 222,266 207,348 150,339" ng-click="toggleRight(floorNumber, '06')"></polygon>
+        <polygon class="clickable-room" points="225,266 283,275 268,357 211,348" ng-click="toggleRight(floorNumber, '08')"></polygon>
+        <polygon class="clickable-room" points="287,276 341,285 327,367 272,358" ng-click="toggleRight(floorNumber, '10')"></polygon>
+        <polygon class="clickable-room" points="416,296 431,376 487,367 472,287" ng-click="toggleRight(floorNumber, '12')"></polygon>
+        <polygon class="clickable-room" points="477,287 491,367 547,358 534,276" ng-click="toggleRight(floorNumber, '14')"></polygon>
+        <polygon class="clickable-room" points="538,276 593,267 607,348 551,357" ng-click="toggleRight(floorNumber, '16')"></polygon>
+        <polygon class="clickable-room" points="597,266 653,256 667,338 611,348" ng-click="toggleRight(floorNumber, '18')"></polygon>
+        <polygon class="clickable-room" points="657,256 714,246 728,329 671,338" ng-click="toggleRight(floorNumber, '20')"></polygon>
+        <polygon class="clickable-room" points="712,195 805,195 813,252 721,266" ng-click="toggleRight(floorNumber, '22')"></polygon>
+>>>>>>> revamp-ui
       </svg>
     </div>
   </div>
 
   <div class="dieseth-odd" ng-show="currentBuilding === 'Dieseth' && floorNumber % 2">
     <svg class="dieseth-odd-svg">
+<<<<<<< HEAD
       <polygon class="clickable-building" points="7,133 99,118 108,190 16,189" ng-click="toggleRight(floorNumber, '01')"></polygon>
       <text x="12" y="120">{{ floorNumber }}01</text>
       <polygon class="clickable-building" points="95,57 149,48 163,133 108,142" ng-click="toggleRight(floorNumber, '03')"></polygon>
@@ -221,6 +273,56 @@
       <text x="690" y="354">{{ floorNumber }}20</text>
       <polygon class="clickable-building" points="712,195 805,195 813,252 721,266" ng-click="toggleRight(floorNumber, '22')"></polygon>
       <text x="760" y="280">{{ floorNumber }}22</text>
+=======
+      <polygon class="clickable-room" points="7,133 99,118 108,190 16,189" ng-click="toggleRight(floorNumber, '01')"></polygon>
+      <polygon class="clickable-room" points="95,57 149,48 163,133 108,142" ng-click="toggleRight(floorNumber, '03')"></polygon>
+      <polygon class="clickable-room" points="152,47 208,38 223,124 167,133" ng-click="toggleRight(floorNumber, '05')"></polygon>
+      <polygon class="clickable-room" points="213,38 270,30 284,114 226,123" ng-click="toggleRight(floorNumber, '07')"></polygon>
+      <polygon class="clickable-room" points="275,28 329,20 344,104 288,113" ng-click="toggleRight(floorNumber, '09')"></polygon>
+      <polygon class="clickable-room" points="431,10 487,19 471,101 417,91" ng-click="toggleRight(floorNumber, '11')"></polygon>
+      <polygon class="clickable-room" points="491,19 547,28 535,113 476,102" ng-click="toggleRight(floorNumber, '13')"></polygon>
+      <polygon class="clickable-room" points="607,38 551,29 538,113 595,122" ng-click="toggleRight(floorNumber, '15')"></polygon>
+      <polygon class="clickable-room" points="612,38 669,47 653,132 598,122" ng-click="toggleRight(floorNumber, '17')"></polygon>
+      <polygon class="clickable-room" points="672,48 727,57 715,142 657,132 " ng-click="toggleRight(floorNumber, '19')"></polygon>
+      <polygon class="clickable-room" points="722,121 813,135 805,190 712,190" ng-click="toggleRight(floorNumber, '21')"></polygon>
+      <polygon class="clickable-room" points="107,194 15,195 6,252 97,266" ng-click="toggleRight(floorNumber, '02')"></polygon>
+      <polygon class="clickable-room" points="104,246 162,256 147,338 92,330" ng-click="toggleRight(floorNumber, '04')"></polygon>
+      <polygon class="clickable-room" points="165,256 222,266 207,348 150,339" ng-click="toggleRight(floorNumber, '06')"></polygon>
+      <polygon class="clickable-room" points="225,266 283,275 268,357 211,348" ng-click="toggleRight(floorNumber, '08')"></polygon>
+      <polygon class="clickable-room" points="287,276 341,285 327,367 272,358" ng-click="toggleRight(floorNumber, '10')"></polygon>
+      <polygon class="clickable-room" points="720,588 840,609 815,776 696,757" ng-click="toggleRight(floorNumber, '12')"></polygon>
+      <polygon class="clickable-room" points="477,287 491,367 547,358 534,276" ng-click="toggleRight(floorNumber, '14')"></polygon>
+      <polygon class="clickable-room" points="538,276 593,267 607,348 551,357" ng-click="toggleRight(floorNumber, '16')"></polygon>
+      <polygon class="clickable-room" points="597,266 653,256 667,338 611,348" ng-click="toggleRight(floorNumber, '18')"></polygon>
+      <polygon class="clickable-room" points="657,256 714,246 728,329 671,338" ng-click="toggleRight(floorNumber, '20')"></polygon>
+      <polygon class="clickable-room" points="712,195 805,195 813,252 721,266" ng-click="toggleRight(floorNumber, '22')"></polygon>
+    </svg>
+  </div>
+  <div class="dieseth-even" ng-show="currentBuilding === 'Dieseth' && !(floorNumber % 2)">
+    <svg class="dieseth-even-svg">
+      <polygon class="clickable-room" points="7,133 99,118 108,190 16,189" ng-click="toggleRight(floorNumber, '01')"></polygon>
+      <polygon class="clickable-room" points="95,57 149,48 163,133 108,142" ng-click="toggleRight(floorNumber, '03')"></polygon>
+      <polygon class="clickable-room" points="152,47 208,38 223,124 167,133" ng-click="toggleRight(floorNumber, '05')"></polygon>
+      <polygon class="clickable-room" points="213,38 270,30 284,114 226,123" ng-click="toggleRight(floorNumber, '07')"></polygon>
+      <polygon class="clickable-room" points="275,28 329,20 344,104 288,113" ng-click="toggleRight(floorNumber, '09')"></polygon>
+      <polygon class="clickable-room" points="431,10 487,19 471,101 417,91" ng-click="toggleRight(floorNumber, '11')"></polygon>
+      <polygon class="clickable-room" points="491,19 547,28 535,113 476,102" ng-click="toggleRight(floorNumber, '13')"></polygon>
+      <polygon class="clickable-room" points="607,38 551,29 538,113 595,122" ng-click="toggleRight(floorNumber, '15')"></polygon>
+      <polygon class="clickable-room" points="612,38 669,47 653,132 598,122" ng-click="toggleRight(floorNumber, '17')"></polygon>
+      <polygon class="clickable-room" points="672,48 727,57 715,142 657,132 " ng-click="toggleRight(floorNumber, '19')"></polygon>
+      <polygon class="clickable-room" points="722,121 813,135 805,190 712,190" ng-click="toggleRight(floorNumber, '21')"></polygon>
+      <polygon class="clickable-room" points="107,194 15,195 6,252 97,266" ng-click="toggleRight(floorNumber, '02')"></polygon>
+      <polygon class="clickable-room" points="104,246 162,256 147,338 92,330" ng-click="toggleRight(floorNumber, '04')"></polygon>
+      <polygon class="clickable-room" points="165,256 222,266 207,348 150,339" ng-click="toggleRight(floorNumber, '06')"></polygon>
+      <polygon class="clickable-room" points="225,266 283,275 268,357 211,348" ng-click="toggleRight(floorNumber, '08')"></polygon>
+      <polygon class="clickable-room" points="287,276 341,285 327,367 272,358" ng-click="toggleRight(floorNumber, '10')"></polygon>
+      <polygon class="clickable-room" points="416,296 431,376 487,367 472,287" ng-click="toggleRight(floorNumber, '12')"></polygon>
+      <polygon class="clickable-room" points="477,287 491,367 547,358 534,276" ng-click="toggleRight(floorNumber, '14')"></polygon>
+      <polygon class="clickable-room" points="538,276 593,267 607,348 551,357" ng-click="toggleRight(floorNumber, '16')"></polygon>
+      <polygon class="clickable-room" points="597,266 653,256 667,338 611,348" ng-click="toggleRight(floorNumber, '18')"></polygon>
+      <polygon class="clickable-room" points="657,256 714,246 728,329 671,338" ng-click="toggleRight(floorNumber, '20')"></polygon>
+      <polygon class="clickable-room" points="712,195 805,195 813,252 721,266" ng-click="toggleRight(floorNumber, '22')"></polygon>
+>>>>>>> revamp-ui
     </svg>
   </div>
 </div>
@@ -266,16 +368,22 @@
   </md-toolbar>
   <md-content ng-controller="RightCtrl" layout-padding>
 
-    <div ng-show="roomOccupants.length === 0">
+    <div ng-show="!occupantsDict[roomNumber].length">
       Room currently available.
       <md-button class="md-primary md-raised" ng-disabled="!canRegister" aria-label="Register" ng-click="registerForRoom()">Register</md-button>
     </div>
 
-    <div ng-show="roomOccupants.length !== 0">
-      Room unavailable. Current occupants:
-      <ul>
-        <li ng-repeat="occupant in roomOccupants">{{ occupant.firstName }} {{ occupant.lastName }} ({{ occupant.userID }})</li>
-      </ul>
+    <div ng-show="occupantsDict[roomNumber].length">
+      <span ng-click="console.log(occupantsDict[roomNumber].length)">Room unavailable. Current occupants:</span>
+      <md-list>
+        <md-list-item class="md-2-line veggie-option" ng-repeat="occupant in occupantsDict[roomNumber]" layout="row"
+            layout-wrap>
+          <div class="md-item-text md-whiteframe-z1" flex>
+            <h3 class="occupant">{{ occupant.firstName }} {{ occupant.lastName }}</h3>
+            <p clas="occupant">({{ occupant.userID }})</p>
+          </div>
+        </md-list-item>
+      </md-list>
     </div>
 
     <md-button ng-click="close()" class="md-primary">

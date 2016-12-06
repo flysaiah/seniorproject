@@ -24,7 +24,7 @@ app.controller("groupCtl", function($scope, getGroupInfo, updateGroupInfo, getAl
         if (res.hasGroup) {
           $scope.groupID = res.groupID;
           if ($scope.groupID) {
-            registrationService.getRegistrationClearance($scope.groupID).then(function(res) {
+            registrationService.getRegistrationTime($scope.groupID).then(function(res) {
               $scope.registrationTime = res.registrationTime;
             });
           }
