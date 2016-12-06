@@ -120,7 +120,7 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(313, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(314, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(315, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity, isTaken, gId) VALUES(316, "Miller", 2, true, 4);
-INSERT INTO Rooms(roomNum, building, capacity) VALUES(317, "Miller", 2, true, 5);
+INSERT INTO Rooms(roomNum, building, capacity, isTaken, gId) VALUES(317, "Miller", 2, true, 5);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(318, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(319, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(320, "Miller", 2);
