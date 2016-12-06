@@ -15,6 +15,8 @@ INSERT INTO Groups() VALUES();
 INSERT INTO Groups() VALUES();
 INSERT INTO Groups() VALUES();
 INSERT INTO Groups() VALUES();
+INSERT INTO Groups() VALUES();
+INSERT INTO Groups() VALUES();
 
 
 INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum, isPending) VALUES ("smitze01","Zechariah","Smith", 1, 65, 3, true);
@@ -25,14 +27,14 @@ INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum) VAL
 INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum) VALUES ("test03","Testy","MacTest", 3, 3, 6);
 INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum) VALUES ("test04","Testy","Testerson", 4, 4, 7);
 INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum) VALUES ("test05","Testy","Testus", 4, 5, 8);
-INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test06","Testy","Tester", 6, 9);
+INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum) VALUES ("test06","Testy","Tester", 8, 6, 9);
 INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test07","Testy","Testin", 7, 10);
-INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test08","Testy","Testenheimer", 8, 11);
-INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test09","Testy","Testbuscus", 9, 12);
+INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum) VALUES ("test08","Testy","Testenheimer", 7, 8, 11);
+INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum) VALUES ("test09","Testy","Testbuscus", 6, 9, 12);
 INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test10","Testy","Testicule", 10, 13);
 INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum) VALUES ("test11","Testy","McT", 2, 11, 14);
 INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test12","Testy","Testeese", 12, 15);
-INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test13","Testy","Testington", 13, 16);
+INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum) VALUES ("test13","Testy","Testington", 5, 13, 16);
 
 INSERT INTO Buildings(name, numFloors) VALUES("Miller", 8);
 INSERT INTO Buildings(name, numFloors) VALUES("Dieseth", 8);
@@ -107,10 +109,10 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(223, "Miller", 2);
 ####################################
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(301, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(302, "Miller", 2);
-INSERT INTO Rooms(roomNum, building, capacity) VALUES(303, "Miller", 2);
+INSERT INTO Rooms(roomNum, building, capacity, isTaken, gId) VALUES(303, "Miller", 2, true, 8);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(304, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(305, "Miller", 2);
-INSERT INTO Rooms(roomNum, building, capacity) VALUES(306, "Miller", 2);
+INSERT INTO Rooms(roomNum, building, capacity, isTaken, gId) VALUES(306, "Miller", 2, true, 6);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(307, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(308, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(309, "Miller", 2);
@@ -123,7 +125,7 @@ INSERT INTO Rooms(roomNum, building, capacity, isTaken, gId) VALUES(316, "Miller
 INSERT INTO Rooms(roomNum, building, capacity, isTaken, gId) VALUES(317, "Miller", 2, true, 5);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(318, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(319, "Miller", 2);
-INSERT INTO Rooms(roomNum, building, capacity) VALUES(320, "Miller", 2);
+INSERT INTO Rooms(roomNum, building, capacity, isTaken, gId) VALUES(320, "Miller", 2, true, 7);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(321, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(322, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(323, "Miller", 2);
