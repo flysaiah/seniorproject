@@ -30,7 +30,7 @@ INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES (
 INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test08","Testy","Testenheimer", 8, 11);
 INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test09","Testy","Testbuscus", 9, 12);
 INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test10","Testy","Testicule", 10, 13);
-INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test11","Testy","McT", 11, 14);
+INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum) VALUES ("test11","Testy","McT", 2, 11, 14);
 INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test12","Testy","Testeese", 12, 15);
 INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test13","Testy","Testington", 13, 16);
 
@@ -53,7 +53,7 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(302, "Olson", 2);
 ####################################
 ##        Miller Floor 1          ##
 ####################################
-INSERT INTO Rooms(roomNum, building, capacity) VALUES(101, "Miller", 2);
+INSERT INTO Rooms(roomNum, building, capacity, isTaken, gId) VALUES(101, "Miller", 2, true, 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(102, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(103, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(104, "Miller", 2);
