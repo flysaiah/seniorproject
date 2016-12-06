@@ -1,17 +1,90 @@
 var app = angular.module("navigation", ["ngMaterial", "services"]);
 
-app.controller("navCtl", function($scope, $window, $location, $rootScope, getGroupInfo, updateGroupInfo, getAllGroupUsers, loginService) {
+app.controller("navCtl", function($scope, $location, $window, getGroupInfo, loginService, getFloorInfo, registrationService, getRoomInfo, $mdSidenav, $mdToast) {
+
+  // hardcoded room lists
+  var room_dict = {
+    'Miller': {
+      "allFloorsAreSame": "true",
+      "givenInRangeFormat": "true",
+      "floors": [01, 23]
+    },     'Dieseth': {
+      "allFloorsAreSame": "true",
+      "givenInRangeFormat": "true",
+      "floors": [01, 23]
+    }
+  }//,  'Larsen': {
+    //   "allFloorsAreSame": "true",
+    //   "givenInRangeFormat": "true",
+    //   "floors": [01, 23]
+    // },    'Olson': {
+    //   "allFloorsAreSame": "true",
+    //   "givenInRangeFormat": "true",
+    //   "floors": [01, 23]
+    // },
+
+  function generateRoomList(buildingName, floorNumber) {
+    // generate list of room numbers to be used in service call for getting room occupants
+    var building = room_dict[buildingName];
+    // if all floor plans are identical with room names then floor number isn't as important
+    if (building.allFloorsAreSame) {
+      if (building.givenInRangeFormat) {
+        var arr = [];
+        for (var i = building.floors[0]; i < building.floors[1] + 1; i++) {
+          var floorNum = parseInt(floorNumber) * 100;
+          arr.push(floorNum + i)
+        }
+        return arr;
+      }
+    } else {
+      // TODO: see if we need this
+    }
+  };
+
+  // List of all building names in order (according to number on campus map)
+  $scope.buildingList = ["Dieseth", "Miller", "Larsen", "Olson"];
+  // used to apply CSS rules on campus map buildings
+  // we can't just use CSS because of dumb HTML rules
+  $scope.buildingDict = {
+    "Dieseth": false,
+    "Miller": false,
+    "Larsen": false,
+    "Olson": false
+  };
+
+  // Determines which floor plan we see in the nav window--defaults to campus map
+  $scope.currentBuilding = "campus";
+
+  $scope.navigate = function(building) {
+    // Navigate to certain building on campus
+    $scope.currentBuilding = building;
+    if (building !== 'campus') {
+      getFloorInfo.fetchData(building.toLowerCase()).then(function(res) {
+        // fetches info about number of floor sfor a given building
+        $scope.floorList = res.floorList;
+      });
+    }
+    refreshRoomInfo();
+  }
+
+  $scope.reload = function() {
+    $window.location.reload();
+  }
+
+  $scope.groupInfo = function() {
+    $location.path("/groupInfo");
+  }
 
   $scope.logout = function() {
     $location.path("/logout");
     $window.location.reload();
-  }
+  };
 
   $scope.login = function() {
     // let user login with google credentials
     $location.path("/login");
     $window.location.reload();
-  }
+  };
 
   loginService.getUserLogin().then(function(res) {
     // Determine if user is logged in; if so, get group information from refresh()
@@ -33,6 +106,13 @@ app.controller("navCtl", function($scope, $window, $location, $rootScope, getGro
       getGroupInfo.isUserInGroup($scope.currentUserID).then(function(res) {
         // Determine if user is currently in a group; used to decide what information panels to display in UI
         $scope.hasGroup = res.hasGroup;
+        // Check if logged-in user has a group; if not, he/she can't register
+        if (res.hasGroup) {
+          $scope.groupID = res.groupID;
+          if ($scope.groupID) {
+            $scope.canRegister = true;
+          }
+        }
       });
 
       getGroupInfo.fetchGroupMembers($scope.currentUserID).then(function(res) {
@@ -41,57 +121,54 @@ app.controller("navCtl", function($scope, $window, $location, $rootScope, getGro
         $scope.requestingMembers = res.requestingMembers;
       });
     }
-  }
-
-  $scope.acceptRequest = function(userID) {
-    updateGroupInfo.acceptRequest(userID);
-    refresh();
+    refreshRoomInfo();
   };
 
-  $scope.rejectRequest = function(userID) {
-    updateGroupInfo.rejectRequest(userID);
-    refresh();
+  function refreshRoomInfo() {
+    // if we're looking at a floor plan, get information about room occupants of that floor
+    if ($scope.currentBuilding !== 'campus' && $scope.floorNumber) {
+      var roomList = generateRoomList($scope.currentBuilding, $scope.floorNumber);
+      getRoomInfo.getOccupantsDict($scope.currentBuilding, roomList).then(function(res) {
+        $scope.occupantsDict = res.occupantsDict;
+        console.log($scope.occupantsDict[$scope.floorNumber + '05'].length);
+      });
+    }
+  }
+
+  $scope.toggleRight = function(roomNum1, roomNum2) {
+    $scope.roomNumber = roomNum1.toString() + roomNum2.toString();
+    $scope.headerTitle = $scope.currentBuilding.toLowerCase() + " " + $scope.roomNumber;
+    $scope.roomOccupants = $scope.occupantsDict[$scope.roomNumber];
+    $mdSidenav('right').toggle();
   };
 
-  $scope.leaveGroup = function() {
-    updateGroupInfo.leaveGroup($scope.currentUserID);
-    refresh();
-  }
-
-  $scope.navigate = function(buildingName) {
-    // Navigates from campus map view to floor plan of whatever building was clicked on
-    $location.path("/building").search("bname", buildingName)
+  $scope.registerForRoom = function() {
+    if ($scope.canRegister) {
+      registrationService.registerForRoom($scope.groupID, $scope.currentBuilding.toLowerCase(), $scope.roomNumber).then(function(res) {
+        if (!res.wasSuccessful) {
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('Registration unsuccessful. ' + (res.reason === 'time' ? "Please wait until your registration time." : "This room is no longer available."))
+            .position('top right')
+            .hideDelay(5000)
+          );
+        } else {
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('You have registered successfully!')
+            .position('top right')
+            .hideDelay(5000)
+          );
+          // if they registered successfully, refresh login info so we disable the remaining "REGISTER" buttons
+          refresh();
+        }
+      })
+    }
   };
 
-  getAllGroupUsers.fetchData().then(function(res) {
-    // get list of all users for autocomplete
-    $scope.allGroupUsers = res.allGroupUsers.map(function(user) {
-      return {
-        displayName: user.firstName + " " + user.lastName + " (" + user.userID + ")",
-        searchName: angular.lowercase(user.firstName) + " " + angular.lowercase(user.lastName),
-        searchID: angular.lowercase(user.userID)
-      }
-    });
-
-    $scope.querySearch = function(query) {
-      // filter query for autocomplete based on entered text
-      var results = query ? $scope.allGroupUsers.filter( function(user) {
-        return (user.searchName.indexOf(angular.lowercase(query)) === 0)
-        || (user.searchID.indexOf(angular.lowercase(query)) === 0)
-      } ) : $scope.allGroupUsers,
-      deferred;
-      return results;
-    };
-  });
-
-  $scope.createGroup = function() {
-    updateGroupInfo.createGroup($scope.currentUserID);
-    refresh();
-  }
-
-  $scope.requestMembership = function(userObj) {
-    // request to be added to the group of the person currently selected in autocomplete
-    updateGroupInfo.sendGroupRequest($scope.currentUserID, userObj.searchID);
-  }
-
+})
+.controller('RightCtrl', function ($scope, $mdSidenav) {
+  $scope.close = function () {
+    $mdSidenav('right').close();
+  };
 });

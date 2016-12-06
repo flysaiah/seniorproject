@@ -1,0 +1,69 @@
+<div class="right-panel">
+  <md-card class="group-info" ng-show="isLoggedIn">
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">Group Information</span>
+      </md-card-title-text>
+    </md-card-title>
+    <md-card-content ng-show="isLoggedIn && hasGroup">
+      <md-tabs md-dynamic-height md-border-bottom>
+        <md-tab label="Current Group Members">
+          <md-content class="md-padding">
+            <p ng-repeat="groupMember in groupMembers">{{ groupMember.FirstName }} {{ groupMember.LastName }} ({{ groupMember.userID }})</p>
+          </md-content>
+          <md-button class="md-warn md-raised" aria-label="Leave Group" ng-click="leaveGroup()">Leave Group</md-button>
+        </md-tab>
+        <md-tab label="Requests">
+          <md-content class="md-padding">
+            <p ng-repeat="requestingMember in requestingMembers">{{ requestingMember.FirstName }} {{ requestingMember.LastName }} ({{ requestingMember.userID }})
+              <md-button ng-click="acceptRequest(requestingMember.userID)" class="md-icon-button" aria-label="Favorite">
+                <md-icon md-svg-icon="/static/img/icons/accept.svg"></md-icon>
+              </md-button>
+              <md-button ng-click="rejectRequest(requestingMember.userID)" class="md-icon-button" aria-label="Favorite">
+                <md-icon md-svg-icon="/static/img/icons/reject.svg"></md-icon>
+              </md-button>
+            </p>
+            <p ng-show="requestingMembers.length === 0">You have no group requests.</p>
+          </md-content>
+        </md-tab>
+        <md-tab label="Registration Information">
+          <md-content class="md-padding" ng-show="registrationTime">
+            Registration time: {{ registrationTime }}
+          </md-content>
+          <md-content class="md-padding" ng-show="!registrationTime">
+            You have not received a registration time yet. Please wait for administration to assign you a time.
+          </md-content>
+        </md-tab>
+      </md-tabs>
+    </md-card-content>
+    <md-card-content ng-show="isLoggedIn && !hasGroup">
+      <md-content class="md-padding">
+        You are not currently in a group. Find a group below, or create your own group.
+        <form ng-submit="$event.preventDefault()">
+          <br>
+          <md-autocomplete
+          md-selected-item="selectedItem"
+          md-search-text="searchText"
+          md-items="user in querySearch(searchText)"
+          md-item-text="user.displayName"
+          md-min-length="0"
+          placeholder="Enter the name of a person here">
+            <md-item-template>
+              <span md-highlight-text="searchText" md-highlight-flags="^i">{{ user.displayName }}</span>
+            </md-item-template>
+            <md-not-found>
+              No users matching "{{searchText}}" were found.
+            </md-not-found>
+          </md-autocomplete>
+          <md-button class="md-accent md-raised" aria-label="Send request" ng-click="requestMembership(selectedItem)"
+          ng-disabled="allGroupUsers.indexOf(selectedItem) === -1">Send request</md-button>
+          <md-button class="md-primary md-raised" aria-label="Create Group" ng-click="createGroup()">Create Group</md-button>
+          <br>
+        </form>
+      </md-content>
+    </md-card-content>
+  </md-card>
+  <md-button href="/" ng-click="refresh();" class="md-primary">
+    Go back to the map
+  </md-button>
+</div>

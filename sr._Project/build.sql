@@ -12,7 +12,7 @@
 
 
 #######################################################
-#################	  INSTRUCTIONS	 ##################
+#################	  INSTRUCTIONS	 ####################
 #######################################################
 #      from within directory containing build.sql     # 
 #        and populateTables.sql enter command         #
