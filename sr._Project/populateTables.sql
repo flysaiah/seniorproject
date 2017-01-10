@@ -31,7 +31,7 @@ INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum) VAL
 INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test07","Testy","Testin", 7, 10);
 INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum) VALUES ("test08","Testy","Testenheimer", 7, 8, 11);
 INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum) VALUES ("test09","Testy","Testbuscus", 6, 9, 12);
-INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test10","Testy","Testicule", 10, 13);
+INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("testytesticule","Testy","Testicule", 10, 13);
 INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum) VALUES ("test11","Testy","McT", 2, 11, 14);
 INSERT INTO Users (userName, firstName, lastName, credits, roomDrawNum) VALUES ("test12","Testy","Testeese", 12, 15);
 INSERT INTO Users (userName, firstName, lastName, gId, credits, roomDrawNum) VALUES ("test13","Testy","Testington", 5, 13, 16);
