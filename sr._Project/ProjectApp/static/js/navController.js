@@ -130,10 +130,14 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
       var roomList = generateRoomList($scope.currentBuilding, $scope.floorNumber);
       getRoomInfo.getOccupantsDict($scope.currentBuilding, roomList).then(function(res) {
         $scope.occupantsDict = res.occupantsDict;
-        console.log($scope.occupantsDict[$scope.floorNumber + '05'].length);
       });
     }
-  }
+  };
+
+  $scope.$watch('floorNumber', function() {
+    // make sure we update occupantsDict when we change floor number
+    refreshRoomInfo();
+  })
 
   $scope.toggleRight = function(roomNum1, roomNum2) {
     $scope.roomNumber = roomNum1.toString() + roomNum2.toString();
@@ -161,6 +165,7 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
           );
           // if they registered successfully, refresh login info so we disable the remaining "REGISTER" buttons
           refresh();
+          refreshRoomInfo();
         }
       })
     }
