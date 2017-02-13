@@ -35,6 +35,7 @@ class Users(db.Model):
 	userName = db.Column(VARCHAR(30), nullable=False, primary_key=True)
 	firstName = db.Column(VARCHAR(30), nullable=False)
 	lastName = db.Column(VARCHAR(30), nullable=False)
+	role = db.Column(VARCHAR(30), nullable=False)
 	gId = db.Column(INTEGER, db.ForeignKey(Groups.groupId))
 	credits = db.Column(INTEGER, nullable=False)
 	roomDrawNum = db.Column(INTEGER, nullable=False)
