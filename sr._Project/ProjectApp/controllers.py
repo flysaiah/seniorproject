@@ -1,4 +1,4 @@
-
+ 
 import os
 import datetime
 import time
@@ -23,6 +23,7 @@ def add_header(response):
 	response.headers['Expires'] = format_date_time(time.mktime(expires_time.timetuple()))
 	return response
 
+
 @app.route('/')
 def view_of_test():
 	response = make_response(open('ProjectApp/static/index.html').read())
@@ -33,13 +34,9 @@ def view_of_test():
 	response.headers['Expires'] = format_date_time(time.mktime(expires_time.timetuple()))
 	return response
 
-@app.route('/getUserLogin', methods=['GET'])
-def getUserLogin():
-	if 'google_token' in session:
-		me = google.get('userinfo')
-		return jsonify({"userInfo": me.data})
-	return jsonify({"userInfo": ""})
-
+####################################
+##         Group Requests         ##
+####################################
 
 @app.route('/acceptGroupRequest', methods=['POST'])
 def acceptRequest():
@@ -48,12 +45,14 @@ def acceptRequest():
 	db.engine.execute(text('update Users set isPending=0 where userName="'+str(uID)+'";'))
 	return ""
 
+
 @app.route('/rejectGroupRequest', methods=['POST'])
 def rejectRequest():
 	req = request.get_json()
 	uID = req['userID']
 	db.engine.execute(text('update Users set isPending=0, gID=NULL where userName="'+str(uID)+'";'))
 	return ""
+
 
 @app.route('/sendGroupRequest', methods=['POST'])
 def SendUserRequest():
@@ -65,6 +64,7 @@ def SendUserRequest():
 		group_id = row.gId
 	db.engine.execute(text('update Users set isPending=1, gId="'+str(group_id)+'" where userName="'+str(req_uID)+'";'))
 	return ""
+
 
 @app.route('/leaveGroup', methods=['POST'])
 def leaveGroup():
@@ -111,6 +111,7 @@ def isUserInGroup():
 		return jsonify(hasGroup=ans, groupID=gID)
 	return jsonify(hasGroup=ans)
 
+
 @app.route('/createGroup', methods=['POST'])
 def createGroup():
 	req = request.get_json()
@@ -135,6 +136,9 @@ def getAllUsers():
 			user_List.append(dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName))
 	return jsonify(allGroupUsers=user_List)
 
+####################################
+##      Buildings and Rooms       ##
+####################################
 
 @app.route('/getFloorInfo', methods=['POST'])
 def getFloorInfo():
@@ -152,6 +156,7 @@ def getFloorInfo():
 		floor_List.append(str(i))
 
 	return jsonify(floorList=floor_List)
+
 
 @app.route('/registerForRoom', methods=['POST'])
 def registerForRoom():
@@ -172,6 +177,7 @@ def registerForRoom():
 	db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(groupID)+'";'))
 	return jsonify(wasSuccessful=True)
 
+
 @app.route('/getRoomOccupants', methods=['POST'])
 def getRoomOccupants():
 	user_List = []
@@ -183,6 +189,7 @@ def getRoomOccupants():
 		x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 		user_List.append(x)
 	return jsonify(roomOccupants=user_List)
+
 
 @app.route('/getRoomOccupantsDict', methods=['POST'])
 def getRoomOccupantsDict():
@@ -205,6 +212,9 @@ def getRoomOccupantsDict():
 	return jsonify(occupantsDict=roomDict)
 
 
+####################################
+##         Authentication         ##
+####################################
 
 
 @app.route('/getRegistrationTime', methods=['POST'])
@@ -217,6 +227,9 @@ def getRegistrationTime():
 	return jsonify(registrationTime=regTime)
 
 
+####################################
+##         Authentication         ##
+####################################
 
 @app.route('/login')
 def login():
@@ -247,6 +260,21 @@ def authorized():
     # print("======================")
     return redirect('/')
 
+
+@app.route('/getUserLogin', methods=['GET'])
+def getUserLogin():
+	if 'google_token' in session:
+		me = google.get('userinfo')
+		email = me.data['email']
+		un = email.split('@')
+		userName = un[0]
+		query = db.engine.execute(text('select role from Users where userName="'+ str(userName)+'";'))
+		role = None
+		for row in query:
+			role = row.role
+
+		return jsonify([{"userInfo": me.data}, role])
+	return jsonify([{"userInfo": ""}, None])
 
 
 @google.tokengetter
