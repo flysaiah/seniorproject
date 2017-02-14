@@ -5,13 +5,16 @@ app.controller("groupCtl", function($scope, getGroupInfo, updateGroupInfo, getAl
     // Determine if user is logged in; if so, get group information from refresh()
     if (res.userInfo) {
       $scope.isLoggedIn = true;
-      $scope.currentUserName = res.userInfo.given_name;
-      $scope.currentUserID = res.userInfo.email.substring(0, res.userInfo.email.indexOf("@"));
+      var userInfo = res.userInfo;
+      $scope.currentUserName = userInfo.given_name;
+      $scope.currentUserID = userInfo.email.substring(0, res.userInfo.email.indexOf("@"));
+      $scope.role = userInfo.role;
       refresh();
     } else {
       $scope.isLoggedIn = false;
       $scope.currentUserName = null;
       $scope.currentUserID = null;
+      $scope.role = null;
     }
   });
   function refresh() {
