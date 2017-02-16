@@ -8,7 +8,7 @@ app.controller("adminCtl", function($scope, getGroupInfo, updateGroupInfo, getAl
       var userInfo = res.userInfo;
       $scope.currentUserName = userInfo.given_name;
       $scope.currentUserID = userInfo.email.substring(0, res.userInfo.email.indexOf("@"));
-      $scope.role = userInfo.role;
+      $scope.role = res.role;
       refresh();
     } else {
       $scope.isLoggedIn = false;

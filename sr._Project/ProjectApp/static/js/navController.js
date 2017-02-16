@@ -97,7 +97,7 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
       var userInfo = res.userInfo;
       $scope.currentUserName = userInfo.given_name;
       $scope.currentUserID = userInfo.email.substring(0, res.userInfo.email.indexOf("@"));
-      $scope.role = userInfo.role;
+      $scope.role = res.role;
       refresh();
     } else {
       $scope.isLoggedIn = false;
@@ -149,7 +149,7 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
   $scope.toggleRight = function(roomNum1, roomNum2) {
     $scope.roomNumber = roomNum1.toString() + roomNum2.toString();
     $scope.headerTitle = $scope.currentBuilding.toLowerCase() + " " + $scope.roomNumber;
-    $scope.roomOccupants = $scope.occupantsDict[$scope.roomNumber];
+    $scope.roomOccupants = $scope.occupantsDict[$scope.roomNumber].roomOccupants;
     $mdSidenav('right').toggle();
   };
 
@@ -172,11 +172,28 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
           );
           // if they registered successfully, refresh login info so we disable the remaining "REGISTER" buttons
           refresh();
-          refreshRoomInfo();
         }
       })
     }
   };
+
+  $scope.switchRoomAvailability = function() {
+    // manually changes room availability (admin function)
+    adminService.switchRoomAvailability($scope.buildinName, $scope.roomNumber).then(function(res) {
+      if (!res.wasSuccessful) {
+        console.log("Error switching room availability");
+      } else {
+        var offOrOn = res.isTaken ? "on" : "off";
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('You have successfully turned ' + offOrOn + ' the room.')
+          .position('top right')
+          .hideDelay(5000)
+        );
+        refresh();
+      }
+    });
+  }
 
 })
 .controller('RightCtrl', function ($scope, $mdSidenav) {
