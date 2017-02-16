@@ -251,3 +251,27 @@ app.factory('getRoomInfo', function($http) {
   };
   return getRoomInfo;
 });
+app.factory('adminService', function($http) {
+  // Perform functions admins in Res Life can request
+  var adminService = {
+    switchRoomAvailability: function(buildingName, roomNumber) {
+      // manually changes room availability, turns room "on" or "off"
+      var body = {
+        "buildingName": buildingName,
+        "roomNumber": roomNumber
+      }
+      var promise = $http.post('/switchRoomAvailability', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {
+          "wasSuccessful": false
+        }
+
+        return {"wasSuccessful": testData};
+      });
+      return promise;
+    }
+  };
+  return adminService;
+});
