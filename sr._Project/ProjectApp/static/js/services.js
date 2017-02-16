@@ -228,7 +228,8 @@ app.factory('getRoomInfo', function($http) {
       }, function (err) {
         // for testing
         var testData = {
-          "101":         [
+          "101":
+          {"isTaken": true, "roomOccupants": [
             {
               "firstName": "Isaiah",
               "lastName": "Mayerchak",
@@ -239,9 +240,9 @@ app.factory('getRoomInfo', function($http) {
               "lastName": "Tester",
               "userID": "testuser01"
             }
-          ],
-          "102": [],
-          "103": []
+          ]},
+          "102": {"isTaken": false, "roomOccupants": []},
+          "103": {"isTaken": true, "roomOccupants": []}
         }
 
         return {"occupantsDict": testData};
