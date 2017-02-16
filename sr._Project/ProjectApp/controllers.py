@@ -83,7 +83,7 @@ def getGroupMembers():
 	uID = req['userID']
 
 	group_id_query = db.engine.execute(text('select gId from Users where ' + ' userName="'+str(uID)+'";'))
-
+	group_id = ''
 	for row in group_id_query:
 		group_id = row.gId
 
@@ -213,7 +213,7 @@ def getRoomOccupantsDict():
 
 
 ####################################
-##         Authentication         ##
+##       Registration Time        ##
 ####################################
 
 
@@ -273,8 +273,8 @@ def getUserLogin():
 		for row in query:
 			role = row.role
 
-		return jsonify([{"userInfo": me.data}, role])
-	return jsonify([{"userInfo": ""}, None])
+		return jsonify({"userInfo": me.data, "role": role})
+	return jsonify({"userInfo": "", "role": role})
 
 
 @google.tokengetter
