@@ -268,7 +268,8 @@
 
     <div ng-show="!occupantsDict[roomNumber].length">
       Room currently available.
-      <md-button class="md-primary md-raised" ng-disabled="!canRegister" aria-label="Register" ng-click="registerForRoom()">Register</md-button>
+      <md-button ng-show="role !== 'admin'" class="md-primary md-raised" ng-disabled="!canRegister" aria-label="Register" ng-click="registerForRoom()">Register</md-button>
+      <md-button ng-show="role === 'admin'" ng-disabled="occupantsDict[roomNumber].roomOccupants.length" class="md-warn md-raised" aria-label="Turn {{ occupantsDict[roomNumber].isTaken && occupantsDict[roomNumber].roomOccupants.length < 1 ? 'On' : 'Off' }} Room" ng-click="switchRoomAvailability()">Turn {{ isCurrentlyOn() ? 'Off' : 'On' }} Room</md-button>
     </div>
 
     <div ng-show="occupantsDict[roomNumber].length">

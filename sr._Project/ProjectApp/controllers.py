@@ -233,7 +233,8 @@ def getRegistrationTime():
 ####################################
 ##        Admin Functions         ##
 ####################################
-def changeRoomAvailablility():
+@app.route('/switchRoomAvailability', methods=['POST'])
+def switchRoomAvailablility():
 	req = request.get_json()
 	try:
 		build = req["buildingName"]
