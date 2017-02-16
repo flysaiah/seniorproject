@@ -232,7 +232,8 @@ def getRegistrationTime():
 ####################################
 ##        Admin Functions         ##
 ####################################
-def changeRoomAvailablility():
+@app.route('/switchRoomAvailability', methods=['POST'])
+def switchRoomAvailablility():
 	req = request.get_json()
 	try:
 		build = req["buildingName"]
@@ -286,12 +287,12 @@ def authorized():
 def getUserLogin():
 	if 'google_token' in session:
 		me = google.get('userinfo')
+		role = None
 		if 'email' in me.data:
 			email = me.data['email']
 			un = email.split('@')
 			userName = un[0]
 			query = db.engine.execute(text('select role from Users where userName="'+ str(userName)+'";'))
-			role = None
 			for row in query:
 				role = row.role
 
