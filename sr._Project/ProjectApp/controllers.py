@@ -83,7 +83,7 @@ def getGroupMembers():
 	uID = req['userID']
 
 	group_id_query = db.engine.execute(text('select gId from Users where ' + ' userName="'+str(uID)+'";'))
-
+	group_id = ''
 	for row in group_id_query:
 		group_id = row.gId
 
@@ -197,6 +197,7 @@ def getRoomOccupantsDict():
 	roomDict = {}
 	build = req["buildingName"]
 	roomList = req["roomArray"]
+	availability = None
 	for room in roomList:
 		personList = []
 		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(room)+ '"and building="'+str(build)+'";'))
@@ -204,16 +205,17 @@ def getRoomOccupantsDict():
 			roomDict[room] = []
 
 		else:
-			query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			query = db.engine.execute(text('select firstName, isTaken, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
 			for row in query:
+				availability = row.isTaken
 				x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 				personList.append(x)
-			roomDict[room] = personList
+			roomDict[room] = dict(roomOccupants=personList, isTaken=availability)
 	return jsonify(occupantsDict=roomDict)
 
 
 ####################################
-##         Authentication         ##
+##       Registration Time        ##
 ####################################
 
 
@@ -225,6 +227,25 @@ def getRegistrationTime():
 	for row in query:
 		regTime = row.drawDate
 	return jsonify(registrationTime=regTime)
+
+
+####################################
+##        Admin Functions         ##
+####################################
+def changeRoomAvailablility():
+	req = request.get_json()
+	try:
+		build = req["buildingName"]
+		roomNum = req['roomNumber']
+		query = db.engine.execute(text('select isTaken from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+		for row in query:
+			isTaken = row.isTaken
+			isTaken = isTaken^1
+		db.engine.execute(text('update Rooms set isTaken="'+str(isTaken)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+		return(jsonify(wasSuccessful=True, isTaken=isTaken))
+
+	except:
+		return(jsonify(wasSuccessful=False))
 
 
 ####################################
@@ -265,18 +286,17 @@ def authorized():
 def getUserLogin():
 	if 'google_token' in session:
 		me = google.get('userinfo')
-		email = me.data['email']
-		un = email.split('@')
-		userName = un[0]
-		query = db.engine.execute(text('select role from Users where userName="'+ str(userName)+'";'))
-		role = None
-		for row in query:
-			role = row.role
+		if 'email' in me.data:
+			email = me.data['email']
+			un = email.split('@')
+			userName = un[0]
+			query = db.engine.execute(text('select role from Users where userName="'+ str(userName)+'";'))
+			role = None
+			for row in query:
+				role = row.role
 
-
-		return jsonify({"userInfo": me.data, "role": role})
-	return jsonify([{"userInfo": ""}, None])
-
+			return jsonify({"userInfo": me.data, "role": role})
+	return jsonify({"userInfo": "", "role": role})
 
 @google.tokengetter
 def get_google_oauth_token():
