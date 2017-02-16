@@ -199,6 +199,7 @@ def getRoomOccupantsDict():
 	build = req["buildingName"]
 	roomList = req["roomArray"]
 	for room in roomList:
+		availability = None
 		personList = []
 		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(room)+ '"and building="'+str(build)+'";'))
 		if check == None:
@@ -206,7 +207,9 @@ def getRoomOccupantsDict():
 
 		else:
 			query = db.engine.execute(text('select firstName, isTaken, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
-			availability = row.isTaken
+			query2 = db.engine.execute(text('isTaken from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			for row in query2:
+				availability = row.isTaken
 			for row in query:
 				x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 				personList.append(x)
