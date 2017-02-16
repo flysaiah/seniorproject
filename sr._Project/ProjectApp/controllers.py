@@ -1,4 +1,4 @@
- 
+
 import os
 import datetime
 import time
@@ -266,6 +266,9 @@ def getUserLogin():
 	if 'google_token' in session:
 		me = google.get('userinfo')
 		email = me.data['email']
+		print("------------------------------")
+		print(me.data)
+		print("")
 		un = email.split('@')
 		userName = un[0]
 		query = db.engine.execute(text('select role from Users where userName="'+ str(userName)+'";'))
@@ -275,7 +278,6 @@ def getUserLogin():
 
 		return jsonify({"userInfo": me.data, "role": role})
 	return jsonify({"userInfo": "", "role": role})
-
 
 @google.tokengetter
 def get_google_oauth_token():
