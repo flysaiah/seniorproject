@@ -1,6 +1,6 @@
 var app = angular.module("navigation", ["ngMaterial", "services"]);
 
-app.controller("navCtl", function($scope, $location, $window, getGroupInfo, loginService, getFloorInfo, registrationService, getRoomInfo, $mdSidenav, $mdToast) {
+app.controller("navCtl", function($scope, $location, $window, getGroupInfo, loginService, getFloorInfo, registrationService, getRoomInfo, adminService, $mdSidenav, $mdToast) {
 
   // hardcoded room lists
   var room_dict = {
@@ -179,7 +179,7 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
 
   $scope.switchRoomAvailability = function() {
     // manually changes room availability (admin function)
-    adminService.switchRoomAvailability($scope.buildinName, $scope.roomNumber).then(function(res) {
+    adminService.switchRoomAvailability($scope.currentBuilding, $scope.roomNumber).then(function(res) {
       if (!res.wasSuccessful) {
         console.log("Error switching room availability");
       } else {
