@@ -268,7 +268,7 @@ def manualyAssignRoom():
 
 		gId = None
 		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
-		check == None:
+		if check == None:
 			return(jsonify(wasSuccessful=False, reason="RB"))
 		for row in check:
 			gId = row.gId
