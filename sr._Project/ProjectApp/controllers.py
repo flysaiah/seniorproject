@@ -209,6 +209,7 @@ def getRoomOccupantsDict():
 		else:
 			query = db.engine.execute(text('select firstName, isTaken, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
 			query2 = db.engine.execute(text('select isTaken, capacity from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+
 			for row in query2:
 				availability = row.isTaken
 				capacity = row.capacity
