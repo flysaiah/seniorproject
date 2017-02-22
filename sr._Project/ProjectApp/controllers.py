@@ -200,20 +200,23 @@ def getRoomOccupantsDict():
 	roomList = req["roomArray"]
 	for room in roomList:
 		availability = None
+		capacity = None
 		personList = []
 		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(room)+ '"and building="'+str(build)+'";'))
 		if check == None:
 			roomDict[room] = []
 
 		else:
-			query = db.engine.execute(text('select firstName, isTaken, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
-			query2 = db.engine.execute(text('select isTaken from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			query2 = db.engine.execute(text('select isTaken, capacity from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+
 			for row in query2:
 				availability = row.isTaken
+				capacity = row.capacity
 			for row in query:
 				x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 				personList.append(x)
-			roomDict[room] = dict(roomOccupants=personList, isTaken=availability)
+			roomDict[room] = dict(roomOccupants=personList, isTaken=availability, capacity=capacity)
 	return jsonify(occupantsDict=roomDict)
 
 
@@ -235,6 +238,8 @@ def getRegistrationTime():
 ####################################
 ##        Admin Functions         ##
 ####################################
+
+
 @app.route('/switchRoomAvailability', methods=['POST'])
 def switchRoomAvailablility():
 	req = request.get_json()
@@ -252,9 +257,69 @@ def switchRoomAvailablility():
 		return(jsonify(wasSuccessful=False))
 
 
+@app.route('/manualAssignStudentsToRoom', methods=['POST'])
+def manualyAssignRoom():
+	reason = "Unknown"
+	try:
+		req = request.get_json()
+		build = req['buildingName']
+		roomNum = req['roomNumber']
+		userList = req['userList']
+
+		gId = None
+		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+		if check == None:
+			return(jsonify(wasSuccessful=False, reason="RB"))
+		for row in check:
+			gId = row.gId
+
+		if gId == None:
+			db.engine.execute(text('INSERT INTO Groups() VALUES();'))
+			query = db.engine.execute(text('SELECT LAST_INSERT_ID();'))
+			for row in query:
+				gId = row.gId
+
+		for user in userList:
+			db.engine.execute(text('update Users set isPending=0, gId="'+str(gId)+'" where userName="'+str(user)+'";'))
+
+		db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(groupID)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+		db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(groupID)+'";'))
+		return(jsonify(wasSuccessful=True))
+
+	except:
+		return(jsonify(wasSuccessful=False, reason=reason))
+
+
+@app.route('/manualRemoveStudentsFromRoom', methods=['POST'])
+def manualRemoveFromRoom():
+	reason = "Unknown"
+	try:
+		req = request.get_json()
+		build = req['buildingName']
+		roomNum = req['roomNumber']
+		userList = req['userList']
+		personList = []
+
+		for row in userList:
+			db.engine.execute(text('update Users set gId=NULL where userName="'+str(uID)+'";'))
+
+
+		query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+		for row in query:
+			x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
+			personList.append(x)
+
+		if personList == []:
+			db.engine.execute(text('update Rooms set isTaken=0, gId=NULL where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+
+	except:
+		return(jsonify(wasSuccessful=False))
+	
+
 ####################################
 ##         Authentication         ##
 ####################################
+
 
 @app.route('/login')
 def login():
@@ -289,9 +354,9 @@ def authorized():
 
 @app.route('/getUserLogin', methods=['GET'])
 def getUserLogin():
+	role = None
 	if 'google_token' in session:
 		me = google.get('userinfo')
-		role = None
 		if 'email' in me.data:
 			email = me.data['email']
 			un = email.split('@')
