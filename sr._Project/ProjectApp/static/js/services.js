@@ -272,6 +272,48 @@ app.factory('adminService', function($http) {
         return {"wasSuccessful": testData};
       });
       return promise;
+    }, manuallyAssignStudentsToRoom: function(buildingName, roomNumber, userList) {
+      // manually assign students to room (duh)
+      var body = {
+        "buildingName": buildingName,
+        "roomNumber": roomNumber,
+        "userList": userList
+      }
+      var promise = $http.post('/manuallyAssignStudentsToRoom', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {
+          "wasSuccessful": false,
+          "reason": "RB" // means invalid building/room was given
+        }
+
+        return {"wasSuccessful": testData};
+      });
+      return promise;
+    }, manuallyRemoveStudentsFromRoom: function(buildingName, roomNumber, studentObjectList) {
+      // manually remove students from room (duh)
+      var userList = [];
+      for (var i = 0; i < studentObjectList.length; i++) {
+        userList.push(studentObjectList[i].userID);
+      }
+      console.log(userList);
+      var body = {
+        "buildingName": buildingName,
+        "roomNumber": roomNumber,
+        "userList": userList
+      }
+      var promise = $http.post('/manuallyRemoveStudentsFromRoom', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {
+          "wasSuccessful": false,
+        }
+
+        return {"wasSuccessful": testData};
+      });
+      return promise;
     }
   };
   return adminService;

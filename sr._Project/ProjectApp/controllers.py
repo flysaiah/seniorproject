@@ -273,7 +273,8 @@ def authorized():
             request.args['error_reason'],
             request.args['error_description']
         )
-
+    print('---------------------------------------')
+    print(session)
     session['google_token'] = (resp['access_token'], '')
     # me = google.get('userinfo')
     # print("======================")

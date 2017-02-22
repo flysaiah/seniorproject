@@ -32,7 +32,7 @@
           <md-button ng-show="isLoggedIn">
             Hello, {{ currentUserName }}
           </md-button>
-          <md-button ng-click="groupInfo()" aria-label="Group Info" ng-show="isLoggedIn">
+          <md-button ng-click="groupInfo()" aria-label="Group Info" ng-show="isLoggedIn && role !== 'admin'">
             Group Info
           </md-button>
           <md-button ng-click="adminPanel()" aria-label="Admin Panel" ng-show="isLoggedIn && role === 'admin'">

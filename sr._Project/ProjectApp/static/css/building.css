@@ -179,3 +179,37 @@
   stroke-width: 8px;
   stroke: #0000ee;
 }
+
+.admin-panel {
+  margin-right: auto;
+  width: 900px;
+}
+
+.manual-add-students-left {
+  width: 45%;
+  float: left;
+  margin-bottom: 10px;
+}
+
+.manual-add-students-right {
+  width: 40%;
+  float: right;
+  margin-bottom: 10px;
+}
+
+.manual-add-students-step3 {
+  clear: both;
+}
+
+.manual-add-student {
+  background-color: white !important;
+}
+
+.select-building-name {
+  width: 120px;
+}
+
+.manually-assign-button {
+  display: block;
+  margin-top: 10px;
+}
