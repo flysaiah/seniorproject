@@ -272,8 +272,12 @@ app.factory('adminService', function($http) {
         return {"wasSuccessful": testData};
       });
       return promise;
-    }, manuallyAssignStudentsToRoom: function(buildingName, roomNumber, userList) {
+    }, manuallyAssignStudentsToRoom: function(buildingName, roomNumber, studentObjectList) {
       // manually assign students to room (duh)
+      var userList = [];
+      for (var i = 0; i < studentObjectList.length; i++) {
+        userList.push(studentObjectList[i].searchID);
+      }
       var body = {
         "buildingName": buildingName,
         "roomNumber": roomNumber,
@@ -295,9 +299,8 @@ app.factory('adminService', function($http) {
       // manually remove students from room (duh)
       var userList = [];
       for (var i = 0; i < studentObjectList.length; i++) {
-        userList.push(studentObjectList[i].userID);
+        userList.push(studentObjectList[i].searchID);
       }
-      console.log(userList);
       var body = {
         "buildingName": buildingName,
         "roomNumber": roomNumber,

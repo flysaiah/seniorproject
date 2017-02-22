@@ -257,41 +257,41 @@ def switchRoomAvailablility():
 		return(jsonify(wasSuccessful=False))
 
 
-@app.route('/manualAssignStudentsToRoom', methods=['POST'])
-def manualyAssignRoom():
+@app.route('/manuallyAssignStudentsToRoom', methods=['POST'])
+def manuallyAssignRoom():
 	reason = "Unknown"
-	try:
-		req = request.get_json()
-		build = req['buildingName']
-		roomNum = req['roomNumber']
-		userList = req['userList']
+	# try:
+	req = request.get_json()
+	build = req['buildingName']
+	roomNum = req['roomNumber']
+	userList = req['userList']
 
-		gId = None
-		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
-		if check == None:
-			return(jsonify(wasSuccessful=False, reason="RB"))
-		for row in check:
-			gId = row.gId
+	gId = None
+	check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+	if check == None:
+		return(jsonify(wasSuccessful=False, reason="RB"))
+	for row in check:
+		gId = row.gId
 
-		if gId == None:
-			db.engine.execute(text('INSERT INTO Groups() VALUES();'))
-			query = db.engine.execute(text('SELECT LAST_INSERT_ID();'))
-			for row in query:
-				gId = row.gId
+	if gId == None:
+		db.engine.execute(text('INSERT INTO Groups() VALUES();'))
+		query = db.engine.execute(text('SELECT LAST_INSERT_ID();'))
+		for row in query:
+		 	gId = row[0]
 
-		for user in userList:
-			db.engine.execute(text('update Users set isPending=0, gId="'+str(gId)+'" where userName="'+str(user)+'";'))
+	for user in userList:
+		db.engine.execute(text('update Users set isPending=0, gId="'+str(gId)+'" where userName="'+str(user)+'";'))
 
-		db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(groupID)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
-		db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(groupID)+'";'))
-		return(jsonify(wasSuccessful=True))
+	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+	db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(gId)+'";'))
+	return(jsonify(wasSuccessful=True))
 
-	except:
-		return(jsonify(wasSuccessful=False, reason=reason))
+	# except:
+	# 	return(jsonify(wasSuccessful=False, reason=reason))
 
 
-@app.route('/manualRemoveStudentsFromRoom', methods=['POST'])
-def manualRemoveFromRoom():
+@app.route('/manuallyRemoveStudentsFromRoom', methods=['POST'])
+def manuallyRemoveFromRoom():
 	reason = "Unknown"
 	try:
 		req = request.get_json()
@@ -314,7 +314,7 @@ def manualRemoveFromRoom():
 
 	except:
 		return(jsonify(wasSuccessful=False))
-	
+
 
 ####################################
 ##         Authentication         ##
@@ -338,8 +338,6 @@ def authorized():
             request.args['error_reason'],
             request.args['error_description']
         )
-    print('---------------------------------------')
-    print(session)
     session['google_token'] = (resp['access_token'], '')
     # me = google.get('userinfo')
     # print("======================")

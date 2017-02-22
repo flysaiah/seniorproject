@@ -1,6 +1,6 @@
 var app = angular.module("admin", ["ngMaterial", "services"]);
 
-app.controller("adminCtl", function($scope, getGroupInfo, updateGroupInfo, getAllGroupUsers, loginService, registrationService) {
+app.controller("adminCtl", function($scope, getAllGroupUsers, loginService, adminService) {
   $scope.manualAddStudentsList = [];
   $scope.buildingNames = ["Dieseth", "Miller", "Larsen", "Olson"];   // TODO: Get this data from a service
 
