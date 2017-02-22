@@ -200,6 +200,7 @@ def getRoomOccupantsDict():
 	roomList = req["roomArray"]
 	for room in roomList:
 		availability = None
+		capacity = None
 		personList = []
 		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(room)+ '"and building="'+str(build)+'";'))
 		if check == None:
@@ -207,13 +208,14 @@ def getRoomOccupantsDict():
 
 		else:
 			query = db.engine.execute(text('select firstName, isTaken, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
-			query2 = db.engine.execute(text('isTaken from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			query2 = db.engine.execute(text('select isTaken, capacity from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
 			for row in query2:
 				availability = row.isTaken
+				capacity = row.capacity
 			for row in query:
 				x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 				personList.append(x)
-			roomDict[room] = dict(roomOccupants=personList, isTaken=availability)
+			roomDict[room] = dict(roomOccupants=personList, isTaken=availability, capacity=capacity)
 	return jsonify(occupantsDict=roomDict)
 
 
@@ -235,6 +237,8 @@ def getRegistrationTime():
 ####################################
 ##        Admin Functions         ##
 ####################################
+
+
 @app.route('/switchRoomAvailability', methods=['POST'])
 def switchRoomAvailablility():
 	req = request.get_json()
@@ -251,10 +255,26 @@ def switchRoomAvailablility():
 	except:
 		return(jsonify(wasSuccessful=False))
 
+# def manualyAssignRoom():
+# 	req = request.get_json()
+# 	build = req['buildingName']
+# 	roomNum = req['roomNumber']
+# 	userList = req['userList']
+# 	gId = None
+# 	for user in userList:
+# 		if gId == None
+# 			check = db.engine.execute(text('select gId from Users where userName="'+str(user)+';'))
+# 			for row in check:
+# 				use = row.gId
+
+# 		if gId == None and usergId == None:
+# 			gId 
+
 
 ####################################
 ##         Authentication         ##
 ####################################
+
 
 @app.route('/login')
 def login():
@@ -288,9 +308,9 @@ def authorized():
 
 @app.route('/getUserLogin', methods=['GET'])
 def getUserLogin():
+	role = None
 	if 'google_token' in session:
 		me = google.get('userinfo')
-		role = None
 		if 'email' in me.data:
 			email = me.data['email']
 			un = email.split('@')
