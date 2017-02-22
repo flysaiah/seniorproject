@@ -207,7 +207,7 @@ def getRoomOccupantsDict():
 			roomDict[room] = []
 
 		else:
-			query = db.engine.execute(text('select firstName, isTaken, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
 			query2 = db.engine.execute(text('select isTaken, capacity from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
 
 			for row in query2:
@@ -256,21 +256,59 @@ def switchRoomAvailablility():
 	except:
 		return(jsonify(wasSuccessful=False))
 
-# def manualyAssignRoom():
-# 	req = request.get_json()
-# 	build = req['buildingName']
-# 	roomNum = req['roomNumber']
-# 	userList = req['userList']
-# 	gId = None
-# 	for user in userList:
-# 		if gId == None
-# 			check = db.engine.execute(text('select gId from Users where userName="'+str(user)+';'))
-# 			for row in check:
-# 				use = row.gId
 
-# 		if gId == None and usergId == None:
-# 			gId 
+@app.route('/manualAssignStudentsToRoom', methods=['POST'])
+def manualyAssignRoom():
+	try:
+		req = request.get_json()
+		build = req['buildingName']
+		roomNum = req['roomNumber']
+		userList = req['userList']
 
+		gId = None
+		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+		for row in check:
+			gId = row.gId
+
+		if gId == None:
+			db.engine.execute(text('INSERT INTO Groups() VALUES();'))
+			query = db.engine.execute(text('SELECT LAST_INSERT_ID();'))
+			for row in query:
+				gId = row.gId
+
+		for user in userList:
+			db.engine.execute(text('update Users set isPending=0, gId="'+str(gId)+'" where userName="'+str(user)+'";'))
+
+		db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(groupID)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+		db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(groupID)+'";'))
+		return(jsonify(wasSuccessful=True))
+
+	except:
+		return(jsonify(wasSuccessful=False))
+
+
+@app.route('/manualRemoveStudentsToRoom', methods=['POST'])
+def manualRemoveFromRoom():
+		req = request.get_json()
+		build = req['buildingName']
+		roomNum = req['roomNumber']
+		userList = req['userList']
+		personList = []
+
+		for row in userList:
+			db.engine.execute(text('update Users set gId=null where userName="'+str(uID)+'";'))
+
+
+		query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+		for row in query:
+			x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
+			personList.append(x)
+
+		if personList == []:
+			db.engine.execute(text('update Rooms set isTaken=0, gId=null where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+
+
+		
 
 ####################################
 ##         Authentication         ##
