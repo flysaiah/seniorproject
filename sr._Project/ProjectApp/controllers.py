@@ -259,6 +259,7 @@ def switchRoomAvailablility():
 
 @app.route('/manualAssignStudentsToRoom', methods=['POST'])
 def manualyAssignRoom():
+	reason = "Unknown"
 	try:
 		req = request.get_json()
 		build = req['buildingName']
@@ -267,6 +268,8 @@ def manualyAssignRoom():
 
 		gId = None
 		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+		check == None:
+			return(jsonify(wasSuccessful=False, reason="RB"))
 		for row in check:
 			gId = row.gId
 
@@ -284,11 +287,12 @@ def manualyAssignRoom():
 		return(jsonify(wasSuccessful=True))
 
 	except:
-		return(jsonify(wasSuccessful=False))
+		return(jsonify(wasSuccessful=False, reason=reason))
 
 
-@app.route('/manualRemoveStudentsToRoom', methods=['POST'])
+@app.route('/manualRemoveStudentsFromRoom', methods=['POST'])
 def manualRemoveFromRoom():
+	reason = "Unknown"
 	try:
 		req = request.get_json()
 		build = req['buildingName']
