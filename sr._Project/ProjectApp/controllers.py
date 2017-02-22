@@ -289,6 +289,7 @@ def manualyAssignRoom():
 
 @app.route('/manualRemoveStudentsToRoom', methods=['POST'])
 def manualRemoveFromRoom():
+	try:
 		req = request.get_json()
 		build = req['buildingName']
 		roomNum = req['roomNumber']
@@ -296,7 +297,7 @@ def manualRemoveFromRoom():
 		personList = []
 
 		for row in userList:
-			db.engine.execute(text('update Users set gId=null where userName="'+str(uID)+'";'))
+			db.engine.execute(text('update Users set gId=NULL where userName="'+str(uID)+'";'))
 
 
 		query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
@@ -305,10 +306,11 @@ def manualRemoveFromRoom():
 			personList.append(x)
 
 		if personList == []:
-			db.engine.execute(text('update Rooms set isTaken=0, gId=null where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+			db.engine.execute(text('update Rooms set isTaken=0, gId=NULL where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
 
-
-		
+	except:
+		return(jsonify(wasSuccessful=False))
+	
 
 ####################################
 ##         Authentication         ##
