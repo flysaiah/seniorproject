@@ -265,8 +265,10 @@ def manuallyAssignRoom():
 	build = req['buildingName']
 	roomNum = req['roomNumber']
 	userList = req['userList']
+	roomList = []
 
 	gId = None
+	print("first gId " + str(gId))
 	check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
 	if check == None:
 		return(jsonify(wasSuccessful=False, reason="RB"))
@@ -274,10 +276,12 @@ def manuallyAssignRoom():
 		gId = row.gId
 
 	if gId == None:
+		gId = 0
 		db.engine.execute(text('INSERT INTO Groups() VALUES();'))
-		query = db.engine.execute(text('SELECT LAST_INSERT_ID();'))
+		query = db.engine.execute(text('select * from Groups;'))
 		for row in query:
-		 	gId = row[0]
+			if row.groupId > gId:
+				gId = row.groupId
 
 	for user in userList:
 		db.engine.execute(text('update Users set isPending=0, gId="'+str(gId)+'" where userName="'+str(user)+'";'))
