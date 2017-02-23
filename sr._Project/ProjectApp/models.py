@@ -62,6 +62,7 @@ class Rooms(db.Model):
 	capacity = db.Column(INTEGER, nullable=False)
 	gId = db.Column(INTEGER, db.ForeignKey(Groups.groupId))
 	isTaken = db.Column(BOOLEAN, nullable=False, server_default=('0'))
+	available = db.Column(BOOLEAN, nullable=False, server_default=('0'))
 
 	def __repr__(self):
 		# formats/manually creates the JSON object

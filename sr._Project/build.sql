@@ -83,6 +83,7 @@ CREATE TABLE Rooms (
   capacity INT NOT NULL,
   gId INT,
   isTaken BOOLEAN NOT NULL DEFAULT false,
+  available BOOLEAN NOT NULL DEFAULT false,
   	PRIMARY KEY(roomNum,building),
     FOREIGN KEY (building)
     REFERENCES Buildings (name)

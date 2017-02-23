@@ -199,7 +199,6 @@ def getRoomOccupantsDict():
 	build = req["buildingName"]
 	roomList = req["roomArray"]
 	for room in roomList:
-		availability = None
 		capacity = None
 		personList = []
 		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(room)+ '"and building="'+str(build)+'";'))
@@ -208,15 +207,25 @@ def getRoomOccupantsDict():
 
 		else:
 			query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
-			query2 = db.engine.execute(text('select isTaken, capacity from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			query2 = db.engine.execute(text('select isTaken, available, capacity from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
 
 			for row in query2:
-				availability = row.isTaken
+				availability = row.available
+				print(availability)
+				isTaken = row.isTaken
 				capacity = row.capacity
+
 			for row in query:
 				x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 				personList.append(x)
+
+			if personList == []:
+				db.engine.execute(text('update Rooms set isTaken=0, gId=NULL where roomNum="'+str(room)+'" and building="'+str(build)+'";'))
+
+
+			availability = availability | isTaken
 			roomDict[room] = dict(roomOccupants=personList, isTaken=availability, capacity=capacity)
+
 	return jsonify(occupantsDict=roomDict)
 
 
@@ -246,12 +255,12 @@ def switchRoomAvailablility():
 	try:
 		build = req["buildingName"]
 		roomNum = req['roomNumber']
-		query = db.engine.execute(text('select isTaken from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+		query = db.engine.execute(text('select available from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
 		for row in query:
-			isTaken = row.isTaken
-			isTaken = isTaken^1
-		db.engine.execute(text('update Rooms set isTaken="'+str(isTaken)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
-		return(jsonify(wasSuccessful=True, isTaken=isTaken))
+			available = row.available
+			available = available^1
+		db.engine.execute(text('update Rooms set available="'+str(available)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+		return(jsonify(wasSuccessful=True, isTaken=available))
 
 	except:
 		return(jsonify(wasSuccessful=False))
