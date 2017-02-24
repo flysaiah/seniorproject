@@ -1,6 +1,11 @@
 var app = angular.module("groupinfo", ["ngMaterial", "services"]);
 
-app.controller("groupCtl", function($scope, getGroupInfo, updateGroupInfo, getAllGroupUsers, loginService, registrationService) {
+app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroupInfo, getAllGroupUsers, loginService, registrationService) {
+  $scope.buildingNames = ["Dieseth", "Miller", "Larsen", "Olson"];   // TODO: Get this data from a service
+  $scope.autoRegPref = false; // explicitly begin with this as false so as to make sure it is never null--this is important because it makes it easier on the back end
+  // autoRegPref is a list of preference objects that will be updated on the auto registration preferences panel
+  $scope.autoRegPref = [{},{},{},{},{}]; // Length of this determines number of preferences student is allowed to choose
+
   loginService.getUserLogin().then(function(res) {
     // Determine if user is logged in; if so, get group information from refresh()
     if (res.userInfo) {
@@ -30,6 +35,10 @@ app.controller("groupCtl", function($scope, getGroupInfo, updateGroupInfo, getAl
             registrationService.getRegistrationTime($scope.groupID).then(function(res) {
               $scope.registrationTime = res.registrationTime;
             });
+            getGroupInfo.getAutoRegPref($scope.groupID).then(function(res) {
+              $scope.autoRegPref = res.autoRegPref;
+              $scope.autoRegEnabled = res.autoRegEnabled;
+            })
           }
         }
       });
@@ -86,5 +95,36 @@ app.controller("groupCtl", function($scope, getGroupInfo, updateGroupInfo, getAl
   $scope.requestMembership = function(userObj) {
     // request to be added to the group of the person currently selected in autocomplete
     updateGroupInfo.sendGroupRequest($scope.currentUserID, userObj.searchID);
+  };
+
+  $scope.showAutoRegExplanation = function(ev) {
+    // opens dialog with explanation of how auto registration works
+    $mdDialog.show({
+      contentElement: '#autoRegExplained',
+      parent: angular.element(document.body),
+      targetEvent: ev,
+      clickOutsideToClose: true
+    });
+  };
+
+  $scope.saveAutoRegPref = function() {
+    // Saves group preferences for auto registration
+    updateGroupInfo.saveAutoRegPref($scope.groupID, $scope.autoRegEnabled, $scope.autoRegPref).then(function(res) {
+      if (!res.wasSuccessful) {
+        // TODO: Toast with results
+        if (res.invalidRooms) {
+          // Query failed because of invalid room
+          for (var i = 0; i < res.invalidRooms.length; i++) {
+            console.log("Invalid room for preference(s): " + (res.invalidRooms[i] + 1).toString());
+          }
+        } else {
+          console.log("Unknown error in saving auto registration preferences")
+        }
+      }
+    });
+  }
+
+  $scope.cancel = function() {
+    $mdDialog.cancel();
   };
 });

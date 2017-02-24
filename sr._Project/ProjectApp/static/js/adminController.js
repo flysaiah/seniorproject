@@ -62,7 +62,7 @@ app.controller("adminCtl", function($scope, getAllGroupUsers, loginService, admi
     } else {
       console.log("Problem removing student from manual-add-students group");
     }
-  }
+  };
 
   $scope.manuallyAssignStudentsToRoom = function() {
     adminService.manuallyAssignStudentsToRoom($scope.buildingName, $scope.roomNumber, $scope.manualAddStudentsList).then(function (res) {
@@ -76,6 +76,5 @@ app.controller("adminCtl", function($scope, getAllGroupUsers, loginService, admi
         console.log("Successful!");
       }
     })
-  }
-
+  };
 });
