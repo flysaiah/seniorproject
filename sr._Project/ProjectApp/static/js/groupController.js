@@ -36,8 +36,12 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
               $scope.registrationTime = res.registrationTime;
             });
             getGroupInfo.getAutoRegPref($scope.groupID).then(function(res) {
+              console.log("WOO");
+              console.log(res);
               $scope.autoRegPref = res.autoRegPref;
+              console.log($scope.autoRegPref);
               formatAutoRegPref();
+              console.log($scope.autoRegPref);
               $scope.autoRegEnabled = res.autoRegEnabled;
             })
           }
@@ -56,7 +60,7 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
     // reformat autoRegPref so that its data structure is easy to work with on the front end
     $scope.defaultPrefEnabled = false;
     var newAutoRegPref = [];
-    for (var i = 0; i < $scope.autoRegPref; i++) {
+    for (var i = 0; i < $scope.autoRegPref.length; i++) {
       if ($scope.autoRegPref[i].defaultPref) {
         $scope.defaultPrefEnabled = true;
         $scope.defaultPref = {"buildingName": $scope.autoRegPref[i].buildingName, "floorNumber": $scope.autoRegPref[i].roomNumber};
@@ -80,7 +84,7 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
   function getFormattedPrefsForSaving() {
     // reformat autoRegPref back to the data structure that works well for the back-end
     var newAutoRegPref = [];
-    for (var i = 0; i < $scope.autoRegPref; i++) {
+    for (var i = 0; i < $scope.autoRegPref.length; i++) {
       if ($scope.autoRegPref[i].buildingName) {
         newAutoRegPref.push({"buildingName": $scope.autoRegPref[i].buildingName, "roomNumber": $scope.autoRegPref[i].roomNumber, "defaultPref": false});
       }

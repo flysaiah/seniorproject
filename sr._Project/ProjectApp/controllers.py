@@ -324,11 +324,14 @@ def getAutoRegPref():
 	req = request.get_json()
 	gId = req["groupID"]
 	roomList = []
-	query = db.engine.execute(text('select enabled, building, roomNum from Preferences where Preferences.gId = "'+str(gId)+'";'))
+	query = db.engine.execute(text('select enabled, building, defaultPref, roomNum from Preferences where Preferences.gId = "'+str(gId)+'";'))
 	for row in query:
+		defPref = row.defaultPref
 		if row.enabled == False:
 			return jsonify(autoRegEnabled=False)
-		roomList.append(dict(buildingName=row.building, roomNumber=row.roomNum))
+
+
+		roomList.append(dict(buildingName=row.building, defaultPref=defPref, roomNumber=row.roomNum))
 
 	return jsonify(autoRegEnabled=True,autoRegPref=roomList)
 
