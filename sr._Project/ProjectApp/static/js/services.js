@@ -129,7 +129,7 @@ app.factory('updateGroupInfo', function($http) {
       }
       var promise = $http.post('/saveAutoRegPref', body).error(function(response) {
         // for testing
-        var data = {"wasSuccessful": false);
+        var data = {"wasSuccessful": false};
         return data;
       });
       return promise;
