@@ -62,7 +62,7 @@ app.factory('getGroupInfo', function($http) {
         return response.data;
       }, function (err) {
         // for testing
-        var data = {"autoRegEnabled": true, "autoRegPref": [{"buildingName": "Miller", "roomNumber": 103},{"buildingName": "Dieseth", "roomNumber": 206},{},{},{}]};
+        var data = {"autoRegEnabled": true, "autoRegPref": [{"buildingName": "Miller", "roomNumber": 103, "defaultPref": false},{"buildingName": "Dieseth", "roomNumber": 2, "defaultPref": true}]};
         return data;
       });
       return promise;

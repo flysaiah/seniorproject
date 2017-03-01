@@ -4,6 +4,7 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
   $scope.buildingNames = ["Dieseth", "Miller", "Larsen", "Olson"];   // TODO: Get this data from a service
   $scope.autoRegEnabled = false;   // explicitly begin with this as false so as to make sure it is never null--this is important because it makes it easier on the back end
   $scope.numberOfAutoRegPrefs = 5;   // static number of maximum preferences a user can list
+  $scope.defaultPref = {};
 
   loginService.getUserLogin().then(function(res) {
     // Determine if user is logged in; if so, get group information from refresh()
@@ -52,6 +53,17 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
   };
 
   function formatAutoRegPref() {
+    // reformat autoRegPref so that its data structure is easy to work with on the front end
+    $scope.defaultPrefEnabled = false;
+    var newAutoRegPref = [];
+    for (var i = 0; i < $scope.autoRegPref; i++) {
+      if ($scope.autoRegPref[i].defaultPref) {
+        $scope.defaultPrefEnabled = true;
+        $scope.defaultPref = {"buildingName": $scope.autoRegPref[i].buildingName, "floorNumber": $scope.autoRegPref[i].roomNumber};
+      } else {
+        newAutoRegPref.push({"buildingName": $scope.autoRegPref[i].buildingName, "roomNumber": $scope.autoRegPref[i].roomNumber});
+      }
+    }
     /* Makes sure $scope.autoRegPref has the extra empty objects it needs to provide
     user with a static number of preferences. I.e. if the database returns 2 saved
     preferences but we want to provide them with 5 options, we add 3 extra empty objects
@@ -59,9 +71,24 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
     var diff = $scope.numberOfAutoRegPrefs - $scope.autoRegPref.length;
     if (diff > 0) {
       for (var i = 0; i < diff; i++) {
-        $scope.autoRegPref.push({});
+        newAutoRegPref.push({});
       }
     }
+    $scope.autoRegPref = newAutoRegPref;
+  };
+
+  function getFormattedPrefsForSaving() {
+    // reformat autoRegPref back to the data structure that works well for the back-end
+    var newAutoRegPref = [];
+    for (var i = 0; i < $scope.autoRegPref; i++) {
+      if ($scope.autoRegPref[i].buildingName) {
+        newAutoRegPref.push({"buildingName": $scope.autoRegPref[i].buildingName, "roomNumber": $scope.autoRegPref[i].roomNumber, "defaultPref": false});
+      }
+    }
+    if ($scope.defaultPrefEnabled) {
+      newAutoRegPref.push({"buildingName": $scope.defaultPref.buildingName, "roomNumber": $scope.defaultPref.floorNumber, "defaultPref": true});
+    }
+    return newAutoRegPref;
   };
 
   $scope.$watch('defaultBuildingName', function() {
@@ -132,7 +159,8 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
 
   $scope.saveAutoRegPref = function() {
     // Saves group preferences for auto registration
-    updateGroupInfo.saveAutoRegPref($scope.groupID, $scope.autoRegEnabled, $scope.autoRegPref).then(function(res) {
+    var autoRefPref = getFormattedPrefsForSaving();
+    updateGroupInfo.saveAutoRegPref($scope.groupID, $scope.autoRegEnabled, autoRegPref).then(function(res) {
       if (!res.wasSuccessful) {
         // TODO: Toast with results
         if (res.invalidRooms) {
