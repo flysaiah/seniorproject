@@ -220,9 +220,22 @@
   line-height: 3.2rem !important;
 }
 
+.dialog-h3 {
+  font-size: 1.600rem !important;
+  font-weight: 400 !important;
+  line-height: 2.0rem !important;
+}
+
 .manual-fix-input-label {
-  /* This is terrible, if there's a better
-  way to line things up please replace this*/
+  /* TODO: Make this like the md-switch-position-fix*/
   position: relative;
   top: 5px;
+
+}
+
+.md-switch-position-fix {
+  margin-top: 21px;
+  margin-bottom: 16px;
+  margin-right: 10px;
+  align-items: center;
 }

@@ -1,10 +1,9 @@
 var app = angular.module("groupinfo", ["ngMaterial", "services"]);
 
-app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroupInfo, getAllGroupUsers, loginService, registrationService) {
+app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroupInfo, getAllGroupUsers, loginService, registrationService, getFloorInfo) {
   $scope.buildingNames = ["Dieseth", "Miller", "Larsen", "Olson"];   // TODO: Get this data from a service
-  $scope.autoRegPref = false; // explicitly begin with this as false so as to make sure it is never null--this is important because it makes it easier on the back end
-  // autoRegPref is a list of preference objects that will be updated on the auto registration preferences panel
-  $scope.autoRegPref = [{},{},{},{},{}]; // Length of this determines number of preferences student is allowed to choose
+  $scope.autoRegEnabled = false;   // explicitly begin with this as false so as to make sure it is never null--this is important because it makes it easier on the back end
+  $scope.numberOfAutoRegPrefs = 5;   // static number of maximum preferences a user can list
 
   loginService.getUserLogin().then(function(res) {
     // Determine if user is logged in; if so, get group information from refresh()
@@ -37,6 +36,7 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
             });
             getGroupInfo.getAutoRegPref($scope.groupID).then(function(res) {
               $scope.autoRegPref = res.autoRegPref;
+              formatAutoRegPref();
               $scope.autoRegEnabled = res.autoRegEnabled;
             })
           }
@@ -50,6 +50,29 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
       });
     }
   };
+
+  function formatAutoRegPref() {
+    /* Makes sure $scope.autoRegPref has the extra empty objects it needs to provide
+    user with a static number of preferences. I.e. if the database returns 2 saved
+    preferences but we want to provide them with 5 options, we add 3 extra empty objects
+    to our list. */
+    var diff = $scope.numberOfAutoRegPrefs - $scope.autoRegPref.length;
+    if (diff > 0) {
+      for (var i = 0; i < diff; i++) {
+        $scope.autoRegPref.push({});
+      }
+    }
+  };
+
+  $scope.$watch('defaultBuildingName', function() {
+    // make sure we have the correct amount of floors for the building we select
+    if ($scope.defaultBuildingName) {
+      getFloorInfo.fetchData($scope.defaultBuildingName.toLowerCase()).then(function(res) {
+        // fetches info about number of floor sfor a given building
+        $scope.floorList = res.floorList;
+      });
+    }
+  });
 
   $scope.acceptRequest = function(userID) {
     updateGroupInfo.acceptRequest(userID);

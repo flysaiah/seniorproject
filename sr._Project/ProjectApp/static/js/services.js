@@ -315,7 +315,6 @@ app.factory('adminService', function($http) {
         // for testing
         var testData = {
           "wasSuccessful": false,
-          "reason": "RB" // means invalid building/room was given
         }
 
         return {"wasSuccessful": testData};

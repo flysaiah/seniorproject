@@ -3,6 +3,7 @@ var app = angular.module("navigation", ["ngMaterial", "services"]);
 app.controller("navCtl", function($scope, $location, $window, getGroupInfo, loginService, getFloorInfo, registrationService, getRoomInfo, adminService, $mdSidenav, $mdToast) {
 
   // hardcoded room lists
+  // TODO: Deal with this
   var room_dict = {
     'Miller': {
       "allFloorsAreSame": "true",
@@ -144,7 +145,7 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
   $scope.$watch('floorNumber', function() {
     // make sure we update occupantsDict when we change floor number
     refreshRoomInfo();
-  })
+  });
 
   $scope.toggleRight = function(roomNum1, roomNum2) {
     $scope.roomNumber = roomNum1.toString() + roomNum2.toString();
