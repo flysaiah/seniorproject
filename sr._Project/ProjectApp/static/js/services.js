@@ -125,11 +125,11 @@ app.factory('updateGroupInfo', function($http) {
       var body = {
         "groupID": groupID,
         "autoRegEnabled": autoRegEnabled,  // boolean value
-        "autoRegPref": autoRegPref        // example: [ {"buildingName": "Miller", "roomNumber": 103}, {}, {}, {}, {} ] -- in this case there is only one preference
+        "autoRegPref": autoRegPref        // example: [ {"buildingName": "Miller", "roomNumber": 103, "defaultPref": false}, {}, {}, {}, {} ]
       }
       var promise = $http.post('/saveAutoRegPref', body).error(function(response) {
         // for testing
-        var data = {"wasSuccessful": false, "invalidRooms": [0, 2]};   // if error was invalid room(s), return list of indices of the autoRegPref object that failed
+        var data = {"wasSuccessful": false);
         return data;
       });
       return promise;
