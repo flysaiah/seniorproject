@@ -53,6 +53,19 @@ app.factory('getGroupInfo', function($http) {
         return data;
       });
       return promise;
+    }, getAutoRegPref: function(groupID) {
+      // Get auto registration preferences for a given group
+      var body = {
+        "groupID": groupID
+      }
+      var promise = $http.post('/getAutoRegPref', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var data = {"autoRegEnabled": true, "autoRegPref": [{"buildingName": "Miller", "roomNumber": 103},{"buildingName": "Dieseth", "roomNumber": 206},{},{},{}]};
+        return data;
+      });
+      return promise;
     }
   };
   return getGroupInfo;
@@ -105,6 +118,19 @@ app.factory('updateGroupInfo', function($http) {
       }
       var promise = $http.post('/createGroup', body).error(function(response) {
         console.log(response);
+      });
+      return promise;
+    }, saveAutoRegPref: function(groupID, autoRegEnabled, autoRegPref) {
+      // Saves group preferences for auto registration
+      var body = {
+        "groupID": groupID,
+        "autoRegEnabled": autoRegEnabled,  // boolean value
+        "autoRegPref": autoRegPref        // example: [ {"buildingName": "Miller", "roomNumber": 103}, {}, {}, {}, {} ] -- in this case there is only one preference
+      }
+      var promise = $http.post('/saveAutoRegPref', body).error(function(response) {
+        // for testing
+        var data = {"wasSuccessful": false, "invalidRooms": [0, 2]};   // if error was invalid room(s), return list of indices of the autoRegPref object that failed
+        return data;
       });
       return promise;
     }

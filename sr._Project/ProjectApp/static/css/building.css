@@ -213,3 +213,16 @@
   display: block;
   margin-top: 10px;
 }
+
+.dialog-h2 {
+  font-size: 2.100rem !important;
+  font-weight: 400 !important;
+  line-height: 3.2rem !important;
+}
+
+.manual-fix-input-label {
+  /* This is terrible, if there's a better
+  way to line things up please replace this*/
+  position: relative;
+  top: 5px;
+}
