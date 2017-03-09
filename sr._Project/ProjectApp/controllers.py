@@ -318,17 +318,22 @@ def manuallyRemoveFromRoom():
 ####################################
 ##            AutoReg             ##
 ####################################
-@app.route('/getAllGroupUsers', methods=['GET'])
+@app.route('/getAllRoomNumbers', methods=['GET'])
 def getAllRooms():
-	ansDic = {}
+	allRoomsDict = {}
 	query= db.engine.execute(text('select name from Buildings;'))
 	for row in query:
 		build = row.name
-		ansDic[build] = []
+		allRoomsDict[build] = []
 
 	query2 = db.engine.execute(text('select roomNum, building from Rooms;'))
 	for row in query2:
-		
+		buildName = row.building
+		roomNum = row.roomNum
+		allRoomsDict[buildName].append(roomNum)
+
+	return(jsonify(allRoomsDict=allRoomsDict))
+
 
 @app.route('/getAutoRegPref', methods=['POST'])
 def getAutoRegPref():
