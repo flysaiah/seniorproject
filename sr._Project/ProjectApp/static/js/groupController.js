@@ -159,7 +159,7 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
 
   $scope.saveAutoRegPref = function() {
     // Saves group preferences for auto registration
-    var autoRefPref = getFormattedPrefsForSaving();
+    var autoRegPref = getFormattedPrefsForSaving();
     updateGroupInfo.saveAutoRegPref($scope.groupID, $scope.autoRegEnabled, autoRegPref).then(function(res) {
       // TODO: Toast with results
       if (!res.wasSuccessful) {
