@@ -1,4 +1,4 @@
-var app = angular.module("groupinfo", ["ngMaterial", "services"]);
+var app = angular.module("groupinfo", ["ngMaterial", "ngMessages", "services"]);
 
 app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroupInfo, getAllGroupUsers, loginService, registrationService, getFloorInfo) {
   $scope.buildingNames = ["Dieseth", "Miller", "Larsen", "Olson"];   // TODO: Get this data from a service
@@ -170,5 +170,43 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
 
   $scope.cancel = function() {
     $mdDialog.cancel();
+  };
+});
+
+app.directive('roomselection', function (getRoomInfo){
+  /* Validation function for room number inputs on the auto reg preferences page
+     Ensures that students don't select a room which is invalid for a given building */
+  var allRoomsDict = null;
+  return {
+    require: 'ngModel',
+    link: function(scope, elem, attr, ngModel) {
+      function getValidity(allRoomsDict, buildingName, roomNumber) {
+        var valid = true;
+        if (!buildingName || !(parseInt(roomNumber)) || allRoomsDict[buildingName].indexOf(parseInt(roomNumber)) === -1) {
+          // they haven't selected a building or the room number they gave is invalid for the given building
+          valid = false;
+        }
+        return valid;
+      }
+
+      var buildingName = attr.roomselection;
+      var allRoomsDict = -1;
+      var valid;
+      ngModel.$parsers.unshift(function(value) {
+        if (allRoomsDict === -1) {
+          getRoomInfo.getAllRoomNumbers().then(function(res) {
+            // fetches dictionary of all room numbers with buildings as the key
+            allRoomsDict = res.allRoomsDict;
+            valid = getValidity(allRoomsDict, buildingName, value);
+            ngModel.$setValidity('roomselection', valid);
+            return valid;
+          });
+        } else {
+          valid = getValidity(allRoomsDict, buildingName, value);
+          ngModel.$setValidity('roomselection', valid);
+          return valid;
+        }
+      });
+    }
   };
 });

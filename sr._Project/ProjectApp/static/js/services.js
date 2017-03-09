@@ -1,4 +1,5 @@
 var app = angular.module("services",[]);
+// NOTE: Dummy data returned during errors for testing needs to be gone by production time
 app.factory('getGroupInfo', function($http) {
   // Get info about group members and group requests
   var getGroupInfo = {
@@ -127,7 +128,9 @@ app.factory('updateGroupInfo', function($http) {
         "autoRegEnabled": autoRegEnabled,  // boolean value
         "autoRegPref": autoRegPref        // example: [ {"buildingName": "Miller", "roomNumber": 103, "defaultPref": false}, {}, {}, {}, {} ]
       }
-      var promise = $http.post('/saveAutoRegPref', body).error(function(response) {
+      var promise = $http.post('/saveAutoRegPref', body).then(function (response) {
+        return response.data;
+      }, function (err) {
         // for testing
         var data = {"wasSuccessful": false};
         return data;
@@ -272,6 +275,20 @@ app.factory('getRoomInfo', function($http) {
         }
 
         return {"occupantsDict": testData};
+      });
+      return promise;
+    }, getAllRoomNumbers: function() {
+      // Return list of all building names + room numbers
+      var promise = $http.get('/getAllRoomNumbers').then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {
+          "Miller": [101, 102, 103, 104],
+          "Dieseth": [101, 102, 103, 104]
+        };
+
+        return {"allRoomsDict": testData};
       });
       return promise;
     }

@@ -31,7 +31,7 @@
             <span ng-show="registrationTime">Registration time: {{ registrationTime }}</span>
             <span ng-show="!registrationTime">You have not received a registration time yet. Please wait for administration to assign you a time.</span>
           </md-content>
-          <form>
+          <form name="autoRegForm">
             <div layout="row">
                 <span class="md-switch-position-fix">Auto Registration:</span>
                 <span class="md-switch-position-fix" style="margin-left: 10px;">Off</span>
@@ -58,7 +58,10 @@
                 </md-input-container>
                 <md-input-container>
                   <label>Room Number</label>
-                  <input ng-model="pref.roomNumber">
+                  <input name="roomNumberInput{{ $index }}" ng-model="pref.roomNumber" roomselection="{{ pref.buildingName }}">
+                  <div ng-messages="autoRegForm['roomNumberInput' +  $index ].$error.roomselection" ng-show="autoRegForm['roomNumberInput' +  $index ].$error.roomselection">
+                    <div ng-messages="autoRegForm['roomNumberInput' +  $index ].$error.roomselection">YES HA HA HA</div>
+                  </div>
                 </md-input-container>
               </div>
               <div layout="row">
