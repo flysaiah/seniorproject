@@ -318,6 +318,8 @@ def manuallyRemoveFromRoom():
 ####################################
 ##            AutoReg             ##
 ####################################
+def enabelAutoReg():
+	req = requst.get_json
 
 @app.route('/getAutoRegPref', methods=['POST'])
 def getAutoRegPref():
@@ -336,7 +338,27 @@ def getAutoRegPref():
 	return jsonify(autoRegEnabled=True,autoRegPref=roomList)
 
 
+@app.route('/saveAutoRegPref', methods=['POST'])
+def saveAutoRegPref():
+	try:
+		req = request.get_json()
+		gId = req["groupID"]
+		enabled = req["autoRegEnabled"]
+		prefs = req["autoRegPref"]
+		for dic in prefs:
+			building = dic['buildingName']
+			num = dic['roomNumber']
+			isPref = dic['defaultPref']
 
+			try:
+				db.engine.execute(text('INSERT INTO Preferences(enabled, roomNum, building, defaultPref, gId) VALUES('+str(enabled)+', '+str(num)+', "'+str(building)+'", '+str(isPref)+', '+str(gId)+');'))
+
+			except:
+				pass
+		return(jsonify(wasSuccessful=True))
+		
+	except:
+		return(jsonify(wasSuccessful=False))
 ####################################
 ##         Authentication         ##
 ####################################
