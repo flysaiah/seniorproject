@@ -318,8 +318,17 @@ def manuallyRemoveFromRoom():
 ####################################
 ##            AutoReg             ##
 ####################################
-def enabelAutoReg():
-	req = requst.get_json
+@app.route('/getAllGroupUsers', methods=['GET'])
+def getAllRooms():
+	ansDic = {}
+	query= db.engine.execute(text('select name from Buildings;'))
+	for row in query:
+		build = row.name
+		ansDic[build] = []
+
+	query2 = db.engine.execute(text('select roomNum, building from Rooms;'))
+	for row in query2:
+		
 
 @app.route('/getAutoRegPref', methods=['POST'])
 def getAutoRegPref():
@@ -356,7 +365,7 @@ def saveAutoRegPref():
 			except:
 				pass
 		return(jsonify(wasSuccessful=True))
-		
+
 	except:
 		return(jsonify(wasSuccessful=False))
 ####################################
