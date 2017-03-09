@@ -60,7 +60,7 @@
                   <label>Room Number</label>
                   <input name="roomNumberInput{{ $index }}" ng-model="pref.roomNumber" roomselection="{{ pref.buildingName }}">
                   <div ng-messages="autoRegForm['roomNumberInput' +  $index ].$error.roomselection" ng-show="autoRegForm['roomNumberInput' +  $index ].$error.roomselection">
-                    <div ng-messages="autoRegForm['roomNumberInput' +  $index ].$error.roomselection">YES HA HA HA</div>
+                    <div ng-messages="autoRegForm['roomNumberInput' +  $index ].$error.roomselection">Invalid room number for the selected building.</div>
                   </div>
                 </md-input-container>
               </div>
@@ -93,7 +93,7 @@
                 </div>
               </div>
             </div>
-            <md-button style="display: block;" class="md-primary md-raised" aria-label="Save Auto Registration Preferences" ng-click="saveAutoRegPref()">Save Auto Registration Preferences</md-button>
+            <md-button style="display: block;" class="md-primary md-raised" ng-disabled="autoRegForm.$invalid" aria-label="Save Auto Registration Preferences" ng-click="saveAutoRegPref()">Save Auto Registration Preferences</md-button>
           </form>
         </md-tab>
       </md-tabs>
