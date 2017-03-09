@@ -36,12 +36,8 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
               $scope.registrationTime = res.registrationTime;
             });
             getGroupInfo.getAutoRegPref($scope.groupID).then(function(res) {
-              console.log("WOO");
-              console.log(res);
               $scope.autoRegPref = res.autoRegPref;
-              console.log($scope.autoRegPref);
               formatAutoRegPref();
-              console.log($scope.autoRegPref);
               $scope.autoRegEnabled = res.autoRegEnabled;
             })
           }
@@ -165,16 +161,9 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
     // Saves group preferences for auto registration
     var autoRegPref = getFormattedPrefsForSaving();
     updateGroupInfo.saveAutoRegPref($scope.groupID, $scope.autoRegEnabled, autoRegPref).then(function(res) {
+      // TODO: Toast with results
       if (!res.wasSuccessful) {
-        // TODO: Toast with results
-        if (res.invalidRooms) {
-          // Query failed because of invalid room
-          for (var i = 0; i < res.invalidRooms.length; i++) {
-            console.log("Invalid room for preference(s): " + (res.invalidRooms[i] + 1).toString());
-          }
-        } else {
-          console.log("Unknown error in saving auto registration preferences")
-        }
+        console.log("Unknown error in saving auto registration preferences")
       }
     });
   }
