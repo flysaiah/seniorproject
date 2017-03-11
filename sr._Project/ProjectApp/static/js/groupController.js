@@ -182,13 +182,12 @@ app.directive('roomselection', function (getRoomInfo){
     link: function(scope, elem, attr, ngModel) {
       function getValidity(allRoomsDict, buildingName, roomNumber) {
         var valid = true;
-        if (!buildingName || !(parseInt(roomNumber)) || allRoomsDict[buildingName].indexOf(parseInt(roomNumber)) === -1) {
+        if (!buildingName || isNaN(roomNumber) || allRoomsDict[buildingName].indexOf(parseInt(roomNumber)) === -1) {
           // they haven't selected a building or the room number they gave is invalid for the given building
           valid = false;
         }
         return valid;
       }
-
       var buildingName = attr.roomselection;
       var allRoomsDict = -1;
       var valid;
