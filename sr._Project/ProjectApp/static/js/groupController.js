@@ -79,6 +79,7 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
 
   function getFormattedPrefsForSaving() {
     // reformat autoRegPref back to the data structure that works well for the back-end
+    console.log($scope.autoRegPref);
     var newAutoRegPref = [];
     for (var i = 0; i < $scope.autoRegPref.length; i++) {
       if ($scope.autoRegPref[i].buildingName) {
@@ -88,6 +89,7 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
     if ($scope.defaultPrefEnabled) {
       newAutoRegPref.push({"buildingName": $scope.defaultPref.buildingName, "roomNumber": $scope.defaultPref.floorNumber, "defaultPref": true});
     }
+    console.log(newAutoRegPref);
     return newAutoRegPref;
   };
 
@@ -181,6 +183,7 @@ app.directive('roomselection', function (getRoomInfo){
     require: 'ngModel',
     link: function(scope, elem, attr, ngModel) {
       function getValidity(allRoomsDict, buildingName, roomNumber) {
+        buildingName = "Miller"
         var valid = true;
         if (!buildingName || isNaN(roomNumber) || allRoomsDict[buildingName].indexOf(parseInt(roomNumber)) === -1) {
           // they haven't selected a building or the room number they gave is invalid for the given building

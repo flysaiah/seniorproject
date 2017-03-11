@@ -354,26 +354,27 @@ def getAutoRegPref():
 
 @app.route('/saveAutoRegPref', methods=['POST'])
 def saveAutoRegPref():
-	try:
-		req = request.get_json()
-		gId = req["groupID"]
-		enabled = req["autoRegEnabled"]
-		prefs = req["autoRegPref"]
-		db.engine.execute(text('DELETE * from Preferences where gId="'+str(gId)+'";'))
-		inc = 0
-		for dic in prefs:
-			inc += 1
-			building = dic['buildingName']
-			num = dic['roomNumber']
-			isPref = dic['defaultPref']
+	# try:
+	req = request.get_json()
+	print(req)
+	gId = req["groupID"]
+	enabled = req["autoRegEnabled"]
+	prefs = req["autoRegPref"]
+	db.engine.execute(text('DELETE from Preferences where gId='+str(gId)+';'))
+	inc = 0
+	for dic in prefs:
+		inc += 1
+		building = dic['buildingName']
+		num = dic['roomNumber']
+		isPref = dic['defaultPref']
 
-			db.engine.execute(text('INSERT INTO Preferences(enabled, roomNum, building, defaultPref, gId, prefNum) VALUES('+str(enabled)+', '+str(num)+', "'+str(building)+'", '+str(isPref)+', '+str(gId)+', '+str(inc)+');'))
+		db.engine.execute(text('INSERT INTO Preferences(enabled, roomNum, building, defaultPref, gId, prefNum) VALUES('+str(enabled)+', '+str(num)+', "'+str(building)+'", '+str(isPref)+', '+str(gId)+', '+str(inc)+');'))
 
 
-		return(jsonify(wasSuccessful=True))
+	return(jsonify(wasSuccessful=True))
 
-	except:
-		return(jsonify(wasSuccessful=False))
+	# except:
+	# 	return(jsonify(wasSuccessful=False))
 
 ####################################
 ##         Authentication         ##
