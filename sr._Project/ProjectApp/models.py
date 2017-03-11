@@ -74,6 +74,7 @@ class Preferences(db.Model):
 	roomNum = db.Column(INTEGER, db.ForeignKey(Rooms.roomNum), nullable=False, primary_key=True)
 	building = db.Column(VARCHAR(30), db.ForeignKey(Buildings.name), nullable=False, primary_key=True)
 	gId = db.Column(INTEGER, db.ForeignKey(Groups.groupId), nullable=False, primary_key=True)
+	prefNum = db.Column(INTEGER, nullable=False)
 
 	def __repr__(self):
 		# formats/manually creates the JSON object

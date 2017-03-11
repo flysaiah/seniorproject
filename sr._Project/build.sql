@@ -100,6 +100,7 @@ CREATE TABLE Preferences (
   roomNum INT NOT NULL,
   building VARCHAR(30) NOT NULL,
   gId INT NOT NULL,
+  prefNum INT NOT NULL,
     PRIMARY KEY(roomNum,building,gId),
     FOREIGN KEY (building)
     REFERENCES Buildings (name)

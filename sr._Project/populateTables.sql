@@ -481,7 +481,7 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(823, "Dieseth", 2);
 ##        Preference Test         ##
 ####################################
 
-INSERT INTO Preferences(enabled, roomNum, building, gId) VALUES(true, 101, "Miller", 1);
-INSERT INTO Preferences(enabled, roomNum, building, gId) VALUES(true, 102, "Miller", 1);
-INSERT INTO Preferences(enabled, roomNum, building, gId) VALUES(true, 103, "Miller", 1);
-INSERT INTO Preferences(enabled, roomNum, building, gId) VALUES(true, 104, "Miller", 1);
+INSERT INTO Preferences(enabled, roomNum, building, gId, prefNum) VALUES(true, 101, "Miller", 1, 1);
+INSERT INTO Preferences(enabled, roomNum, building, gId, prefNum) VALUES(true, 102, "Miller", 1, 2);
+INSERT INTO Preferences(enabled, roomNum, building, gId, prefNum) VALUES(true, 103, "Miller", 1, 3);
+INSERT INTO Preferences(enabled, roomNum, building, gId, prefNum) VALUES(true, 104, "Miller", 1, 4);
