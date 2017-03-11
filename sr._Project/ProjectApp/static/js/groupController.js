@@ -182,9 +182,13 @@ app.directive('roomselection', function (getRoomInfo){
     link: function(scope, elem, attr, ngModel) {
       function getValidity(allRoomsDict, buildingName, roomNumber) {
         var valid = true;
-        if (!buildingName || isNaN(roomNumber) || allRoomsDict[buildingName].indexOf(parseInt(roomNumber)) === -1) {
+        if (!buildingName || buildingName === "None" || isNaN(roomNumber) || allRoomsDict[buildingName].indexOf(parseInt(roomNumber)) === -1) {
           // they haven't selected a building or the room number they gave is invalid for the given building
           valid = false;
+        }
+        if (!roomNumber && (!buildingName || buildingName === "None")) {
+          // Nothing to validate, defaults to true
+          valid = true;
         }
         return valid;
       }
@@ -196,14 +200,14 @@ app.directive('roomselection', function (getRoomInfo){
           getRoomInfo.getAllRoomNumbers().then(function(res) {
             // fetches dictionary of all room numbers with buildings as the key
             allRoomsDict = res.allRoomsDict;
-            valid = getValidity(allRoomsDict, buildingName, value);
+            valid = getValidity(allRoomsDict, attr.roomselection, value);
             ngModel.$setValidity('roomselection', valid);
-            return valid;
+            return valid ? value : false;
           });
         } else {
-          valid = getValidity(allRoomsDict, buildingName, value);
+          valid = getValidity(allRoomsDict, attr.roomselection, value);
           ngModel.$setValidity('roomselection', valid);
-          return valid;
+          return valid ? value : false;
         }
       });
     }
