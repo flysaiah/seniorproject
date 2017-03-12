@@ -228,7 +228,8 @@ app.factory('getRoomInfo', function($http) {
       }, function (err) {
         // for testing
         var testData = {
-          "101":         [
+          "101":
+          {"isTaken": true, "roomOccupants": [
             {
               "firstName": "Isaiah",
               "lastName": "Mayerchak",
@@ -239,9 +240,9 @@ app.factory('getRoomInfo', function($http) {
               "lastName": "Tester",
               "userID": "testuser01"
             }
-          ],
-          "102": [],
-          "103": []
+          ]},
+          "102": {"isTaken": false, "roomOccupants": []},
+          "103": {"isTaken": true, "roomOccupants": []}
         }
 
         return {"occupantsDict": testData};
@@ -250,4 +251,74 @@ app.factory('getRoomInfo', function($http) {
     }
   };
   return getRoomInfo;
+});
+app.factory('adminService', function($http) {
+  // Perform functions admins in Res Life can request
+  var adminService = {
+    switchRoomAvailability: function(buildingName, roomNumber) {
+      // manually changes room availability, turns room "on" or "off"
+      var body = {
+        "buildingName": buildingName,
+        "roomNumber": roomNumber
+      }
+      var promise = $http.post('/switchRoomAvailability', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {
+          "wasSuccessful": false
+        }
+
+        return {"wasSuccessful": testData};
+      });
+      return promise;
+    }, manuallyAssignStudentsToRoom: function(buildingName, roomNumber, studentObjectList) {
+      // manually assign students to room (duh)
+      var userList = [];
+      for (var i = 0; i < studentObjectList.length; i++) {
+        userList.push(studentObjectList[i].searchID);
+      }
+      var body = {
+        "buildingName": buildingName,
+        "roomNumber": roomNumber,
+        "userList": userList
+      }
+      var promise = $http.post('/manuallyAssignStudentsToRoom', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {
+          "wasSuccessful": false,
+          "reason": "RB" // means invalid building/room was given
+        }
+
+        return {"wasSuccessful": testData};
+      });
+      return promise;
+    }, manuallyRemoveStudentsFromRoom: function(buildingName, roomNumber, studentObjectList) {
+      // manually remove students from room (duh)
+      var userList = [];
+      for (var i = 0; i < studentObjectList.length; i++) {
+        userList.push(studentObjectList[i].userID);
+      }
+      var body = {
+        "buildingName": buildingName,
+        "roomNumber": roomNumber,
+        "userList": userList
+      }
+      console.log(body);
+      var promise = $http.post('/manuallyRemoveStudentsFromRoom', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {
+          "wasSuccessful": false,
+        }
+
+        return {"wasSuccessful": testData};
+      });
+      return promise;
+    }
+  };
+  return adminService;
 });

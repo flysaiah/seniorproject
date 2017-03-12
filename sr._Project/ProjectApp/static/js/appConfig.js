@@ -1,4 +1,4 @@
-var app = angular.module("roomDraw", ["ngRoute", "navigation", "groupinfo"]);
+var app = angular.module("roomDraw", ["ngRoute", "navigation", "groupinfo", "admin"]);
 
 app.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true);
@@ -12,5 +12,9 @@ app.config(function($routeProvider, $locationProvider) {
   .when('/groupInfo', {
     templateUrl : '/static/pages/group-info.html',
     controller  : "groupCtl"
+  })
+  .when('/adminPanel', {
+    templateUrl : '/static/pages/admin-panel.html',
+    controller : "adminCtl"
   })
 });

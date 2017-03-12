@@ -9,6 +9,7 @@
   <script src="/static/js/services.js"></script>
   <script src="/static/js/navController.js"></script>
   <script src="/static/js/groupController.js"></script>
+  <script src="/static/js/adminController.js"></script>
   <script src="/static/js/appConfig.js"></script>
 
   <link rel="stylesheet" href="/static/bower_components/angular-material/angular-material.css">
@@ -31,8 +32,11 @@
           <md-button ng-show="isLoggedIn">
             Hello, {{ currentUserName }}
           </md-button>
-          <md-button ng-click="groupInfo()" aria-label="Group Info" ng-show="isLoggedIn">
+          <md-button ng-click="groupInfo()" aria-label="Group Info" ng-show="isLoggedIn && role !== 'admin'">
             Group Info
+          </md-button>
+          <md-button ng-click="adminPanel()" aria-label="Admin Panel" ng-show="isLoggedIn && role === 'admin'">
+            Admin Panel
           </md-button>
           <md-button ng-show="isLoggedIn" ng-click="logout()">
             Logout

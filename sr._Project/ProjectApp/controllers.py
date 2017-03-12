@@ -23,6 +23,7 @@ def add_header(response):
 	response.headers['Expires'] = format_date_time(time.mktime(expires_time.timetuple()))
 	return response
 
+
 @app.route('/')
 def view_of_test():
 	response = make_response(open('ProjectApp/static/index.html').read())
@@ -33,13 +34,9 @@ def view_of_test():
 	response.headers['Expires'] = format_date_time(time.mktime(expires_time.timetuple()))
 	return response
 
-@app.route('/getUserLogin', methods=['GET'])
-def getUserLogin():
-	if 'google_token' in session:
-		me = google.get('userinfo')
-		return jsonify({"userInfo": me.data})
-	return jsonify({"userInfo": ""})
-
+####################################
+##         Group Requests         ##
+####################################
 
 @app.route('/acceptGroupRequest', methods=['POST'])
 def acceptRequest():
@@ -48,12 +45,14 @@ def acceptRequest():
 	db.engine.execute(text('update Users set isPending=0 where userName="'+str(uID)+'";'))
 	return ""
 
+
 @app.route('/rejectGroupRequest', methods=['POST'])
 def rejectRequest():
 	req = request.get_json()
 	uID = req['userID']
 	db.engine.execute(text('update Users set isPending=0, gID=NULL where userName="'+str(uID)+'";'))
 	return ""
+
 
 @app.route('/sendGroupRequest', methods=['POST'])
 def SendUserRequest():
@@ -65,6 +64,7 @@ def SendUserRequest():
 		group_id = row.gId
 	db.engine.execute(text('update Users set isPending=1, gId="'+str(group_id)+'" where userName="'+str(req_uID)+'";'))
 	return ""
+
 
 @app.route('/leaveGroup', methods=['POST'])
 def leaveGroup():
@@ -83,7 +83,7 @@ def getGroupMembers():
 	uID = req['userID']
 
 	group_id_query = db.engine.execute(text('select gId from Users where ' + ' userName="'+str(uID)+'";'))
-
+	group_id = ''
 	for row in group_id_query:
 		group_id = row.gId
 
@@ -111,6 +111,7 @@ def isUserInGroup():
 		return jsonify(hasGroup=ans, groupID=gID)
 	return jsonify(hasGroup=ans)
 
+
 @app.route('/createGroup', methods=['POST'])
 def createGroup():
 	req = request.get_json()
@@ -128,13 +129,17 @@ def createGroup():
 @app.route('/getAllGroupUsers', methods=['GET'])
 def getAllUsers():
 	user_List = []
-	query = db.engine.execute(text('select firstName, lastName, userName, isPending, gId from Users;'))
+	query = db.engine.execute(text('select firstName, lastName, role, userName, isPending, gId from Users;'))
 	for row in query:
-		print(row.userName,row.gId)
+		if row.role == 'admin':
+			continue
 		if row.gId != None and row.isPending == 0:
 			user_List.append(dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName))
 	return jsonify(allGroupUsers=user_List)
 
+####################################
+##      Buildings and Rooms       ##
+####################################
 
 @app.route('/getFloorInfo', methods=['POST'])
 def getFloorInfo():
@@ -152,6 +157,7 @@ def getFloorInfo():
 		floor_List.append(str(i))
 
 	return jsonify(floorList=floor_List)
+
 
 @app.route('/registerForRoom', methods=['POST'])
 def registerForRoom():
@@ -172,6 +178,7 @@ def registerForRoom():
 	db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(groupID)+'";'))
 	return jsonify(wasSuccessful=True)
 
+
 @app.route('/getRoomOccupants', methods=['POST'])
 def getRoomOccupants():
 	user_List = []
@@ -184,6 +191,7 @@ def getRoomOccupants():
 		user_List.append(x)
 	return jsonify(roomOccupants=user_List)
 
+
 @app.route('/getRoomOccupantsDict', methods=['POST'])
 def getRoomOccupantsDict():
 	req = request.get_json()
@@ -191,6 +199,7 @@ def getRoomOccupantsDict():
 	build = req["buildingName"]
 	roomList = req["roomArray"]
 	for room in roomList:
+		capacity = None
 		personList = []
 		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(room)+ '"and building="'+str(build)+'";'))
 		if check == None:
@@ -198,13 +207,30 @@ def getRoomOccupantsDict():
 
 		else:
 			query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			query2 = db.engine.execute(text('select isTaken, available, capacity from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+
+			for row in query2:
+				availability = row.available
+				isTaken = row.isTaken
+				capacity = row.capacity
+
 			for row in query:
 				x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 				personList.append(x)
-			roomDict[room] = personList
+
+			if personList == []:
+				db.engine.execute(text('update Rooms set isTaken=0, gId=NULL where roomNum="'+str(room)+'" and building="'+str(build)+'";'))
+
+
+			availability = availability | isTaken
+			roomDict[room] = dict(roomOccupants=personList, isTaken=availability, capacity=capacity)
+
 	return jsonify(occupantsDict=roomDict)
 
 
+####################################
+##       Registration Time        ##
+####################################
 
 
 @app.route('/getRegistrationTime', methods=['POST'])
@@ -216,6 +242,99 @@ def getRegistrationTime():
 		regTime = row.drawDate
 	return jsonify(registrationTime=regTime)
 
+
+####################################
+##        Admin Functions         ##
+####################################
+
+
+@app.route('/switchRoomAvailability', methods=['POST'])
+def switchRoomAvailablility():
+	req = request.get_json()
+	try:
+		build = req["buildingName"].lower()
+		roomNum = req['roomNumber']
+		print(build)
+		print(roomNum)
+		query = db.engine.execute(text('select available from Rooms where roomNum='+str(roomNum)+' and building="'+str(build) +'";'))
+		for row in query:
+			print("HERE")
+			available = row.available
+			available = available^1
+		db.engine.execute(text('update Rooms set available="'+str(available)+'" where roomNum='+str(roomNum)+' and building="'+str(build)+'";'))
+		return(jsonify(wasSuccessful=True, isTaken=available))
+
+	except:
+		return(jsonify(wasSuccessful=False))
+
+
+@app.route('/manuallyAssignStudentsToRoom', methods=['POST'])
+def manuallyAssignRoom():
+	reason = "Unknown"
+	# try:
+	req = request.get_json()
+	build = req['buildingName']
+	roomNum = req['roomNumber']
+	userList = req['userList']
+	roomList = []
+
+	gId = None
+	check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+	if check == None:
+		return(jsonify(wasSuccessful=False, reason="RB"))
+	for row in check:
+		gId = row.gId
+
+	if gId == None:
+		gId = 0
+		db.engine.execute(text('INSERT INTO Groups() VALUES();'))
+		query = db.engine.execute(text('select * from Groups;'))
+		for row in query:
+			if row.groupId > gId:
+				gId = row.groupId
+
+	for user in userList:
+		db.engine.execute(text('update Users set isPending=0, gId="'+str(gId)+'" where userName="'+str(user)+'";'))
+
+	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+	db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(gId)+'";'))
+	return(jsonify(wasSuccessful=True))
+
+	# except:
+	# 	return(jsonify(wasSuccessful=False, reason=reason))
+
+
+@app.route('/manuallyRemoveStudentsFromRoom', methods=['POST'])
+def manuallyRemoveFromRoom():
+	reason = "Unknown"
+	try:
+		req = request.get_json()
+		build = req['buildingName']
+		roomNum = req['roomNumber']
+		userList = req['userList']
+		personList = []
+
+		for person in userList:
+			db.engine.execute(text('update Users set gId=NULL where userName="'+str(person)+'";'))
+
+
+		query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(roomNum)+ '"and building="'+str(build)+'";'))
+		for row in query:
+			x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
+			personList.append(x)
+
+		if personList == []:
+			db.engine.execute(text('update Rooms set isTaken=0, gId=NULL where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+
+		return(jsonify(wasSuccessful=True))
+
+	except:
+		return(jsonify(wasSuccessful=False))
+
+
+####################################
+##         Authentication         ##
+####################################
 
 
 @app.route('/login')
@@ -235,7 +354,6 @@ def authorized():
             request.args['error_reason'],
             request.args['error_description']
         )
-
     session['google_token'] = (resp['access_token'], '')
     # me = google.get('userinfo')
     # print("======================")
@@ -248,6 +366,21 @@ def authorized():
     return redirect('/')
 
 
+@app.route('/getUserLogin', methods=['GET'])
+def getUserLogin():
+	role = None
+	if 'google_token' in session:
+		me = google.get('userinfo')
+		if 'email' in me.data:
+			email = me.data['email']
+			un = email.split('@')
+			userName = un[0]
+			query = db.engine.execute(text('select role from Users where userName="'+ str(userName)+'";'))
+			for row in query:
+				role = row.role
+
+			return jsonify({"userInfo": me.data, "role": role})
+	return jsonify({"userInfo": "", "role": role})
 
 @google.tokengetter
 def get_google_oauth_token():

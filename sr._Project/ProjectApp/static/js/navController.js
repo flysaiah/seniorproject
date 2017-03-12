@@ -1,6 +1,6 @@
 var app = angular.module("navigation", ["ngMaterial", "services"]);
 
-app.controller("navCtl", function($scope, $location, $window, getGroupInfo, loginService, getFloorInfo, registrationService, getRoomInfo, $mdSidenav, $mdToast) {
+app.controller("navCtl", function($scope, $location, $window, $mdDialog, getGroupInfo, loginService, getFloorInfo, registrationService, getRoomInfo, adminService, $mdSidenav, $mdToast) {
 
   // hardcoded room lists
   var room_dict = {
@@ -75,6 +75,10 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
     $location.path("/groupInfo");
   }
 
+  $scope.adminPanel = function() {
+    $location.path("/adminPanel")
+  }
+
   $scope.logout = function() {
     $location.path("/logout");
     $window.location.reload();
@@ -90,13 +94,16 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
     // Determine if user is logged in; if so, get group information from refresh()
     if (res.userInfo) {
       $scope.isLoggedIn = true;
-      $scope.currentUserName = res.userInfo.given_name;
-      $scope.currentUserID = res.userInfo.email.substring(0, res.userInfo.email.indexOf("@"));
+      var userInfo = res.userInfo;
+      $scope.currentUserName = userInfo.given_name;
+      $scope.currentUserID = userInfo.email.substring(0, res.userInfo.email.indexOf("@"));
+      $scope.role = res.role;
       refresh();
     } else {
       $scope.isLoggedIn = false;
       $scope.currentUserName = null;
       $scope.currentUserID = null;
+      $scope.role = null;
     }
   });
 
@@ -142,7 +149,7 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
   $scope.toggleRight = function(roomNum1, roomNum2) {
     $scope.roomNumber = roomNum1.toString() + roomNum2.toString();
     $scope.headerTitle = $scope.currentBuilding.toLowerCase() + " " + $scope.roomNumber;
-    $scope.roomOccupants = $scope.occupantsDict[$scope.roomNumber];
+    $scope.roomOccupants = $scope.occupantsDict[$scope.roomNumber].roomOccupants;
     $mdSidenav('right').toggle();
   };
 
@@ -165,12 +172,58 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
           );
           // if they registered successfully, refresh login info so we disable the remaining "REGISTER" buttons
           refresh();
-          refreshRoomInfo();
         }
       })
     }
   };
 
+  $scope.switchRoomAvailability = function() {
+    // manually changes room availability (admin function)
+    adminService.switchRoomAvailability($scope.currentBuilding, $scope.roomNumber).then(function(res) {
+      if (!res.wasSuccessful) {
+        console.log("Error switching room availability");
+      } else {
+        var offOrOn = res.isTaken ? "off" : "on";
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('You have successfully turned ' + offOrOn + ' the room.')
+          .position('top right')
+          .hideDelay(5000)
+        );
+        refreshRoomInfo();
+      }
+    });
+  }
+
+  $scope.removeStudentFromRoom = function(ev, student) {
+    // Flashes confirm message then removes a single student from the given room if confirmed
+    console.log(student);
+    var confirm = $mdDialog.confirm()
+          .title('Confirm removal')
+          .textContent('Are you sure you want to remove ' + student.userID + ' from this room?')
+          .ariaLabel('Confirm removal')
+          .targetEvent(ev)
+          .ok('Remove student from room')
+          .cancel('Cancel');
+
+    /* TODO: If there's a way we can squelch the warning message that comes when the
+    mdDialog activates, that would be nice. Right now it's an unnecessary warning */
+    $mdDialog.show(confirm).then(function() {
+      adminService.manuallyRemoveStudentsFromRoom($scope.currentBuilding, $scope.roomNumber, [student]).then(function(res) {
+        if (!res.wasSuccessful) {
+          console.log("Error removing student from room");
+        } else {
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('You have successfully removed the student from the room.')
+            .position('top right')
+            .hideDelay(5000)
+          );
+          refreshRoomInfo();
+        }
+      });
+    });
+  };
 })
 .controller('RightCtrl', function ($scope, $mdSidenav) {
   $scope.close = function () {

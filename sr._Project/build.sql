@@ -61,6 +61,7 @@ CREATE TABLE Users (
   firstName VARCHAR(30) NOT NULL,
   lastName VARCHAR(30) NOT NULL,
   gId INT,
+  role VARCHAR(20) NOT NULL,
   credits INT NOT NULL,
   roomDrawNum INT NOT NULL,
   isPending BOOLEAN NOT NULL DEFAULT false,
@@ -82,6 +83,7 @@ CREATE TABLE Rooms (
   capacity INT NOT NULL,
   gId INT,
   isTaken BOOLEAN NOT NULL DEFAULT false,
+  available BOOLEAN NOT NULL DEFAULT false,
   	PRIMARY KEY(roomNum,building),
     FOREIGN KEY (building)
     REFERENCES Buildings (name)

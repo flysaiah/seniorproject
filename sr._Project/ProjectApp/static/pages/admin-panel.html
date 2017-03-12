@@ -1,0 +1,85 @@
+<div class="right-panel">
+  <md-card class="admin-panel" ng-show="isLoggedIn && role === 'admin'">
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">Admin Panel</span>
+      </md-card-title-text>
+    </md-card-title>
+    <md-card-content ng-show="isLoggedIn && role === 'admin'">
+      <md-tabs md-dynamic-height md-border-bottom>
+        <md-tab label="Assign students to room">
+          </br></br>
+          Manually assign students to a room:
+          </br></br>
+          <md-content class="md-padding manual-add-students-left">
+            1. Select students to be added to the group.
+            <form  ng-submit="$event.preventDefault()">
+              <br>
+              <md-autocomplete
+              md-selected-item="selectedItem"
+              md-search-text="searchText"
+              md-items="user in querySearch(searchText)"
+              md-item-text="user.displayName"
+              md-min-length="0"
+              placeholder="Enter the name of a student here">
+                <md-item-template>
+                  <span md-highlight-text="searchText" md-highlight-flags="^i">{{ user.displayName }}</span>
+                </md-item-template>
+                <md-not-found>
+                  No users matching "{{searchText}}" were found.
+                </md-not-found>
+              </md-autocomplete>
+              <md-button class="md-accent md-raised" aria-label="Add Student" ng-click="addStudentToGroup(selectedItem)"
+              ng-disabled="allGroupUsers.indexOf(selectedItem) === -1">Add Student</md-button>
+              <br>
+            </form>
+          </md-content>
+          <md-content class="md-padding manual-add-students-right">
+            <md-list ng-show="manualAddStudentsList.length">
+              <md-list-item class="md-2-line veggie-option" ng-repeat="student in manualAddStudentsList" layout="row"
+                  layout-wrap>
+                <div class="md-item-text md-whiteframe-z1 manual-add-student" flex>
+                  <h3>{{ student.displayName }}
+                    <md-button ng-click="removeStudentFromGroup(student)" class="md-icon-button" aria-label="Favorite">
+                      <md-icon md-svg-icon="/static/img/icons/reject.svg"></md-icon>
+                    </md-button>
+                  </h3>
+                </div>
+              </md-list-item>
+            </md-list>
+            <span ng-show="!manualAddStudentsList.length">Students you have added will appear here.</span>
+          </md-content>
+          <form ng-submit="$event.preventDefault()">
+            <md-content class="md-padding manual-add-students-step3">
+              2. Select where you wish to manually assign students.
+              <br>
+              <div layout="row">
+                <md-input-container>
+                  <label>Building</label>
+                  <md-select class="select-building-name" required ng-model="buildingName">
+                    <md-option ng-repeat="building in buildingNames" ng-value="building">
+                      {{building}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <md-input-container>
+                  <label>Room Number</label>
+                  <input required ng-model="roomNumber">
+                </md-input-container>
+              </div>
+            </md-content>
+            <md-button ng-disabled="!manualAddStudentsList.length" type="submit" class="md-primary md-raised manually-assign-button" ng-click="manuallyAssignStudentsToRoom()">Manually Assign Students to Room</md-button>
+          </form>
+        </md-tab>
+        <md-tab label="Remove students from room">
+          </br></br>
+          This functionality will be added later.
+          </br></br>
+        </md-tab>
+      </md-tabs>
+    </md-card-content>
+  </md-card>
+  <md-button href="/" ng-click="refresh();" class="md-primary">
+    Go back to the map
+  </md-button>
+</div>

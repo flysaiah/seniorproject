@@ -35,6 +35,7 @@ class Users(db.Model):
 	userName = db.Column(VARCHAR(30), nullable=False, primary_key=True)
 	firstName = db.Column(VARCHAR(30), nullable=False)
 	lastName = db.Column(VARCHAR(30), nullable=False)
+	role = db.Column(VARCHAR(30), nullable=False)
 	gId = db.Column(INTEGER, db.ForeignKey(Groups.groupId))
 	credits = db.Column(INTEGER, nullable=False)
 	roomDrawNum = db.Column(INTEGER, nullable=False)
@@ -61,6 +62,7 @@ class Rooms(db.Model):
 	capacity = db.Column(INTEGER, nullable=False)
 	gId = db.Column(INTEGER, db.ForeignKey(Groups.groupId))
 	isTaken = db.Column(BOOLEAN, nullable=False, server_default=('0'))
+	available = db.Column(BOOLEAN, nullable=False, server_default=('0'))
 
 	def __repr__(self):
 		# formats/manually creates the JSON object
