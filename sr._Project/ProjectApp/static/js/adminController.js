@@ -90,6 +90,8 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
           .position('bottom left')
           .hideDelay(5000)
         );
+      } else {
+        $scope.selectedRemoveStudentsRoom = {"buildingName": $scope.removeStudentRoom.buildingName, "roomNumber": $scope.removeStudentRoom.roomNumber};
       }
     });
   };
@@ -118,9 +120,37 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
             .position('top right')
             .hideDelay(5000)
           );
-          $scope.selectRoomForRemoval();   // serves as a refresh for the room info
+          $scope.selectRoomForRemoval();   // refresh the UI
         }
       });
+    });
+  };
+
+  $scope.checkRoomAvailability = function() {
+    getRoomInfo.getOccupantsDict($scope.checkAvailabilityRoom.buildingName, [$scope.checkAvailabilityRoom.roomNumber]).then(function(res) {
+      // TODO: We need a flag like wasSuccessful here so that we know if we can index into the dictionary with the room number
+      var room = [$scope.checkAvailabilityRoom.roomNumber];
+      $scope.currentRoomAvailability = (room.isTaken && !room.roomOccupants.length) ? 0 : 1;
+      // scope variable that remembers the room that was last "selected"
+      $scope.selectedCheckAvailabilityRoom = {"buildingName": $scope.checkAvailabilityRoom.buildingName, "roomNumber": $scope.checkAvailabilityRoom.roomNumber};
+    });
+  };
+
+  $scope.switchRoomAvailability = function() {
+    // manually changes room availability
+    adminService.switchRoomAvailability($scope.checkAvailabilityRoom.buildingName, $scope.checkAvailabilityRoom.roomNumber).then(function(res) {
+      if (!res.wasSuccessful) {
+        console.log("Error switching room availability");
+      } else {
+        var offOrOn = res.isTaken ? "off" : "on";
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('You have successfully turned ' + offOrOn + ' the room.')
+          .position('top right')
+          .hideDelay(5000)
+        );
+        $scope.checkRoomAvailability();   // refresh the UI
+      }
     });
   };
 
