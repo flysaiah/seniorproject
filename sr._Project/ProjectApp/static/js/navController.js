@@ -197,7 +197,6 @@ app.controller("navCtl", function($scope, $location, $window, $mdDialog, getGrou
 
   $scope.removeStudentFromRoom = function(ev, student) {
     // Flashes confirm message then removes a single student from the given room if confirmed
-    console.log(student);
     var confirm = $mdDialog.confirm()
           .title('Confirm removal')
           .textContent('Are you sure you want to remove ' + student.userID + ' from this room?')

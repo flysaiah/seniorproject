@@ -73,8 +73,43 @@
         </md-tab>
         <md-tab label="Remove students from room">
           </br></br>
-          This functionality will be added later.
+          Manually remove students from a room:
           </br></br>
+          <md-content class="md-padding manual-remove-students-left">
+            Please select a room.
+            </br>
+            <div layout="row">
+              <md-input-container>
+                <label>Building</label>
+                <md-select class="select-building-name" ng-model="removeStudentRoom.buildingName">
+                  <md-option><em>None</em></md-option>
+                  <md-option ng-repeat="building in buildingNames" ng-value="building">
+                    {{building}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+              <md-input-container>
+                <label>Room Number</label>
+                <input ng-model="removeStudentRoom.roomNumber">
+              </md-input-container>
+            </div>
+            <!-- TODO: Better validation would be nice here to check for invalid building/room combinations -->
+            <md-button class="md-accent md-raised" aria-label="Get Room Occupants" ng-click="selectRoomForRemoval()"
+            ng-disabled="!removeStudentRoom.buildingName || removeStudentRoom.buildingName === 'None' || !removeStudentRoom.roomNumber">Get Room Occupants</md-button>
+          </md-content>
+          <md-content class="md-padding manual-remove-students-right">
+            <md-list ng-show="manualRemoveStudentList.length">
+              <md-list-item class="md-2-line veggie-option" ng-repeat="student in manualRemoveStudentList" layout="row"
+                  layout-wrap>
+                <div class="md-item-text md-whiteframe-z1 manual-add-student" flex>
+                  <h3>{{ student.firstName }} {{ student.lastName }} ({{ student.userID }})
+                  </h3>
+                </div>
+                <md-button ng-click="removeStudentFromRoom($event, student)" type="submit" class="md-warn md-raised">Remove</md-button>
+              </md-list-item>
+            </md-list>
+            <span ng-show="!manualRemoveStudentList.length">Occupants of the room you select will appear here.</span>
+          </md-content>
         </md-tab>
       </md-tabs>
     </md-card-content>
