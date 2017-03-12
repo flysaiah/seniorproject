@@ -213,3 +213,7 @@
   display: block;
   margin-top: 10px;
 }
+
+.admin-sidenav {
+  width: 500px !important;
+}

@@ -211,7 +211,6 @@ def getRoomOccupantsDict():
 
 			for row in query2:
 				availability = row.available
-				print(availability)
 				isTaken = row.isTaken
 				capacity = row.capacity
 
@@ -277,7 +276,6 @@ def manuallyAssignRoom():
 	roomList = []
 
 	gId = None
-	print("first gId " + str(gId))
 	check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
 	if check == None:
 		return(jsonify(wasSuccessful=False, reason="RB"))
@@ -313,17 +311,19 @@ def manuallyRemoveFromRoom():
 		userList = req['userList']
 		personList = []
 
-		for row in userList:
-			db.engine.execute(text('update Users set gId=NULL where userName="'+str(uID)+'";'))
+		for person in userList:
+			db.engine.execute(text('update Users set gId=NULL where userName="'+str(person)+'";'))
 
 
-		query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+		query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(roomNum)+ '"and building="'+str(build)+'";'))
 		for row in query:
 			x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 			personList.append(x)
 
 		if personList == []:
 			db.engine.execute(text('update Rooms set isTaken=0, gId=NULL where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+
+		return(jsonify(wasSuccessful=True))
 
 	except:
 		return(jsonify(wasSuccessful=False))

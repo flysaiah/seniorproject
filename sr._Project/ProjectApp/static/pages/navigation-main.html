@@ -259,7 +259,7 @@
   </md-list>
 </div>
 <!-- Side nav with registration info -->
-<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="right">
+<md-sidenav class="md-sidenav-right md-whiteframe-4dp" ng-class="{'admin-sidenav': role === 'admin'}" md-component-id="right">
 
   <md-toolbar class="md-theme-light main-navbar">
     <h1 class="md-toolbar-tools">{{ headerTitle }}</h1>
@@ -281,6 +281,7 @@
             <h3 class="occupant">{{ occupant.firstName }} {{ occupant.lastName }}</h3>
             <p clas="occupant">({{ occupant.userID }})</p>
           </div>
+          <md-button ng-show="role === 'admin'" ng-click="removeStudentFromRoom($event, occupant)" type="submit" class="md-warn md-raised">Remove</md-button>
         </md-list-item>
       </md-list>
       <md-button ng-show="role === 'admin'" ng-disabled="occupantsDict[roomNumber].roomOccupants.length" class="md-warn md-raised" aria-label="Turn {{ occupantsDict[roomNumber].isTaken && occupantsDict[roomNumber].roomOccupants.length < 1 ? 'On' : 'Off' }} Room" ng-click="switchRoomAvailability()">Turn {{ occupantsDict[roomNumber].isTaken && occupantsDict[roomNumber].roomOccupants.length < 1 ? 'On' : 'Off' }} Room</md-button>

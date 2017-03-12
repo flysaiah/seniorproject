@@ -299,13 +299,14 @@ app.factory('adminService', function($http) {
       // manually remove students from room (duh)
       var userList = [];
       for (var i = 0; i < studentObjectList.length; i++) {
-        userList.push(studentObjectList[i].searchID);
+        userList.push(studentObjectList[i].userID);
       }
       var body = {
         "buildingName": buildingName,
         "roomNumber": roomNumber,
         "userList": userList
       }
+      console.log(body);
       var promise = $http.post('/manuallyRemoveStudentsFromRoom', body).then(function (response) {
         return response.data;
       }, function (err) {
