@@ -252,13 +252,16 @@ def getRegistrationTime():
 def switchRoomAvailablility():
 	req = request.get_json()
 	try:
-		build = req["buildingName"]
+		build = req["buildingName"].lower()
 		roomNum = req['roomNumber']
-		query = db.engine.execute(text('select available from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+		print(build)
+		print(roomNum)
+		query = db.engine.execute(text('select available from Rooms where roomNum='+str(roomNum)+' and building="'+str(build) +'";'))
 		for row in query:
+			print("HERE")
 			available = row.available
 			available = available^1
-		db.engine.execute(text('update Rooms set available="'+str(available)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+		db.engine.execute(text('update Rooms set available="'+str(available)+'" where roomNum='+str(roomNum)+' and building="'+str(build)+'";'))
 		return(jsonify(wasSuccessful=True, isTaken=available))
 
 	except:
