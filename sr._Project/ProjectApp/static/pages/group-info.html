@@ -27,12 +27,74 @@
           </md-content>
         </md-tab>
         <md-tab label="Registration Information">
-          <md-content class="md-padding" ng-show="registrationTime">
-            Registration time: {{ registrationTime }}
+          <md-content class="md-padding">
+            <span ng-show="registrationTime">Registration time: {{ registrationTime }}</span>
+            <span ng-show="!registrationTime">You have not received a registration time yet. Please wait for administration to assign you a time.</span>
           </md-content>
-          <md-content class="md-padding" ng-show="!registrationTime">
-            You have not received a registration time yet. Please wait for administration to assign you a time.
-          </md-content>
+          <form name="autoRegForm">
+            <div layout="row">
+                <span class="md-switch-position-fix">Auto Registration:</span>
+                <span class="md-switch-position-fix" style="margin-left: 10px;">Off</span>
+                <md-switch class="md-primary" ng-model="autoRegEnabled">
+                  On
+                </md-switch>
+                <md-button style="margin-left: 15px;" class="md-primary" ng-click="showAutoRegExplanation($event)">
+                  What's this?
+                </md-button>
+            </div>
+            <div ng-show="autoRegEnabled">
+              <div layout="row" ng-repeat="pref in autoRegPref track by $index">
+                <md-input-container class="manual-fix-input-label">
+                  <span>Preference {{ $index + 1 }}:</span>
+                </md-input-container>
+                <md-input-container>
+                  <label>Building</label>
+                  <md-select class="select-building-name" ng-model="pref.buildingName">
+                    <md-option><em>None</em></md-option>
+                    <md-option ng-repeat="building in buildingNames" ng-value="building">
+                      {{building}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <md-input-container>
+                  <label>Room Number</label>
+                  <input name="roomNumberInput{{ $index }}" ng-model="pref.roomNumber" roomselection="{{ pref.buildingName }}">
+                  <div ng-messages="autoRegForm['roomNumberInput' +  $index ].$error.roomselection" ng-show="autoRegForm['roomNumberInput' +  $index ].$error.roomselection">
+                    <div ng-messages="autoRegForm['roomNumberInput' +  $index ].$error.roomselection">Invalid room number for the selected building.</div>
+                  </div>
+                </md-input-container>
+              </div>
+              <div layout="row">
+                  <span class="md-switch-position-fix">Default Preference:</span>
+                  <span class="md-switch-position-fix" style="margin-left: 10px;">Off</span>
+                  <md-switch class="md-primary" ng-model="defaultPrefEnabled">
+                    On
+                  </md-switch>
+              </div>
+              <div ng-show="defaultPrefEnabled">
+                <div layout="row">
+                  <md-input-container class="manual-fix-input-label">
+                    <span>Default building and floor number preference:</span>
+                  </md-input-container>
+                  <md-input-container>
+                    <label>Building</label>
+                    <md-select class="select-building-name" ng-model="defaultBuildingName">
+                      <md-option><em>None</em></md-option>
+                      <md-option ng-repeat="building in buildingNames" ng-value="building">
+                        {{building}}
+                      </md-option>
+                    </md-select>
+                  </md-input-container>
+                  <md-input-container>
+                    <md-select class="form-control" id="floorpicker" ng-model="defaultPref.floorNumber" ng-init="floorNumber = '1'">
+                      <md-option ng-repeat="floorNum in floorList" ng-value="floorNum">{{ floorNum }}</md-option>
+                    </md-select>
+                  </md-input-container>
+                </div>
+              </div>
+            </div>
+            <md-button style="display: block;" class="md-primary md-raised" ng-disabled="autoRegForm.$invalid" aria-label="Save Auto Registration Preferences" ng-click="saveAutoRegPref()">Save Auto Registration Preferences</md-button>
+          </form>
         </md-tab>
       </md-tabs>
     </md-card-content>
@@ -66,4 +128,58 @@
   <md-button href="/" ng-click="refresh();" class="md-primary">
     Go back to the map
   </md-button>
+
+  <!-- Explanation of auto registration -->
+  <div style="visibility: hidden;">
+    <div class="md-dialog-container" id="autoRegExplained">
+      <md-dialog aria-label="Mango (Fruit)">
+        <form ng-cloak>
+          <md-toolbar class="main-navbar">
+            <div class="md-toolbar-tools">
+              <h2>Auto Registration</h2>
+              <span flex></span>
+              <md-button ng-click="cancel()">
+                Close Dialog
+              </md-button>
+            </div>
+          </md-toolbar>
+          <md-dialog-content>
+            <div class="md-dialog-content">
+              <h3 class="dialog-h2">What is Auto Registration?</h3>
+              <p>
+                Auto registration is a service which allows your group to select a set of
+                preferred rooms which you would like to register for. When you registration
+                time occurs, the system will automatically try to register your group for each of the rooms
+                you specify in your preferences, in order. You do not need to be logged in or online during
+                your registration time in order to use the service, and once you are registered to a room, auto
+                registration will cease (i.e. if your first preference is fulfilled, the system will not re-register
+                you for your second or third preference). This service is primarily for those who are unable
+                to access the internet during their registration time, but is available to any group that wishes
+                to use it.
+                <br/><br/>
+                If you wish to use Auto Registration, begin by setting the "Auto Registration" setting to "On" then continue
+                by selecting up to 5 choices of preferred rooms. It is important to note that Auto Registration preferences
+                are shared among all members of a group, and it is important to select "Save Auto Registration Preferences"
+                whenever you are done making changes. It is also important that if you do <strong>not</strong> wish to
+                use Auto Registration, <strong>you must make sure that the "Auto Registration" option is set to Off (gray
+                on the slider)</strong>.
+                If you fail to do this, Auto Registration may attempt to register you for a previously selected preference during your
+                registration time that you no longer wish to register for.
+                <br/><br/>
+              </p>
+              <p>
+                <h3 class="dialog-h3">Default Preferences</h4>
+                  In the unlikely situation that none of your listed room preferences can be fulfilled at the
+                  time of registration, you may provide a preference of building and floor number which Auto Registration
+                  will attempt to satisfy. You can enable this feature by turning on the "Default Preference" setting. If
+                  this setting is not enabled and your listed room preferences cannot be automatically fulfilled, then
+                  you will <strong>not</strong> be automatically registered for a room and you will have to register manually.
+              </p>
+            </div>
+          </md-dialog-content>
+
+        </form>
+      </md-dialog>
+    </div>
+  </div>
 </div>

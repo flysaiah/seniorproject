@@ -215,6 +215,32 @@
   margin-top: 10px;
 }
 
+.dialog-h2 {
+  font-size: 2.100rem !important;
+  font-weight: 400 !important;
+  line-height: 3.2rem !important;
+}
+
+.dialog-h3 {
+  font-size: 1.600rem !important;
+  font-weight: 400 !important;
+  line-height: 2.0rem !important;
+}
+
+.manual-fix-input-label {
+  /* TODO: Make this like the md-switch-position-fix*/
+  position: relative;
+  top: 5px;
+
+}
+
+.md-switch-position-fix {
+  margin-top: 21px;
+  margin-bottom: 16px;
+  margin-right: 10px;
+  align-items: center;
+}
+
 .admin-sidenav {
   width: 500px !important;
 }

@@ -14,6 +14,11 @@ from sqlalchemy import text, func
 
 from ProjectApp import app, db, models, google
 
+
+from apscheduler.schedulers.background import BackgroundScheduler
+sched = BackgroundScheduler()
+sched.start()
+
 @app.after_request
 def add_header(response):
 	response.cache_control.max_age = 0
@@ -271,37 +276,34 @@ def switchRoomAvailablility():
 @app.route('/manuallyAssignStudentsToRoom', methods=['POST'])
 def manuallyAssignRoom():
 	reason = "Unknown"
-	# try:
-	req = request.get_json()
-	build = req['buildingName']
-	roomNum = req['roomNumber']
-	userList = req['userList']
-	roomList = []
+	try:
+		req = request.get_json()
+		build = req['buildingName']
+		roomNum = req['roomNumber']
+		userList = req['userList']
 
-	gId = None
-	check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
-	if check == None:
-		return(jsonify(wasSuccessful=False, reason="RB"))
-	for row in check:
-		gId = row.gId
+		gId = None
+		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+		if check == None:
+			return(jsonify(wasSuccessful=False, reason="RB"))
+		for row in check:
+			gId = row.gId
 
-	if gId == None:
-		gId = 0
-		db.engine.execute(text('INSERT INTO Groups() VALUES();'))
-		query = db.engine.execute(text('select * from Groups;'))
-		for row in query:
-			if row.groupId > gId:
-				gId = row.groupId
+		if gId == None:
+			db.engine.execute(text('INSERT INTO Groups() VALUES();'))
+			query = db.engine.execute(text('SELECT LAST_INSERT_ID();'))
+			for row in query:
+			 	gId = row[0]
 
-	for user in userList:
-		db.engine.execute(text('update Users set isPending=0, gId="'+str(gId)+'" where userName="'+str(user)+'";'))
+		for user in userList:
+			db.engine.execute(text('update Users set isPending=0, gId="'+str(gId)+'" where userName="'+str(user)+'";'))
 
-	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
-	db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(gId)+'";'))
-	return(jsonify(wasSuccessful=True))
+		db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+		db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(gId)+'";'))
+		return(jsonify(wasSuccessful=True))
 
-	# except:
-	# 	return(jsonify(wasSuccessful=False, reason=reason))
+	except:
+		return(jsonify(wasSuccessful=False, reason=reason))
 
 
 @app.route('/manuallyRemoveStudentsFromRoom', methods=['POST'])
@@ -331,6 +333,91 @@ def manuallyRemoveFromRoom():
 	except:
 		return(jsonify(wasSuccessful=False))
 
+
+####################################
+##            AutoReg             ##
+####################################
+@app.route('/getAllRoomNumbers', methods=['GET'])
+def getAllRooms():
+	allRoomsDict = {}
+	query= db.engine.execute(text('select name from Buildings;'))
+	for row in query:
+		build = row.name
+		allRoomsDict[build] = []
+
+	query2 = db.engine.execute(text('select roomNum, building from Rooms;'))
+	for row in query2:
+		buildName = row.building
+		roomNum = row.roomNum
+		allRoomsDict[buildName].append(roomNum)
+
+	return(jsonify(allRoomsDict=allRoomsDict))
+
+
+@app.route('/getAutoRegPref', methods=['POST'])
+def getAutoRegPref():
+	req = request.get_json()
+	gId = req["groupID"]
+	roomList = []
+	query = db.engine.execute(text('select enabled, building, defaultPref, roomNum from Preferences where Preferences.gId = "'+str(gId)+'";'))
+	for row in query:
+		defPref = row.defaultPref
+		if row.enabled == False:
+			return jsonify(autoRegEnabled=False)
+
+
+		roomList.append(dict(buildingName=row.building, defaultPref=defPref, roomNumber=row.roomNum))
+
+	return jsonify(autoRegEnabled=True,autoRegPref=roomList)
+
+
+def autoReg():
+	query = db.engine.execute(text('select * from Groups where drawDate;'))
+	for row in query:
+		isReg = row.isRegistered
+		gId =row.groupId
+		drawDate = row.drawDate
+		if isReg == True:
+			continue
+		query2 = db.engine.execute(text('select enabled, building, defaultPref, roomNum from Preferences where Preferences.gId = "'+str(gId)+'";'))
+		for row2 in query2:
+			args = []
+			if row2.enabled == False:
+				break
+			args.append(gId)
+			args.append(row2.building)
+			args.append(row2.roomNum)
+			sched.add_date_job(registerForRoom, drawDate, args)
+
+def registerForRoom(args):
+	gId = args[0]
+	build = args[1]
+	room = args[2]
+	query = db.engine.execute(text('select isTaken, isRegistered from Rooms, Groups where groupId="'+str(gId)+'" and roomNum=+str(roomNum)+;'))
+	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+
+@app.route('/saveAutoRegPref', methods=['POST'])
+def saveAutoRegPref():
+	try:
+		req = request.get_json()
+		gId = req["groupID"]
+		enabled = req["autoRegEnabled"]
+		prefs = req["autoRegPref"]
+		db.engine.execute(text('DELETE from Preferences where gId='+str(gId)+';'))
+		inc = 0
+		for dic in prefs:
+			inc += 1
+			building = dic['buildingName']
+			num = dic['roomNumber']
+			isPref = dic['defaultPref']
+
+			db.engine.execute(text('INSERT INTO Preferences(enabled, roomNum, building, defaultPref, gId, prefNum) VALUES('+str(enabled)+', '+str(num)+', "'+str(building)+'", '+str(isPref)+', '+str(gId)+', '+str(inc)+');'))
+
+
+		return(jsonify(wasSuccessful=True))
+
+	except:
+		return(jsonify(wasSuccessful=False))
 
 ####################################
 ##         Authentication         ##
@@ -385,3 +472,6 @@ def getUserLogin():
 @google.tokengetter
 def get_google_oauth_token():
     return session.get('google_token')
+
+
+autoReg()

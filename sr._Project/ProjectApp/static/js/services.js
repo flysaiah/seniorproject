@@ -1,4 +1,5 @@
 var app = angular.module("services",[]);
+// NOTE: Dummy data returned during errors for testing needs to be gone by production time
 app.factory('getGroupInfo', function($http) {
   // Get info about group members and group requests
   var getGroupInfo = {
@@ -50,6 +51,19 @@ app.factory('getGroupInfo', function($http) {
       }, function (err) {
         // for testing
         var data = {"hasGroup": true, "groupID": 0};
+        return data;
+      });
+      return promise;
+    }, getAutoRegPref: function(groupID) {
+      // Get auto registration preferences for a given group
+      var body = {
+        "groupID": groupID
+      }
+      var promise = $http.post('/getAutoRegPref', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var data = {"autoRegEnabled": true, "autoRegPref": [{"buildingName": "Miller", "roomNumber": 103, "defaultPref": false},{"buildingName": "Dieseth", "roomNumber": 2, "defaultPref": true}]};
         return data;
       });
       return promise;
@@ -105,6 +119,21 @@ app.factory('updateGroupInfo', function($http) {
       }
       var promise = $http.post('/createGroup', body).error(function(response) {
         console.log(response);
+      });
+      return promise;
+    }, saveAutoRegPref: function(groupID, autoRegEnabled, autoRegPref) {
+      // Saves group preferences for auto registration
+      var body = {
+        "groupID": groupID,
+        "autoRegEnabled": autoRegEnabled,  // boolean value
+        "autoRegPref": autoRegPref        // example: [ {"buildingName": "Miller", "roomNumber": 103, "defaultPref": false}, {}, {}, {}, {} ]
+      }
+      var promise = $http.post('/saveAutoRegPref', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var data = {"wasSuccessful": false};
+        return data;
       });
       return promise;
     }
@@ -248,6 +277,20 @@ app.factory('getRoomInfo', function($http) {
         return {"occupantsDict": testData};
       });
       return promise;
+    }, getAllRoomNumbers: function() {
+      // Return list of all building names + room numbers
+      var promise = $http.get('/getAllRoomNumbers').then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {
+          "Miller": [101, 102, 103, 104],
+          "Dieseth": [101, 102, 103, 104]
+        };
+
+        return {"allRoomsDict": testData};
+      });
+      return promise;
     }
   };
   return getRoomInfo;
@@ -289,7 +332,6 @@ app.factory('adminService', function($http) {
         // for testing
         var testData = {
           "wasSuccessful": false,
-          "reason": "RB" // means invalid building/room was given
         }
 
         return {"wasSuccessful": testData};

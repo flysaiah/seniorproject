@@ -1,7 +1,8 @@
 var app = angular.module("roomDraw", ["ngRoute", "navigation", "groupinfo", "admin"]);
 
-app.config(function($routeProvider, $locationProvider) {
+app.config(function($routeProvider, $locationProvider, $mdAriaProvider) {
   $locationProvider.html5Mode(true);
+  $mdAriaProvider.disableWarnings();
   $routeProvider
 
   // route for the home page

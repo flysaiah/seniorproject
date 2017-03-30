@@ -18,6 +18,7 @@ INSERT INTO Groups() VALUES();
 INSERT INTO Groups() VALUES();
 INSERT INTO Groups() VALUES();
 
+
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum, isPending) VALUES ("smitze01","Zechariah","Smith", "admin", 1, 65, 3, true);
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("mayeis01","Isaiah","Mayerchak", "admin", 1, 120, 1);
 INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("saudih01","Ihab","Saud", "admin", 85, 2);
@@ -43,7 +44,7 @@ INSERT INTO Buildings(name, numFloors) VALUES("Olson",3);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(302, "Olson", 2);
 
 
-#######################################################
+######################################################
 #######################################################
 ##                                                   ##
 ##                Adding Miller's Rooms              ##
@@ -483,3 +484,13 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(820, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(821, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(822, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(823, "Dieseth", 2);
+
+
+####################################
+##        Preference Test         ##
+####################################
+
+INSERT INTO Preferences(enabled, roomNum, building, gId, prefNum) VALUES(true, 101, "Miller", 1, 1);
+INSERT INTO Preferences(enabled, roomNum, building, gId, prefNum) VALUES(true, 102, "Miller", 1, 2);
+INSERT INTO Preferences(enabled, roomNum, building, gId, prefNum) VALUES(true, 103, "Miller", 1, 3);
+INSERT INTO Preferences(enabled, roomNum, building, gId, prefNum) VALUES(true, 104, "Miller", 1, 4);

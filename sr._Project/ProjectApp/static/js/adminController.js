@@ -157,5 +157,4 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
       }
     });
   };
-
 });

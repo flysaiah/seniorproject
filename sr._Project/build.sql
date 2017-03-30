@@ -95,6 +95,28 @@ CREATE TABLE Rooms (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+CREATE TABLE Preferences (
+  enabled BOOLEAN NOT NULL DEFAULT false,
+  defaultPref BOOLEAN NOT NULL DEFAULT false,
+  roomNum INT NOT NULL,
+  building VARCHAR(30) NOT NULL,
+  gId INT NOT NULL,
+  prefNum INT NOT NULL,
+    PRIMARY KEY(roomNum,building,gId),
+    FOREIGN KEY (building)
+    REFERENCES Buildings (name)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    FOREIGN KEY (gId)
+    REFERENCES Groups (groupId)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    FOREIGN KEY (roomNum)
+    REFERENCES Rooms (roomNum)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
 CREATE VIEW groupsWithAverage AS
 select groupID, isRegistered, drawDate, AVG(Users.roomDrawNum) groupRoomDraw from Users, Groups where Users.gId = Groups.groupId group by groupId;
 
