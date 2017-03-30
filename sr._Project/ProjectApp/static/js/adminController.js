@@ -129,8 +129,12 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
   $scope.checkRoomAvailability = function() {
     getRoomInfo.getOccupantsDict($scope.checkAvailabilityRoom.buildingName, [$scope.checkAvailabilityRoom.roomNumber]).then(function(res) {
       // TODO: We need a flag like wasSuccessful here so that we know if we can index into the dictionary with the room number
-      var room = [$scope.checkAvailabilityRoom.roomNumber];
-      $scope.currentRoomAvailability = (room.isTaken && !room.roomOccupants.length) ? 0 : 1;
+      var room = res.occupantsDict[$scope.checkAvailabilityRoom.roomNumber];
+      $scope.currentRoomAvailability = (room.isTaken) ? 0 : 1;
+      // occupantsInCARoom is true if there are occupants in the room; this disables the "Turn on room" button
+      $scope.occupantsInCARoom = room.roomOccupants.length ? 1 : 0;
+      // TODO: Have a helpful message appear saying "There are occupants in the room!"
+
       // scope variable that remembers the room that was last "selected"
       $scope.selectedCheckAvailabilityRoom = {"buildingName": $scope.checkAvailabilityRoom.buildingName, "roomNumber": $scope.checkAvailabilityRoom.roomNumber};
     });

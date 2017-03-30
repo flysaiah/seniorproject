@@ -143,7 +143,7 @@
             <span style="display: block;" ng-show="selectedCheckAvailabilityRoom">Room: {{ selectedCheckAvailabilityRoom.buildingName }} {{ selectedCheckAvailabilityRoom.roomNumber }}</span>
             <mg-input-container ng-show="selectedCheckAvailabilityRoom">
               <label>This room is currently {{ currentRoomAvailability ? "available" : "unavailable" }}.</label>
-              <md-button ng-click="switchAvailability()" type="submit" class="md-warn md-raised">Turn {{ currentRoomAvailability ? "Off" : "On" }} room</md-button>
+              <md-button ng-click="switchRoomAvailability()" ng-disabled="occupantsInCARoom" type="submit" class="md-warn md-raised">Turn {{ currentRoomAvailability ? "Off" : "On" }} room</md-button>
             </md-input-container>
           </md-content>
         </md-tab>
