@@ -306,7 +306,6 @@ app.factory('adminService', function($http) {
         "roomNumber": roomNumber,
         "userList": userList
       }
-      console.log(body);
       var promise = $http.post('/manuallyRemoveStudentsFromRoom', body).then(function (response) {
         return response.data;
       }, function (err) {

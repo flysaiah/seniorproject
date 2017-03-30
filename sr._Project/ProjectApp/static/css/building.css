@@ -203,6 +203,7 @@
 
 .manual-add-student {
   background-color: white !important;
+  margin-bottom: 10px;
 }
 
 .select-building-name {
@@ -216,4 +217,16 @@
 
 .admin-sidenav {
   width: 500px !important;
+}
+
+.manual-remove-students-left {
+  width: 40%;
+  float: left;
+  margin-bottom: 10px;
+}
+
+.manual-remove-students-right {
+  width: 45%;
+  float: right;
+  margin-bottom: 10px;
 }

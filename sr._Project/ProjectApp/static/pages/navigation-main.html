@@ -275,7 +275,7 @@
     <div ng-show="occupantsDict[roomNumber].isTaken">
       <span>Room unavailable. {{ occupantsDict[roomNumber].roomOccupants.length ? 'Current occupants:' : '' }}</span>
       <md-list>
-        <md-list-item class="md-2-line veggie-option" ng-repeat="occupant in occupantsDict[roomNumber].roomOccupants" layout="row"
+        <md-list-item style="margin-bottom: 10px;" class="md-2-line veggie-option" ng-repeat="occupant in occupantsDict[roomNumber].roomOccupants" layout="row"
             layout-wrap>
           <div class="md-item-text md-whiteframe-z1" flex>
             <h3 class="occupant">{{ occupant.firstName }} {{ occupant.lastName }}</h3>
