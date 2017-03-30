@@ -17,7 +17,7 @@ from ProjectApp import app, db, models, google
 
 from apscheduler.schedulers.background import BackgroundScheduler
 sched = BackgroundScheduler()
-sched.start()  
+sched.start()
 
 @app.after_request
 def add_header(response):
@@ -204,7 +204,6 @@ def getRoomOccupantsDict():
 	build = req["buildingName"]
 	roomList = req["roomArray"]
 	for room in roomList:
-		availability = None
 		capacity = None
 		personList = []
 		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(room)+ '"and building="'+str(build)+'";'))
@@ -213,15 +212,24 @@ def getRoomOccupantsDict():
 
 		else:
 			query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
-			query2 = db.engine.execute(text('select isTaken, capacity from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			query2 = db.engine.execute(text('select isTaken, available, capacity from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
 
 			for row in query2:
-				availability = row.isTaken
+				availability = row.available
+				isTaken = row.isTaken
 				capacity = row.capacity
+
 			for row in query:
 				x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 				personList.append(x)
+
+			if personList == []:
+				db.engine.execute(text('update Rooms set isTaken=0, gId=NULL where roomNum="'+str(room)+'" and building="'+str(build)+'";'))
+
+
+			availability = availability | isTaken
 			roomDict[room] = dict(roomOccupants=personList, isTaken=availability, capacity=capacity)
+
 	return jsonify(occupantsDict=roomDict)
 
 
@@ -249,14 +257,17 @@ def getRegistrationTime():
 def switchRoomAvailablility():
 	req = request.get_json()
 	try:
-		build = req["buildingName"]
+		build = req["buildingName"].lower()
 		roomNum = req['roomNumber']
-		query = db.engine.execute(text('select isTaken from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+		print(build)
+		print(roomNum)
+		query = db.engine.execute(text('select available from Rooms where roomNum='+str(roomNum)+' and building="'+str(build) +'";'))
 		for row in query:
-			isTaken = row.isTaken
-			isTaken = isTaken^1
-		db.engine.execute(text('update Rooms set isTaken="'+str(isTaken)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
-		return(jsonify(wasSuccessful=True, isTaken=isTaken))
+			print("HERE")
+			available = row.available
+			available = available^1
+		db.engine.execute(text('update Rooms set available="'+str(available)+'" where roomNum='+str(roomNum)+' and building="'+str(build)+'";'))
+		return(jsonify(wasSuccessful=True, isTaken=available))
 
 	except:
 		return(jsonify(wasSuccessful=False))
@@ -265,11 +276,27 @@ def switchRoomAvailablility():
 @app.route('/manuallyAssignStudentsToRoom', methods=['POST'])
 def manuallyAssignRoom():
 	reason = "Unknown"
-	try:
-		req = request.get_json()
-		build = req['buildingName']
-		roomNum = req['roomNumber']
-		userList = req['userList']
+	# try:
+	req = request.get_json()
+	build = req['buildingName']
+	roomNum = req['roomNumber']
+	userList = req['userList']
+	roomList = []
+
+	gId = None
+	check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+	if check == None:
+		return(jsonify(wasSuccessful=False, reason="RB"))
+	for row in check:
+		gId = row.gId
+
+	if gId == None:
+		gId = 0
+		db.engine.execute(text('INSERT INTO Groups() VALUES();'))
+		query = db.engine.execute(text('select * from Groups;'))
+		for row in query:
+			if row.groupId > gId:
+				gId = row.groupId
 
 		gId = None
 		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
@@ -305,17 +332,19 @@ def manuallyRemoveFromRoom():
 		userList = req['userList']
 		personList = []
 
-		for row in userList:
-			db.engine.execute(text('update Users set gId=NULL where userName="'+str(uID)+'";'))
+		for person in userList:
+			db.engine.execute(text('update Users set gId=NULL where userName="'+str(person)+'";'))
 
 
-		query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+		query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(roomNum)+ '"and building="'+str(build)+'";'))
 		for row in query:
 			x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
 			personList.append(x)
 
 		if personList == []:
 			db.engine.execute(text('update Rooms set isTaken=0, gId=NULL where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+
+		return(jsonify(wasSuccessful=True))
 
 	except:
 		return(jsonify(wasSuccessful=False))

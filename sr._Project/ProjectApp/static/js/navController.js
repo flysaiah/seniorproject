@@ -1,6 +1,6 @@
 var app = angular.module("navigation", ["ngMaterial", "services"]);
 
-app.controller("navCtl", function($scope, $location, $window, getGroupInfo, loginService, getFloorInfo, registrationService, getRoomInfo, adminService, $mdSidenav, $mdToast) {
+app.controller("navCtl", function($scope, $location, $window, $mdDialog, getGroupInfo, loginService, getFloorInfo, registrationService, getRoomInfo, adminService, $mdSidenav, $mdToast) {
 
   // hardcoded room lists
   // TODO: Deal with this
@@ -184,18 +184,46 @@ app.controller("navCtl", function($scope, $location, $window, getGroupInfo, logi
       if (!res.wasSuccessful) {
         console.log("Error switching room availability");
       } else {
-        var offOrOn = res.isTaken ? "on" : "off";
+        var offOrOn = res.isTaken ? "off" : "on";
         $mdToast.show(
           $mdToast.simple()
           .textContent('You have successfully turned ' + offOrOn + ' the room.')
           .position('top right')
           .hideDelay(5000)
         );
-        refresh();
+        refreshRoomInfo();
       }
     });
-  }
+  };
 
+  $scope.removeStudentFromRoom = function(ev, student) {
+    // Flashes confirm message then removes a single student from the given room if confirmed
+    var confirm = $mdDialog.confirm()
+          .title('Confirm removal')
+          .textContent('Are you sure you want to remove ' + student.userID + ' from this room?')
+          .ariaLabel('Confirm removal')
+          .targetEvent(ev)
+          .ok('Remove student from room')
+          .cancel('Cancel');
+
+    /* TODO: If there's a way we can squelch the warning message that comes when the
+    mdDialog activates, that would be nice. Right now it's an unnecessary warning */
+    $mdDialog.show(confirm).then(function() {
+      adminService.manuallyRemoveStudentsFromRoom($scope.currentBuilding, $scope.roomNumber, [student]).then(function(res) {
+        if (!res.wasSuccessful) {
+          console.log("Error removing student from room");
+        } else {
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('You have successfully removed the student from the room.')
+            .position('top right')
+            .hideDelay(5000)
+          );
+          refreshRoomInfo();
+        }
+      });
+    });
+  };
 })
 .controller('RightCtrl', function ($scope, $mdSidenav) {
   $scope.close = function () {
