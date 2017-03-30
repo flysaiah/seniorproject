@@ -276,27 +276,11 @@ def switchRoomAvailablility():
 @app.route('/manuallyAssignStudentsToRoom', methods=['POST'])
 def manuallyAssignRoom():
 	reason = "Unknown"
-	# try:
-	req = request.get_json()
-	build = req['buildingName']
-	roomNum = req['roomNumber']
-	userList = req['userList']
-	roomList = []
-
-	gId = None
-	check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
-	if check == None:
-		return(jsonify(wasSuccessful=False, reason="RB"))
-	for row in check:
-		gId = row.gId
-
-	if gId == None:
-		gId = 0
-		db.engine.execute(text('INSERT INTO Groups() VALUES();'))
-		query = db.engine.execute(text('select * from Groups;'))
-		for row in query:
-			if row.groupId > gId:
-				gId = row.groupId
+	try:
+		req = request.get_json()
+		build = req['buildingName']
+		roomNum = req['roomNumber']
+		userList = req['userList']
 
 		gId = None
 		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
