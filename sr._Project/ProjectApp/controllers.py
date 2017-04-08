@@ -359,7 +359,7 @@ def getAutoRegPref():
 
 
 def autoReg():
-	query = db.engine.execute(text('select * from Groups where drawDate;'))
+	query = db.engine.execute(text('select * from Groups where drawDate and NOT groupID=1;'))
 	for row in query:
 		isReg = row.isRegistered
 		gId =row.groupId
