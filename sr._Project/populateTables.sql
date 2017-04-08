@@ -9,6 +9,7 @@
 
 USE projectdb
 
+INSERT INTO Groups() VALUES();
 INSERT INTO Groups(drawDate) VALUES ('2016-03-04 18:00:00');
 INSERT INTO Groups() VALUES();
 INSERT INTO Groups() VALUES();
@@ -19,10 +20,10 @@ INSERT INTO Groups() VALUES();
 INSERT INTO Groups() VALUES();
 
 
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum, isPending) VALUES ("smitze01","Zechariah","Smith", "admin", 1, 65, 3, true);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("mayeis01","Isaiah","Mayerchak", "admin", 1, 120, 1);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("smitze01","Zechariah","Smith", "student", 2, 65, 3);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("mayeis01","Isaiah","Mayerchak", "admin", 2, 120, 1);
 INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("saudih01","Ihab","Saud", "admin", 85, 2);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum, isPending) VALUES ("test01","Testy","McTest", "student", 1, 1, 4, true);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum, isPending) VALUES ("test01","Testy","McTest", "student", 2, 1, 4, true);
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test02","Testy","Test", "student", 3, 2, 5);
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test03","Testy","MacTest", "student", 3, 3, 6);
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test04","Testy","Testerson", "student", 4, 4, 7);
@@ -32,7 +33,7 @@ INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VA
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test08","Testy","Testenheimer", "student", 7, 8, 11);
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test09","Testy","Testbuscus", "student", 6, 9, 12);
 INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("test10","Testy","Testicule", "student", 10, 13);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test11","Testy","McT", "student", 2, 11, 14);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test11","Testy","McT", "student", 9, 11, 14);
 INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("test12","Testy","Testeese", "student", 12, 15);
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test13","Testy","Testington", "student", 5, 13, 16);
 
@@ -278,7 +279,7 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(823, "Miller", 2);
 #######################################################
 
 ####################################
-##        Dieseth Floor 1          ##
+##        Dieseth Floor 1         ##
 ####################################
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(101, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(102, "Dieseth", 2);
@@ -304,7 +305,7 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(122, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(123, "Dieseth", 2);
 
 ####################################
-##        Dieseth Floor 2          ##
+##        Dieseth Floor 2         ##
 ####################################
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(201, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(202, "Dieseth", 2);
@@ -330,7 +331,7 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(222, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(223, "Dieseth", 2);
 
 ####################################
-##        Dieseth Floor 3          ##
+##        Dieseth Floor 3         ##
 ####################################
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(301, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(302, "Dieseth", 2);
@@ -356,7 +357,7 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(322, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(323, "Dieseth", 2);
 
 ####################################
-##        Dieseth Floor 4          ##
+##        Dieseth Floor 4         ##
 ####################################
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(401, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(402, "Dieseth", 2);
@@ -382,7 +383,7 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(422, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(423, "Dieseth", 2);
 
 ####################################
-##        Dieseth Floor 5          ##
+##        Dieseth Floor 5         ##
 ####################################
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(501, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(502, "Dieseth", 2);
@@ -408,7 +409,7 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(522, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(523, "Dieseth", 2);
 
 ####################################
-##        Dieseth Floor 6          ##
+##        Dieseth Floor 6         ##
 ####################################
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(601, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(602, "Dieseth", 2);
@@ -434,7 +435,7 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(622, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(623, "Dieseth", 2);
 
 ####################################
-##        Dieseth Floor 7          ##
+##        Dieseth Floor 7         ##
 ####################################
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(701, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(702, "Dieseth", 2);
@@ -460,7 +461,7 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(722, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(723, "Dieseth", 2);
 
 ####################################
-##        Dieseth Floor 8          ##
+##        Dieseth Floor 8         ##
 ####################################
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(801, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(802, "Dieseth", 2);
