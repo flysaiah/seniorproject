@@ -27,8 +27,10 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
       adminService.fetchDeadlinesPreferences().then(function(res) {
         $scope.groupsDeadline = res.deadlinePrefs.groupsDeadline;
         $scope.firstRegistrationDate = res.deadlinePrefs.firstRegistrationDate;
-        $scope.startTime = res.startTime;
-        $scope.endTime = res.endTime;
+        $scope.lastRegistrationDate = res.deadlinePrefs.lastRegistrationDate;
+        $scope.startTime = res.deadlinePrefs.startTime;
+        $scope.endTime = res.deadlinePrefs.endTime;
+        $scope.timeInterval = res.deadlinePrefs.timeInterval;
       });
     }
   };
@@ -167,5 +169,10 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
   $scope.saveDeadlinePreferences = function() {
     // save preferences for all options in the deadline panel
     adminService.saveDeadlinePreferences($scope.groupsDeadline, $scope.firstRegistrationDate, $scope.lastRegistrationDate, $scope.startTime, $scope.endTime, $scope.timeInterval);
+  };
+
+  $scope.range = function(n) {
+    // utility function for ng-repeat
+    return new Array(n);
   };
 });

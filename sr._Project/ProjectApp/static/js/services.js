@@ -373,13 +373,14 @@ app.factory('adminService', function($http) {
       // update starting and ending times for registration each day
       // update time interval for registration batches
       var body = {
-        "groupsDeadline": groupsDeadline.toString(),
-        "firstRegistrationDate": firstRegDate,
-        "lastRegistrationDate": lastRegDate,
-        "startTime": startTime,
-        "endTime": endTime,
+        "groupsDeadline": {"year": groupsDeadline.getFullYear(), "month": groupsDeadline.getMonth(), "day": groupsDeadline.getDate()},
+        "firstRegistrationDate": {"year": firstRegDate.getFullYear(), "month": firstRegDate.getMonth(), "day": firstRegDate.getDate()},
+        "lastRegistrationDate": {"year": lastRegDate.getFullYear(), "month": lastRegDate.getMonth(), "day": lastRegDate.getDate()},
+        "startTime": {"hour": startTime.getHours(), "minute": startTime.getMinutes()},
+        "endTime": {"hour": endTime.getHours(), "minute": endTime.getMinutes()},
         "timeInterval": timeInterval
       }
+      console.log(body);
       var promise = $http.post('/saveDeadlinePreferences', body).then(function(response) {
         return response.data;
       }, function (err) {
