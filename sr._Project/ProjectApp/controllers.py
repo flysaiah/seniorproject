@@ -172,7 +172,7 @@ def registerForRoom():
 	build = req['buildingName'].capitalize()
 	roomNum = req['roomNumber']
 	query = db.engine.execute(text('select isTaken from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
-	query2 = db.engine.execute(text('select drawDate from Groups where groupId="'+str(groupID)+'";'))
+	query2 = db.engine.execute(text('select drawDate from Groups where groupId="'+str(groupID)+'" and groupId>3;'))
 	for row in query:
 		if row.isTaken == 1:
 			return jsonify(wasSuccessful=False, reason='taken')
@@ -372,7 +372,7 @@ def getAutoRegPref():
 
 
 def autoReg():
-	query = db.engine.execute(text('select * from Groups where drawDate and NOT groupID=1;'))
+	query = db.engine.execute(text('select * from Groups where drawDate and groupID>3;'))
 	for row in query:
 		isReg = row.isRegistered
 		gId =row.groupId
