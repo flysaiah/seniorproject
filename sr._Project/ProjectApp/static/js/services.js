@@ -397,7 +397,7 @@ app.factory('adminService', function($http) {
           "firstRegistrationDate": new Date(2018, 3, 5),
           "startTime": new Date(2018, 3, 5, 18, 0, 0),
           "endTime": new Date(2018, 3, 5, 22, 30, 0),
-          "timeInterval": 5;
+          "timeInterval": 5
         };
 
         return {"deadlinePrefs": testData};
