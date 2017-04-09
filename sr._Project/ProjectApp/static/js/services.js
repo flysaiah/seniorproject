@@ -80,8 +80,10 @@ app.factory('updateGroupInfo', function($http) {
       var body = {
         "userID": userID
       }
-      var promise = $http.post('/acceptGroupRequest', body).error(function(response) {
-        console.log(response);
+      var promise = $http.post('/acceptGroupRequest', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
       });
       return promise;
     }, rejectRequest: function(userID) {
@@ -89,8 +91,10 @@ app.factory('updateGroupInfo', function($http) {
       var body = {
         "userID": userID
       }
-      var promise = $http.post('/rejectGroupRequest', body).error(function(response) {
-        console.log(response);
+      var promise = $http.post('/rejectGroupRequest', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
       });
       return promise;
     }, sendGroupRequest: function(sendingUserID, receivingUserID) {
@@ -99,8 +103,10 @@ app.factory('updateGroupInfo', function($http) {
         "sendingUserID": sendingUserID,   // ID of the person sending the request
         "receivingUserID": receivingUserID  // ID of the person whose group is receiving the request
       }
-      var promise = $http.post('/sendGroupRequest', body).error(function(response) {
-        console.log(response);
+      var promise = $http.post('/sendGroupRequest', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
       });
       return promise;
     }, leaveGroup: function(userID) {
@@ -108,8 +114,10 @@ app.factory('updateGroupInfo', function($http) {
       var body = {
         "userID": userID
       }
-      var promise = $http.post('/leaveGroup', body).error(function(response) {
-        console.log(response);
+      var promise = $http.post('/leaveGroup', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
       });
       return promise;
     }, createGroup: function(userID) {
@@ -369,9 +377,11 @@ app.factory('adminService', function($http) {
         "startTime": startTime,
         "endTime": endTime
       }
-      var promise = $http.post('/saveDeadlinePreferences', body)//.error(function(response) {
-      //   console.log(response);
-      // });
+      var promise = $http.post('/saveDeadlinePreferences', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
+      });
 
       return promise;
     }, fetchDeadlinesPreferences: function() {
