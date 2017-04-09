@@ -168,10 +168,14 @@
               <input type="time" ng-model="endTime"></input>
             </div>
             <div class="deadline-div">
-              Set time interval:
-              <input type="text" ng-model="timeInterval"></input>
+              Set interval between registration times (in minutes):
+              <md-select class="time-interval-select" ng-model="timeInterval">
+                <md-option ng-repeat="i in range(30) track by $index" ng-value="$index + 1">
+                  {{ $index + 1 }}
+                </md-option>
+              </md-select>
             </div>
-            <md-button style="display: block;" class="md-primary md-raised" ng-disabled="!deadlinesForm.$dirty || !groupsDeadline || !firstRegistrationDate || !lastRegistrationDate || !timeInterval" aria-label="Update Preferences" ng-click="saveDeadlinePreferences()">Update Preferences</md-button>
+            <md-button style="display: block;" class="md-primary md-raised" ng-disabled="!deadlinesForm.$dirty || !groupsDeadline || !firstRegistrationDate || !lastRegistrationDate || !startTime || !endTime || !timeInterval" aria-label="Update Preferences" ng-click="saveDeadlinePreferences()">Update Preferences</md-button>
           </form>
         </md-tab>
       </md-tabs>

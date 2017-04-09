@@ -261,3 +261,8 @@
   margin-top: 20px;
   margin-bottom: 10px;
 }
+
+.time-interval-select {
+  width: 70px;
+  display: inline-block;
+}
