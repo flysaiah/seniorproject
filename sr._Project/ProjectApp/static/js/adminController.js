@@ -166,6 +166,6 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
 
   $scope.saveDeadlinePreferences = function() {
     // save preferences for all options in the deadline panel
-    adminService.saveDeadlinePreferences($scope.groupsDeadline, $scope.firstRegistrationDate, $scope.startTime, $scope.endTime);
+    adminService.saveDeadlinePreferences($scope.groupsDeadline, $scope.firstRegistrationDate, $scope.startTime, $scope.endTime, $scope.timeInterval);
   };
 });
