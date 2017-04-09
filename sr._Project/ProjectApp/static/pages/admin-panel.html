@@ -159,6 +159,10 @@
               <md-datepicker ng-model="firstRegistrationDate" md-placeholder="Enter date"></md-datepicker>
             </div>
             <div class="deadline-div">
+              Set ending date for registration:
+              <md-datepicker ng-model="lastRegistrationDate" md-placeholder="Enter date"></md-datepicker>
+            </div>
+            <div class="deadline-div">
               Set start/end time for registration each day:
               <input type="time" ng-model="startTime"></input>
               <input type="time" ng-model="endTime"></input>
@@ -167,7 +171,7 @@
               Set time interval:
               <input type="text" ng-model="timeInterval"></input>
             </div>
-            <md-button style="display: block;" class="md-primary md-raised" ng-disabled="!deadlinesForm.$dirty || !groupsDeadline || !firstRegistrationDate || !timeInterval" aria-label="Update Preferences" ng-click="saveDeadlinePreferences()">Update Preferences</md-button>
+            <md-button style="display: block;" class="md-primary md-raised" ng-disabled="!deadlinesForm.$dirty || !groupsDeadline || !firstRegistrationDate || !lastRegistrationDate || !timeInterval" aria-label="Update Preferences" ng-click="saveDeadlinePreferences()">Update Preferences</md-button>
           </form>
         </md-tab>
       </md-tabs>
