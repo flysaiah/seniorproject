@@ -359,6 +359,37 @@ app.factory('adminService', function($http) {
         return {"wasSuccessful": testData};
       });
       return promise;
+    }, saveDeadlinePreferences: function(groupsDeadline, firstRegDate, startTime, endTime) {
+      // update deadline for finding a group; when this deadline is hit, assign registration times
+      // update first date for registration
+      // update starting and ending times for registration each day
+      var body = {
+        "groupsDeadline": groupsDeadline,
+        "firstRegistrationDate": firstRegDate,
+        "startTime": startTime,
+        "endTime": endTime
+      }
+      var promise = $http.post('/saveDeadlinePreferences', body)//.error(function(response) {
+      //   console.log(response);
+      // });
+
+      return promise;
+    }, fetchDeadlinesPreferences: function() {
+      // get data to prepopulate fields in deadlines panel
+      var promise = $http.get('/fetchDeadlinesPreferences').then(function(response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {
+          "groupsDeadline": new Date(2018, 2, 10),
+          "firstRegistrationDate": new Date(2018, 3, 5),
+          "startTime": new Date(2018, 3, 5, 18, 0, 0),
+          "endTime": new Date(2018, 3, 5, 22, 30, 0)
+        };
+
+        return {"deadlinePrefs": testData};
+      });
+      return promise;
     }
   };
   return adminService;
