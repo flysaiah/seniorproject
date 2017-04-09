@@ -20,7 +20,7 @@ INSERT INTO Groups() VALUES();
 INSERT INTO Groups() VALUES();
 
 
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("smitze01","Zechariah","Smith", "student", 2, 65, 3);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("smitze01","Zechariah","Smith", "admin", 2, 65, 3);
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("mayeis01","Isaiah","Mayerchak", "admin", 2, 120, 1);
 INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("saudih01","Ihab","Saud", "admin", 85, 2);
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum, isPending) VALUES ("test01","Testy","McTest", "student", 2, 1, 4, true);

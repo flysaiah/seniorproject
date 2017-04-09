@@ -3,6 +3,7 @@ import os
 import datetime
 import time
 import json
+import datetime
 from wsgiref.handlers import format_date_time
 
 from flask import Flask, request, Response, session
@@ -335,7 +336,7 @@ def manuallyRemoveFromRoom():
 
 
 ####################################
-##            AutoReg             ##
+##     AutoReg/Group Deadlines    ##
 ####################################
 @app.route('/getAllRoomNumbers', methods=['GET'])
 def getAllRooms():
@@ -474,4 +475,15 @@ def get_google_oauth_token():
     return session.get('google_token')
 
 
-autoReg()
+# autoReg()
+
+@app.route('/saveDeadlinePreferences', methods=['POST'])
+def saveDeadlinePreferences():
+	req = request.get_json()
+	print(req)
+	print("-------------------\n")
+	s = req['lastRegistrationDate']
+	x = datetime.datetime.strptime(s, '%Y-%m-%dT%H:%M:%SZ')
+	print(x)
+	print("-------------------\n")
+	print(type(x))

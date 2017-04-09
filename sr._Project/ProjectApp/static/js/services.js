@@ -373,7 +373,7 @@ app.factory('adminService', function($http) {
       // update starting and ending times for registration each day
       // update time interval for registration batches
       var body = {
-        "groupsDeadline": groupsDeadline,
+        "groupsDeadline": groupsDeadline.toString(),
         "firstRegistrationDate": firstRegDate,
         "lastRegistrationDate": lastRegDate,
         "startTime": startTime,
