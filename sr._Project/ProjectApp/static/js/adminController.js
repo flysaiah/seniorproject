@@ -12,7 +12,7 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
       $scope.currentUserName = userInfo.given_name;
       $scope.currentUserID = userInfo.email.substring(0, res.userInfo.email.indexOf("@"));
       $scope.role = res.role;
-      // refresh();
+      refresh();
     } else {
       $scope.isLoggedIn = false;
       $scope.currentUserName = null;
@@ -20,12 +20,18 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
       $scope.role = null;
     }
   });
-  // function refresh() {
-  //   // re-fetch all data that might have been altered by user action
-  //   if ($scope.isLoggedIn) {
-  //     // do something
-  //   }
-  // };
+  function refresh() {
+    // re-fetch all data that might have been altered by user action
+    if ($scope.isLoggedIn && $scope.role === "admin") {
+      // fetch deadline info for the deadlines tab
+      adminService.fetchDeadlinesPreferences().then(function(res) {
+        $scope.groupsDeadline = res.deadlinePrefs.groupsDeadline;
+        $scope.firstRegistrationDate = res.deadlinePrefs.firstRegistrationDate;
+        $scope.startTime = res.startTime;
+        $scope.endTime = res.endTime;
+      });
+    }
+  };
 
   getAllGroupUsers.fetchData().then(function(res) {
     // get list of all users for autocomplete
@@ -65,7 +71,7 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
   };
 
   $scope.manuallyAssignStudentsToRoom = function() {
-    adminService.manuallyAssignStudentsToRoom($scope.buildingName, $scope.roomNumber, $scope.manualAddStudentsList).then(function (res) {
+    adminService.manuallyAssignStudentsToRoom($scope.buildingName, $scope.roomNumber, $scope.manualAddStudentsList).then(function(res) {
       if (!res.wasSuccessful) {
         if (res.reason === "RB") {
           console.log("Invalid room");
@@ -156,5 +162,10 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
         $scope.checkRoomAvailability();   // refresh the UI
       }
     });
+  };
+
+  $scope.saveDeadlinePreferences = function() {
+    // save preferences for all options in the deadline panel
+    adminService.saveDeadlinePreferences($scope.groupsDeadline, $scope.firstRegistrationDate, $scope.startTime, $scope.endTime);
   };
 });
