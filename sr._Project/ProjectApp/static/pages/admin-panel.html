@@ -163,7 +163,11 @@
               <input type="time" ng-model="startTime"></input>
               <input type="time" ng-model="endTime"></input>
             </div>
-            <md-button style="display: block;" class="md-primary md-raised" ng-disabled="!deadlinesForm.$dirty || !groupsDeadline || !firstRegistrationDate" aria-label="Update Preferences" ng-click="saveDeadlinePreferences()">Update Preferences</md-button>
+            <div class="deadline-div">
+              Set time interval:
+              <input type="text" ng-model="timeInterval"></input>
+            </div>
+            <md-button style="display: block;" class="md-primary md-raised" ng-disabled="!deadlinesForm.$dirty || !groupsDeadline || !firstRegistrationDate || !timeInterval" aria-label="Update Preferences" ng-click="saveDeadlinePreferences()">Update Preferences</md-button>
           </form>
         </md-tab>
       </md-tabs>
