@@ -367,14 +367,15 @@ app.factory('adminService', function($http) {
         return {"wasSuccessful": testData};
       });
       return promise;
-    }, saveDeadlinePreferences: function(groupsDeadline, firstRegDate, startTime, endTime, timeInterval) {
+    }, saveDeadlinePreferences: function(groupsDeadline, firstRegDate, lastRegDate, startTime, endTime, timeInterval) {
       // update deadline for finding a group; when this deadline is hit, assign registration times
-      // update first date for registration
+      // update first & last date for registration
       // update starting and ending times for registration each day
       // update time interval for registration batches
       var body = {
         "groupsDeadline": groupsDeadline,
         "firstRegistrationDate": firstRegDate,
+        "lastRegistrationDate": lastRegDate,
         "startTime": startTime,
         "endTime": endTime,
         "timeInterval": timeInterval
@@ -395,6 +396,7 @@ app.factory('adminService', function($http) {
         var testData = {
           "groupsDeadline": new Date(2018, 2, 10),
           "firstRegistrationDate": new Date(2018, 3, 5),
+          "lastRegistrationDate": new Date(2018, 3, 17),
           "startTime": new Date(2018, 3, 5, 18, 0, 0),
           "endTime": new Date(2018, 3, 5, 22, 30, 0),
           "timeInterval": 5
