@@ -259,11 +259,8 @@ def switchRoomAvailablility():
 	try:
 		build = req["buildingName"].lower()
 		roomNum = req['roomNumber']
-		print(build)
-		print(roomNum)
 		query = db.engine.execute(text('select available from Rooms where roomNum='+str(roomNum)+' and building="'+str(build) +'";'))
 		for row in query:
-			print("HERE")
 			available = row.available
 			available = available^1
 		db.engine.execute(text('update Rooms set available="'+str(available)+'" where roomNum='+str(roomNum)+' and building="'+str(build)+'";'))
@@ -441,15 +438,31 @@ def authorized():
             request.args['error_reason'],
             request.args['error_description']
         )
+
     session['google_token'] = (resp['access_token'], '')
-    # me = google.get('userinfo')
-    # print("======================")
-    # print(me.data['email'])
-    # if me.data['email'].split('@')[-1] != 'luther.edu':
-    #     credentials.revoke(httplib2.Http())
-    #     session.pop('google_token', None)
-    #     return redirect(url_for('index'))
-    # print("======================")
+    me = google.get('userinfo')
+    if me.data['email'].split('@')[-1] != 'luther.edu':
+        # credentials.revoke(httplib2.Http())
+		# TODO: Make this a nice HTML page
+        session.pop('google_token', None)
+        return 'Access denied: reason=%s error=%s' % (
+			"Invalid User",
+			"This is not a valid Luther account"
+		)
+
+	# User is authorized only if they exist in our database
+    user = me.data['email'].split('@')[0]
+    query = db.engine.execute(text('select * from Users where userName="' + str(user) + '";'))
+    if query.rowcount < 1:
+	    # TODO: Make this a nice HTML page
+	    # credentials.revoke(httplib2.Http())
+	    session.pop('google_token', None)
+
+	    return 'Access denied: reason=%s error=%s' % (
+			"Invalid User",
+			"You are not in Res Life's records"
+		)
+
     return redirect('/')
 
 
