@@ -61,9 +61,10 @@ app.controller("navCtl", function($scope, $location, $window, $mdDialog, getGrou
     $scope.currentBuilding = building;
     if (building !== 'campus') {
       getFloorInfo.fetchData(building.toLowerCase()).then(function(res) {
-        // fetches info about number of floor sfor a given building
+        // fetches info about number of floors for a given building
         $scope.floorList = res.floorList;
       });
+      $scope.floorNumber = 1;
     }
     refreshRoomInfo();
   }
