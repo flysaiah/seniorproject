@@ -13,7 +13,7 @@
           </br></br>
           <md-content class="md-padding manual-add-students-left">
             1. Select students to be added to the group.
-            <form  ng-submit="$event.preventDefault()">
+            <form ng-submit="$event.preventDefault()">
               <br>
               <md-autocomplete
               md-selected-item="selectedItem"
@@ -49,7 +49,7 @@
             </md-list>
             <span ng-show="!manualAddStudentsList.length">Students you have added will appear here.</span>
           </md-content>
-          <form ng-submit="$event.preventDefault()">
+          <form name="addStudentsForm" ng-submit="$event.preventDefault()">
             <md-content class="md-padding manual-add-students-step3">
               2. Select where you wish to manually assign students.
               <br>

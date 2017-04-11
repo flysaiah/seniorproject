@@ -52,6 +52,9 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
     var index = $scope.manualAddStudentsList.indexOf(student);
     if (index === -1) {
       $scope.manualAddStudentsList.push(student);
+      // clear field
+      $scope.searchText = "";
+      $scope.selectedItem = undefined;
     }
   };
 
@@ -67,13 +70,26 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
   $scope.manuallyAssignStudentsToRoom = function() {
     adminService.manuallyAssignStudentsToRoom($scope.buildingName, $scope.roomNumber, $scope.manualAddStudentsList).then(function (res) {
       if (!res.wasSuccessful) {
-        if (res.reason === "RB") {
-          console.log("Invalid room");
-        } else {
-          console.log("Unknown error in manually assigning students to room");
-        }
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('Error assigning student to room. Be sure you have a valid room number.')
+          .position('top right')
+          .hideDelay(5000)
+        );
       } else {
-        console.log("Successful!");
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('You have successfully assigned the student to the room!')
+          .position('top right')
+          .hideDelay(5000)
+        );
+        // clear fields
+        $scope.manualAddStudentsList = [];
+        $scope.buildingName = "";
+        $scope.roomNumber = "";
+        $scope.addStudentsForm.$setPristine();
+        $scope.addStudentsForm.$setPristine(true);
+        $scope.addStudentsForm.$setUntouched();
       }
     });
   };
