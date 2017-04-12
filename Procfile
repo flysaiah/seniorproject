@@ -1,1 +1,1 @@
-web: gunicorn lcroomdraw.wsgi
+web: python sr._Project/run.py
