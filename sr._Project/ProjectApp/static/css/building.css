@@ -60,19 +60,74 @@
   height: 659px;
 }
 
-.miller-odd {
-  background-image: url("../img/miller-odd.png");
+.miller1 {
+  background-image: url("../img/Miller1.png");
   width: 820px;
   height: 385px;
   background-size: 820px 385px;
   float:left;
 }
 
+.miller2 {
+  background-image: url("../img/Miller2.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+
+.miller3 {
+  background-image: url("../img/Miller3.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+
+.miller4 {
+  background-image: url("../img/Miller4.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+
+.miller5 {
+  background-image: url("../img/Miller5.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+
+.miller6 {
+  background-image: url("../img/Miller6.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+
+.miller7 {
+  background-image: url("../img/Miller7.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+
+.miller8 {
+  background-image: url("../img/Miller8.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
 .miller-odd-svg {
   width: 820px;
   height: 385px;
 }
-.miller-even {
+/*.miller-even {
   background-image: url("../img/miller-even.png");
   width: 820px;
   height: 385px;
@@ -84,15 +139,70 @@
   width: 820px;
   height: 385px;
 }
-
-.dieseth-odd {
-  background-image: url("../img/dieseth-odd.png");
+*/
+.dieseth1 {
+  background-image: url("../img/Dieseth1.png");
   width: 820px;
   height: 385px;
   background-size: 820px 385px;
   float:left;
 }
 
+.dieseth2 {
+  background-image: url("../img/Dieseth2.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+
+.dieseth3 {
+  background-image: url("../img/Dieseth3.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+
+.dieseth4 {
+  background-image: url("../img/Dieseth4.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+
+.dieseth5 {
+  background-image: url("../img/Dieseth5.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+
+.dieseth6 {
+  background-image: url("../img/Dieseth6.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+
+.dieseth7 {
+  background-image: url("../img/Dieseth7.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+
+.dieseth8 {
+  background-image: url("../img/Dieseth8.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
 .dieseth-odd-svg {
   width: 820px;
   height: 385px;
@@ -111,7 +221,7 @@
 }
 
 .larsen1 {
-  background-image: url("../img/larsen1.png");
+  background-image: url("../img/Larsen1.png");
   width: 850px;
   height: 385px;
   background-size: 850px 385px;
@@ -123,7 +233,7 @@
 }
 
 .larsen2 {
-  background-image: url("../img/larsen2.png");
+  background-image: url("../img/Larsen2.png");
   width: 850px;
   height: 385px;
   background-size: 850px 385px;
@@ -135,16 +245,48 @@
 }
 
 .larsen3 {
-  background-image: url("../img/larsen3.png");
+  background-image: url("../img/Larsen3.png");
+  width: 850px;
+  height: 385px;
+  background-size: 850px 385px;
+  float:left;
+}
+
+
+
+.olson1 {
+  background-image: url("../img/Olson1.png");
+  width: 850px;
+  height: 385px;
+  background-size: 850px 385px;
+  float:left;
+}
+.larsen-svg {
+  width: 850px;
+  height: 385px;
+}
+
+.olson2 {
+  background-image: url("../img/Olson2.png");
+  width: 850px;
+  height: 385px;
+  background-size: 850px 385px;
+  float:left;
+}
+
+.olson3 {
+  background-image: url("../img/Olson3.png");
   width: 850px;
   height: 385px;
   background-size: 850px 385px;
   float:left;
 }
 .larsen3-svg {
-  width: 820px;
+  width: 850px;
   height: 385px;
 }
+
+
 .clickable-building {
   opacity: 0;
 }
