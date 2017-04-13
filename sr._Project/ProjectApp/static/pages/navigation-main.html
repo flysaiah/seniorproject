@@ -167,7 +167,7 @@
   </svg>
 </div>
 
-<div ng-repeat="floorClass in floorOlClasses" ng-class="floorClass" ng-show="currentBuilding === 'Olson' && floorNumber == 2">
+<div ng-repeat="floorClass in floorOlClasses track by $index" ng-class="floorClass" ng-show="currentBuilding === 'Olson' && floorNumber == ($index + 1)">
   <svg class="larson2-svg">
 
     <polygon class="clickable-building" points="463,80 524,79 525,156 461,156" ng-click="toggleRight(floorNumber, '01')"></polygon>
@@ -229,7 +229,7 @@
 -->
 
 
-<div class = "olson3" ng-show="currentBuilding === 'Olson' && floorNumber == 2">
+<div class = "olson3" ng-show="currentBuilding === 'Olson' && floorNumber == 3">
   <svg class="larson2-svg">
 
     <polygon class="clickable-building" points="200,26 286,25 287,169 200,170" ng-click="toggleRight(floorNumber, '344')"></polygon>
