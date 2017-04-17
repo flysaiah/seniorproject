@@ -182,7 +182,7 @@
 
 .admin-panel {
   margin-right: auto;
-  width: 900px;
+  width: 975px;
 }
 
 .manual-add-students-left {
@@ -255,4 +255,14 @@
   width: 45%;
   float: right;
   margin-bottom: 10px;
+}
+
+.deadline-div {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.time-interval-select {
+  width: 70px;
+  display: inline-block;
 }

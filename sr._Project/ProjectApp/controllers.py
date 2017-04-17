@@ -3,6 +3,7 @@ import os
 import datetime
 import time
 import json
+import datetime
 from wsgiref.handlers import format_date_time
 
 from flask import Flask, request, Response, session
@@ -172,7 +173,7 @@ def registerForRoom():
 	build = req['buildingName'].capitalize()
 	roomNum = req['roomNumber']
 	query = db.engine.execute(text('select isTaken from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
-	query2 = db.engine.execute(text('select drawDate from Groups where groupId="'+str(groupID)+'";'))
+	query2 = db.engine.execute(text('select drawDate from Groups where groupId="'+str(groupID)+'" and groupId>5;'))
 	for row in query:
 		if row.isTaken == 1:
 			return jsonify(wasSuccessful=False, reason='taken')
@@ -335,7 +336,7 @@ def manuallyRemoveFromRoom():
 
 
 ####################################
-##            AutoReg             ##
+##     AutoReg/Group Deadlines    ##
 ####################################
 @app.route('/getAllRoomNumbers', methods=['GET'])
 def getAllRooms():
@@ -372,7 +373,7 @@ def getAutoRegPref():
 
 
 def autoReg():
-	query = db.engine.execute(text('select * from Groups where drawDate and NOT groupID=1;'))
+	query = db.engine.execute(text('select * from Groups where drawDate and groupID>5;'))
 	for row in query:
 		isReg = row.isRegistered
 		gId =row.groupId
@@ -474,4 +475,58 @@ def get_google_oauth_token():
     return session.get('google_token')
 
 
-autoReg()
+# autoReg()
+
+@app.route('/saveDeadlinePreferences', methods=['POST'])
+def saveDeadlinePreferences():
+	req = request.get_json()
+
+
+	gd = req['groupsDeadline']
+	gdt = datetime.datetime(gd['year'], gd['month'], gd['day'])
+	interval = req['timeInterval']
+
+	frd = req['firstRegistrationDate']
+	frdt = datetime.datetime(frd['year'], frd['month'], frd['day'])
+
+	lrd = req['lastRegistrationDate']
+	lrdt = datetime.datetime(lrd['year'], lrd['month'], lrd['day'])
+
+	st = req['startTime']
+	stt = datetime.datetime(1111, 1, 1, st['hour'], st['minute'])
+
+	et = req['endTime']
+	ett = datetime.datetime(1111, 1, 1, et['hour'], et['minute'])
+
+
+
+	db.engine.execute(text('update Groups set drawDate="'+str(gdt)+'", timeInterval="'+str(interval)+'" where groupId=1;'))
+	db.engine.execute(text('update Groups set drawDate="'+str(frdt)+'" where groupId=2;'))
+	db.engine.execute(text('update Groups set drawDate="'+str(lrdt)+'" where groupId=3;'))
+	db.engine.execute(text('update Groups set drawDate="'+str(stt)+'" where groupId=4;'))
+	db.engine.execute(text('update Groups set drawDate="'+str(ett)+'" where groupId=5;'))
+
+	return(jsonify(''))
+
+@app.route('/fetchDeadlinesPreferences', methods=['GET'])
+def fetchDeadlinesPreferences():
+	query = db.engine.execute(text('select * from Groups where groupId<6;'))
+	for row in query:
+		groupId = row.groupId
+		if groupId == 1:
+			interval = row.timeInterval
+			gd = row.drawDate
+		if groupId == 2:
+			frd = row.drawDate
+		if groupId == 3:
+			lrd = row.drawDate
+		if groupId == 4:
+			st = row.drawDate
+		if groupId == 5:
+			et = row.drawDate
+
+	return jsonify(deadlinePrefs=dict(groupsDeadline=gd, firstRegistrationDate=frd,lastRegistrationDate=lrd,startTime=st, endTime=et, timeInterval=interval))
+
+
+# def assignRoomDrawTimes():
+# 	query = db.engine.execute(text('select gId, AVG(roomDrawNum) from Users where gId group by gId order by AVG(roomDrawNum);'))
