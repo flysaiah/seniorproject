@@ -380,7 +380,6 @@ app.factory('adminService', function($http) {
         "endTime": {"hour": endTime.getHours(), "minute": endTime.getMinutes()},
         "timeInterval": timeInterval
       }
-      console.log(body);
       var promise = $http.post('/saveDeadlinePreferences', body).then(function(response) {
         return response.data;
       }, function (err) {
@@ -391,7 +390,14 @@ app.factory('adminService', function($http) {
     }, fetchDeadlinesPreferences: function() {
       // get data to prepopulate fields in deadlines panel
       var promise = $http.get('/fetchDeadlinesPreferences').then(function(response) {
-        console.log(response.data)
+        // string formatting time
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        var retObj = response.data.deadlinePrefs;
+        retObj.groupsDeadline = new Date(retObj.groupsDeadline.split(" ")[3], months.indexOf(retObj.groupsDeadline.split(" ")[2]), retObj.groupsDeadline.split(" ")[1]);
+        retObj.firstRegistrationDate = new Date(retObj.firstRegistrationDate.split(" ")[3], months.indexOf(retObj.firstRegistrationDate.split(" ")[2]), retObj.firstRegistrationDate.split(" ")[1]);
+        retObj.lastRegistrationDate = new Date(retObj.lastRegistrationDate.split(" ")[3], months.indexOf(retObj.lastRegistrationDate.split(" ")[2]), retObj.lastRegistrationDate.split(" ")[1]);
+        retObj.startTime = new Date(2000, 1, 10, retObj.startTime.split(" ")[4].split(":")[0], retObj.startTime.split(" ")[4].split(":")[1], 0);
+        retObj.endTime = new Date(2000, 1, 10, retObj.endTime.split(" ")[4].split(":")[0], retObj.endTime.split(" ")[4].split(":")[1], 0);
         return response.data;
       }, function (err) {
         // for testing

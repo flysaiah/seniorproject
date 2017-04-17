@@ -502,7 +502,7 @@ def saveDeadlinePreferences():
 
 	db.engine.execute(text('update Groups set drawDate="'+str(gdt)+'", timeInterval="'+str(interval)+'" where groupId=1;'))
 	db.engine.execute(text('update Groups set drawDate="'+str(frdt)+'" where groupId=2;'))
-	db.engine.execute(text('update Groups set drawDate="'+str(frdt)+'" where groupId=3;'))
+	db.engine.execute(text('update Groups set drawDate="'+str(lrdt)+'" where groupId=3;'))
 	db.engine.execute(text('update Groups set drawDate="'+str(stt)+'" where groupId=4;'))
 	db.engine.execute(text('update Groups set drawDate="'+str(ett)+'" where groupId=5;'))
 
