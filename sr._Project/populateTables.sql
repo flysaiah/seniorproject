@@ -10,6 +10,11 @@
 USE projectdb
 
 INSERT INTO Groups() VALUES();
+INSERT INTO Groups() VALUES();
+INSERT INTO Groups() VALUES();
+INSERT INTO Groups() VALUES();
+INSERT INTO Groups() VALUES()8
+
 INSERT INTO Groups(drawDate) VALUES ('2016-03-04 18:00:00');
 INSERT INTO Groups() VALUES();
 INSERT INTO Groups() VALUES();
@@ -20,14 +25,14 @@ INSERT INTO Groups() VALUES();
 INSERT INTO Groups() VALUES();
 
 
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("smitze01","Zechariah","Smith", "admin", 2, 65, 3);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("mayeis01","Isaiah","Mayerchak", "admin", 2, 120, 1);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("smitze01","Zechariah","Smith", "admin", 6, 65, 20);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("mayeis01","Isaiah","Mayerchak", "admin", 6, 120, 1);
 INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("saudih01","Ihab","Saud", "admin", 85, 2);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum, isPending) VALUES ("test01","Testy","McTest", "student", 2, 1, 4, true);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test02","Testy","Test", "student", 3, 2, 5);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test03","Testy","MacTest", "student", 3, 3, 6);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test04","Testy","Testerson", "student", 4, 4, 7);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test05","Testy","Testus", "student", 4, 5, 8);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum, isPending) VALUES ("test01","Testy","McTest", "student", 7, 1, 4, true);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test02","Testy","Test", "student", 6, 2, 5);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test03","Testy","MacTest", "student", 6, 3, 6);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test04","Testy","Testerson", "student", 8, 4, 7);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test05","Testy","Testus", "student", 6, 5, 8);
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test06","Testy","Tester", "student", 8, 6, 9);
 INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("test07","Testy","Testin", "student", 7, 10);
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test08","Testy","Testenheimer", "student", 7, 8, 11);
@@ -35,7 +40,7 @@ INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNu
 INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("test10","Testy","Testicule", "student", 10, 13);
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test11","Testy","McT", "student", 9, 11, 14);
 INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("test12","Testy","Testeese", "student", 12, 15);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test13","Testy","Testington", "student", 5, 13, 16);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test13","Testy","Testington", "student", 8, 13, 16);
 
 INSERT INTO Buildings(name, numFloors) VALUES("Miller", 8);
 INSERT INTO Buildings(name, numFloors) VALUES("Dieseth", 8);
@@ -45,7 +50,7 @@ INSERT INTO Buildings(name, numFloors) VALUES("Olson",3);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(302, "Olson", 2);
 
 
-######################################################
+#######################################################
 #######################################################
 ##                                                   ##
 ##                Adding Miller's Rooms              ##

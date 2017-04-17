@@ -373,9 +373,9 @@ app.factory('adminService', function($http) {
       // update starting and ending times for registration each day
       // update time interval for registration batches
       var body = {
-        "groupsDeadline": {"year": groupsDeadline.getFullYear(), "month": groupsDeadline.getMonth(), "day": groupsDeadline.getDate()},
-        "firstRegistrationDate": {"year": firstRegDate.getFullYear(), "month": firstRegDate.getMonth(), "day": firstRegDate.getDate()},
-        "lastRegistrationDate": {"year": lastRegDate.getFullYear(), "month": lastRegDate.getMonth(), "day": lastRegDate.getDate()},
+        "groupsDeadline": {"year": groupsDeadline.getFullYear(), "month": groupsDeadline.getMonth()+1, "day": groupsDeadline.getDate()},
+        "firstRegistrationDate": {"year": firstRegDate.getFullYear(), "month": firstRegDate.getMonth()+1, "day": firstRegDate.getDate()},
+        "lastRegistrationDate": {"year": lastRegDate.getFullYear(), "month": lastRegDate.getMonth()+1, "day": lastRegDate.getDate()},
         "startTime": {"hour": startTime.getHours(), "minute": startTime.getMinutes()},
         "endTime": {"hour": endTime.getHours(), "minute": endTime.getMinutes()},
         "timeInterval": timeInterval
@@ -391,6 +391,7 @@ app.factory('adminService', function($http) {
     }, fetchDeadlinesPreferences: function() {
       // get data to prepopulate fields in deadlines panel
       var promise = $http.get('/fetchDeadlinesPreferences').then(function(response) {
+        console.log(response.data)
         return response.data;
       }, function (err) {
         // for testing

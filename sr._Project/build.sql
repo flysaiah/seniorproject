@@ -53,7 +53,8 @@ USE projectdb;
 CREATE TABLE Groups (
   groupId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   isRegistered BOOLEAN NOT NULL DEFAULT false,
-  drawDate DATETIME)
+  drawDate DATETIME,
+  timeInterval INT)
 ENGINE = InnoDB;
 
 CREATE TABLE Users (
