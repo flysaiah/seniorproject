@@ -208,6 +208,19 @@
   height: 385px;
 }
 
+.larsenB {
+  background-image: url("../img/LarsenB.png");
+  width: 820px;
+  height: 385px;
+  background-size: 820px 385px;
+  float:left;
+}
+.larsenB-svg {
+  width: 820px;
+  height: 385px;
+}
+
+
 .larsen1 {
   background-image: url("../img/Larsen1.png");
   width: 820px;

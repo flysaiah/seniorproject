@@ -95,145 +95,110 @@
 <div class = "larsen1" ng-show="currentBuilding === 'Larsen' && floorNumber == 1">
   <svg class="larsen1-svg">
 
-    <polygon class="clickable-building" points="293,36 415,35 416,107 294,107" ng-click="toggleRight(floorNumber, '01')"></polygon>
-    <polygon class="clickable-building" points="419,11 577,11 577,107 419,106" ng-click="toggleRight(floorNumber, '02')"></polygon>
-
-    <polygon class="clickable-building" points="647,11 804,11 803,64 647,64" ng-click="toggleRight(floorNumber, '03')"></polygon>
-    <polygon class="clickable-building" points="647,67 803,68 804,116 646,115" ng-click="toggleRight(floorNumber, '04')"></polygon>
-
-    <polygon class="clickable-building" points="647,156 803,156 803,207 646,206" ng-click="toggleRight(floorNumber, '05')"></polygon>
-    <polygon class="clickable-building" points="803,210 647,209 646,250 803,250" ng-click="toggleRight(floorNumber, '06')"></polygon>
-
-    <polygon class="clickable-building" points="647,254 803,254 803,303 646,303" ng-click="toggleRight(floorNumber, '07')"></polygon>
-    <polygon class="clickable-building" points=" 412,252 576,252 576,302 412,302" ng-click="toggleRight(floorNumber, '12')"></polygon>
-
-    <polygon class="clickable-building" points="412,195 577,195 577,248 412,248" ng-click="toggleRight(floorNumber, '13')"></polygon>
+    <polygon class="clickable-building" points="291,38 410,38 410,109 289,108" ng-click="toggleRight(floorNumber, '01')"></polygon>
+    <polygon class="clickable-building" points="415,14 571,14 571,109 415,109" ng-click="toggleRight(floorNumber, '02')"></polygon>
+    <polygon class="clickable-building" points="641,14 795,14 796,66 641,66" ng-click="toggleRight(floorNumber, '03')"></polygon>
+    <polygon class="clickable-building" points="641,70 796,70 795,117 640,117" ng-click="toggleRight(floorNumber, '04')"></polygon>
+    <polygon class="clickable-building" points="641,158 796,158 796,208 641,208" ng-click="toggleRight(floorNumber, '05')"></polygon>
+    <polygon class="clickable-building" points="640,211 795,212 796,252 639,251" ng-click="toggleRight(floorNumber, '06')"></polygon>
+    <polygon class="clickable-building" points="641,255 796,255 796,304 640,303" ng-click="toggleRight(floorNumber, '07')"></polygon>
+    <polygon class="clickable-building" points="408,253 570,253 571,303 407,303" ng-click="toggleRight(floorNumber, '12')"></polygon>
+    <polygon class="clickable-building" points="408,196 571,196 571,250 407,250" ng-click="toggleRight(floorNumber, '13')"></polygon>
+    <polygon class="clickable-building" points="263,138 402,138 401,196 262,196" ng-click="toggleRight(floorNumber, '16')"></polygon>
   </svg>
 </div>
+
+<div class = "larsenB" ng-show="currentBuilding === 'Larsen' && floorNumber == B">
+  <svg class="larsenB-svg">
+
+    <polygon class="clickable-building" points="7,283 290,281 292,344 9,345" ng-click="toggleRight(floorNumber, '008')"></polygon>
+    <polygon class="clickable-building" points="530,281 820,281 820,344 533,344" ng-click="toggleRight(floorNumber, '007')"></polygon>
+
+    <polygon class="clickable-building" points="530,206 818,206 818,280 530,281" ng-click="toggleRight(floorNumber, '006')"></polygon>
+    <polygon class="clickable-building" points="530,143 815,143 818,203 533,204" ng-click="toggleRight(floorNumber, '005')"></polygon>
+  </svg>
+</div>
+
 
 <div ng-repeat="floorClass in floorLaClasses track by $index" ng-class="floorClass" ng-show="currentBuilding === 'Larsen' && floorNumber == ($index + 2)">
-  <svg class="larson2-svg">
-
-    <polygon class="clickable-building" points="463,80 524,79 525,156 461,156" ng-click="toggleRight(floorNumber, '01')"></polygon>
-    <polygon class="clickable-building" points="589,43 679,42 680,156 589,155" ng-click="toggleRight(floorNumber, '02')"></polygon>
-
-    <polygon class="clickable-building" points="702,14 807,14 806,62 701,61" ng-click="toggleRight(floorNumber, '03')"></polygon>
-    <polygon class="clickable-building" points="702,197 806,198 806,235 702,235" ng-click="toggleRight(floorNumber, '04')"></polygon>
-
-    <polygon class="clickable-building" points="702,115 806,114 807,164 701,164" ng-click="toggleRight(floorNumber, '05')"></polygon>
-    <polygon class="clickable-building" points="168,252 227,261 213,343 156,335" ng-click="toggleRight(floorNumber, '06')"></polygon>
-
-    <polygon class="clickable-building" points="702,238 807,238 808,284 702,284" ng-click="toggleRight(floorNumber, '07')"></polygon>
-    <polygon class="clickable-building" points=" 702,286 806,286 807,326 702,326" ng-click="toggleRight(floorNumber, '08')"></polygon>
-
-    <polygon class="clickable-building" points="702,328 808,328 806,369 701,369" ng-click="toggleRight(floorNumber, '09')"></polygon>
-    <polygon class="clickable-building" points="592,331 681,331 681,370 592,370" ng-click="toggleRight(floorNumber, '10')"></polygon>
-
-    <polygon class="clickable-building" points="592,329 592,291 681,292 681,329" ng-click="toggleRight(floorNumber, '11')"></polygon>
-    <polygon class="clickable-building" points="593,245 591,290 681,289 680,246" ng-click="toggleRight(floorNumber, '12')"></polygon>
-
-    <polygon class="clickable-building" points="593,211 680,210 681,243 593,244" ng-click="toggleRight(floorNumber, '13')"></polygon>
-    <polygon class="clickable-building" points="526,176 589,175 588,241 526,241" ng-click="toggleRight(floorNumber, '16')"></polygon>
-
-    <polygon class="clickable-building" points="461,176 523,176 523,241 460,241" ng-click="toggleRight(floorNumber, '17')"></polygon>
-    <polygon class="clickable-building" points="379,176 458,176 457,241 379,241" ng-click="toggleRight(floorNumber, '18')"></polygon>
-
-    <polygon class="clickable-building" points="303,176 377,176 376,242 302,241" ng-click="toggleRight(floorNumber, '19')"></polygon>
-    <polygon class="clickable-building" points="141,205 231,205 231,241 141,241" ng-click="toggleRight(floorNumber, '23')"></polygon>
-
-    <polygon class="clickable-building" points="141,243 231,243 231,283 141,283" ng-click="toggleRight(floorNumber, '24')"></polygon>
-
-    <polygon class="clickable-building" points="141,285 230,285 231,324 140,324" ng-click="toggleRight(floorNumber, '25')"></polygon>
-    <polygon class="clickable-building" points="141,326 230,326 231,368 141,369" ng-click="toggleRight(floorNumber, '26')"></polygon>
-
-    <polygon class="clickable-building" points="12,330 115,330 115,368 12,368" ng-click="toggleRight(floorNumber, '27')"></polygon>
-    <polygon class="clickable-building" points="12,287 115,286 116,327 11,326" ng-click="toggleRight(floorNumber, '28')"></polygon>
-
-    <polygon class="clickable-building" points="12,245 12,284 116,284 115,246" ng-click="toggleRight(floorNumber, '29')"></polygon>
-    <polygon class="clickable-building" points="12,197 114,198 116,243 12,243" ng-click="toggleRight(floorNumber, '30')"></polygon>
-
-    <polygon class="clickable-building" points="13,152 115,152 115,195 12,195" ng-click="toggleRight(floorNumber, '31')"></polygon>
-    <polygon class="clickable-building" points="14,63 115,63 115,118 12,119" ng-click="toggleRight(floorNumber, '32')"></polygon>
-
-    <polygon class="clickable-building" points="115,13 12,14 11,60 117,61" ng-click="toggleRight(floorNumber, '33')"></polygon>
-
-    <polygon class="clickable-building" points="141,43 232,43 231,156 141,156" ng-click="toggleRight(floorNumber, '34')"></polygon>
-    <polygon class="clickable-building" points=" 235,79 301,79 300,156 235,156" ng-click="toggleRight(floorNumber, '35')"></polygon>
-
-    <polygon class="clickable-building" points="305,80 378,79 378,156 304,156" ng-click="toggleRight(floorNumber, '36')"></polygon>
-    <polygon class="clickable-building" points="382,79 458,79 458,157 382,156" ng-click="toggleRight(floorNumber, '37')"></polygon>
+  <svg class="larsen2-svg">
+    <polygon class="clickable-building" points="462,80 524,79 524,156 462,156" ng-click="toggleRight(floorNumber, '00')"></polygon>
+    <polygon class="clickable-building" points="527,80 584,79 585,156 527,156" ng-click="toggleRight(floorNumber, '01')"></polygon>
+    <polygon class="clickable-building" points="587,43 676,43 677,155 588,155" ng-click="toggleRight(floorNumber, '02')"></polygon>
+    <polygon class="clickable-building" points="699,14 802,14 803,62 699,62" ng-click="toggleRight(floorNumber, '03')"></polygon>
+    <polygon class="clickable-building" points="699,64 803,64 803,112 699,112" ng-click="toggleRight(floorNumber, '04')"></polygon>
+    <polygon class="clickable-building" points="699,114 803,114 803,164 699,164" ng-click="toggleRight(floorNumber, '05')"></polygon>
+    <polygon class="clickable-building" points="699,198 803,198 803,235 699,235" ng-click="toggleRight(floorNumber, '06')"></polygon>
+    <polygon class="clickable-building" points="699,238 803,238 803,283 699,283" ng-click="toggleRight(floorNumber, '07')"></polygon>
+    <polygon class="clickable-building" points="699,286 802,286 803,325 699,326" ng-click="toggleRight(floorNumber, '08')"></polygon>
+    <polygon class="clickable-building" points="699,328 803,328 803,369 699,369" ng-click="toggleRight(floorNumber, '09')"></polygon>
+    <polygon class="clickable-building" points="591,332 678,332 678,369 591,369" ng-click="toggleRight(floorNumber, '10')"></polygon>
+    <polygon class="clickable-building" points="591,291 678,292 678,330 591,329" ng-click="toggleRight(floorNumber, '11')"></polygon>
+    <polygon class="clickable-building" points="591,246 678,245 678,290 591,290" ng-click="toggleRight(floorNumber, '12')"></polygon>
+    <polygon class="clickable-building" points="591,211 678,211 678,243 591,243" ng-click="toggleRight(floorNumber, '13')"></polygon>
+    <polygon class="clickable-building" points="526,176 587,176 587,241 526,241" ng-click="toggleRight(floorNumber, '16')"></polygon>
+    <polygon class="clickable-building" points="460,176 522,176 522,241 460,241" ng-click="toggleRight(floorNumber, '17')"></polygon>
+    <polygon class="clickable-building" points="381,176 458,176 458,241 381,241" ng-click="toggleRight(floorNumber, '18')"></polygon>
+    <polygon class="clickable-building" points="304,176 377,176 378,241 303,241" ng-click="toggleRight(floorNumber, '19')"></polygon>
+    <polygon class="clickable-building" points="235,176 300,176 300,241 235,241" ng-click="toggleRight(floorNumber, '20')"></polygon>
+    <polygon class="clickable-building" points="144,205 232,205 233,241 145,241" ng-click="toggleRight(floorNumber, '23')"></polygon>
+    <polygon class="clickable-building" points="144,243 232,243 233,283 145,282" ng-click="toggleRight(floorNumber, '24')"></polygon>
+    <polygon class="clickable-building" points="145,285 145,324 232,324 232,285" ng-click="toggleRight(floorNumber, '25')"></polygon>
+    <polygon class="clickable-building" points="144,368 144,326 232,326 232,368" ng-click="toggleRight(floorNumber, '26')"></polygon>
+    <polygon class="clickable-building" points="17,330 119,329 119,368 17,368" ng-click="toggleRight(floorNumber, '27')"></polygon>
+    <polygon class="clickable-building" points="17,287 119,287 119,326 17,326" ng-click="toggleRight(floorNumber, '28')"></polygon>
+    <polygon class="clickable-building" points="17,246 119,246 119,284 17,284" ng-click="toggleRight(floorNumber, '29')"></polygon>
+    <polygon class="clickable-building" points="18,198 119,198 119,243 17,242" ng-click="toggleRight(floorNumber, '30')"></polygon>
+    <polygon class="clickable-building" points="18,153 119,152 118,195 17,195" ng-click="toggleRight(floorNumber, '31')"></polygon>
+    <polygon class="clickable-building" points="17,63 118,64 119,118 17,117" ng-click="toggleRight(floorNumber, '32')"></polygon>
+    <polygon class="clickable-building" points="17,13 119,14 119,60 17,60" ng-click="toggleRight(floorNumber, '33')"></polygon>
+    <polygon class="clickable-building" points="145,43 233,43 234,156 144,156" ng-click="toggleRight(floorNumber, '34')"></polygon>
+    <polygon class="clickable-building" points="237,79 302,80 302,156 237,156" ng-click="toggleRight(floorNumber, '35')"></polygon>
+    <polygon class="clickable-building" points="305,79 379,80 378,156 305,156" ng-click="toggleRight(floorNumber, '36')"></polygon>
+    <polygon class="clickable-building" points="382,80 458,79 459,156 381,156" ng-click="toggleRight(floorNumber, '37')"></polygon>
 
 
   </svg>
 </div>
 
-<div ng-repeat="floorClass in floorOlClasses track by $index" ng-class="floorClass" ng-show="currentBuilding === 'Olson' && floorNumber == ($index + 1)">
-  <svg class="larson2-svg">
+<div class = "olson1" ng-class="floorClass" ng-show="currentBuilding === 'Olson' && floorNumber == 1">
+  <svg class="larsen2-svg">
 
-    <polygon class="clickable-building" points="463,80 524,79 525,156 461,156" ng-click="toggleRight(floorNumber, '01')"></polygon>
-    <polygon class="clickable-building" points="589,43 679,42 680,156 589,155" ng-click="toggleRight(floorNumber, '02')"></polygon>
-
-    <polygon class="clickable-building" points="702,14 807,14 806,62 701,61" ng-click="toggleRight(floorNumber, '03')"></polygon>
-    <polygon class="clickable-building" points="702,197 806,198 806,235 702,235" ng-click="toggleRight(floorNumber, '04')"></polygon>
-
-    <polygon class="clickable-building" points="702,115 806,114 807,164 701,164" ng-click="toggleRight(floorNumber, '05')"></polygon>
-    <polygon class="clickable-building" points="168,252 227,261 213,343 156,335" ng-click="toggleRight(floorNumber, '06')"></polygon>
-
-    <polygon class="clickable-building" points="702,238 807,238 808,284 702,284" ng-click="toggleRight(floorNumber, '07')"></polygon>
-    <polygon class="clickable-building" points=" 702,286 806,286 807,326 702,326" ng-click="toggleRight(floorNumber, '08')"></polygon>
-
-    <polygon class="clickable-building" points="702,328 808,328 806,369 701,369" ng-click="toggleRight(floorNumber, '09')"></polygon>
-    <polygon class="clickable-building" points="592,331 681,331 681,370 592,370" ng-click="toggleRight(floorNumber, '10')"></polygon>
-
-    <polygon class="clickable-building" points="592,329 592,291 681,292 681,329" ng-click="toggleRight(floorNumber, '11')"></polygon>
-    <polygon class="clickable-building" points="593,245 591,290 681,289 680,246" ng-click="toggleRight(floorNumber, '12')"></polygon>
-
-    <polygon class="clickable-building" points="593,211 680,210 681,243 593,244" ng-click="toggleRight(floorNumber, '13')"></polygon>
-    <polygon class="clickable-building" points="526,176 589,175 588,241 526,241" ng-click="toggleRight(floorNumber, '16')"></polygon>
-
-    <polygon class="clickable-building" points="461,176 523,176 523,241 460,241" ng-click="toggleRight(floorNumber, '17')"></polygon>
-    <polygon class="clickable-building" points="379,176 458,176 457,241 379,241" ng-click="toggleRight(floorNumber, '18')"></polygon>
-
-    <polygon class="clickable-building" points="303,176 377,176 376,242 302,241" ng-click="toggleRight(floorNumber, '19')"></polygon>
-    <polygon class="clickable-building" points="141,205 231,205 231,241 141,241" ng-click="toggleRight(floorNumber, '23')"></polygon>
-
-    <polygon class="clickable-building" points="141,243 231,243 231,283 141,283" ng-click="toggleRight(floorNumber, '24')"></polygon>
-
-    <polygon class="clickable-building" points="141,285 230,285 231,324 140,324" ng-click="toggleRight(floorNumber, '25')"></polygon>
-    <polygon class="clickable-building" points="141,326 230,326 231,368 141,369" ng-click="toggleRight(floorNumber, '26')"></polygon>
-
-    <polygon class="clickable-building" points="12,330 115,330 115,368 12,368" ng-click="toggleRight(floorNumber, '27')"></polygon>
-    <polygon class="clickable-building" points="12,287 115,286 116,327 11,326" ng-click="toggleRight(floorNumber, '28')"></polygon>
-
-    <polygon class="clickable-building" points="12,245 12,284 116,284 115,246" ng-click="toggleRight(floorNumber, '29')"></polygon>
-    <polygon class="clickable-building" points="12,197 114,198 116,243 12,243" ng-click="toggleRight(floorNumber, '30')"></polygon>
-
-    <polygon class="clickable-building" points="13,152 115,152 115,195 12,195" ng-click="toggleRight(floorNumber, '31')"></polygon>
-    <polygon class="clickable-building" points="14,63 115,63 115,118 12,119" ng-click="toggleRight(floorNumber, '32')"></polygon>
-
-    <polygon class="clickable-building" points="115,13 12,14 11,60 117,61" ng-click="toggleRight(floorNumber, '33')"></polygon>
-
-    <polygon class="clickable-building" points="141,43 232,43 231,156 141,156" ng-click="toggleRight(floorNumber, '34')"></polygon>
-    <polygon class="clickable-building" points=" 235,79 301,79 300,156 235,156" ng-click="toggleRight(floorNumber, '35')"></polygon>
-
-    <polygon class="clickable-building" points="305,80 378,79 378,156 304,156" ng-click="toggleRight(floorNumber, '36')"></polygon>
-    <polygon class="clickable-building" points="382,79 458,79 458,157 382,156" ng-click="toggleRight(floorNumber, '37')"></polygon>
-
-
+    <polygon class="clickable-building" points="4,26 191,26 191,168 4,168" ng-click="toggleRight(floorNumber, '01')"></polygon>
+    <polygon class="clickable-building" points="4,219 69,219 69,361 3,361" ng-click="toggleRight(floorNumber, '02')"></polygon>
+    <polygon class="clickable-building" points="72,219 146,219 147,361 72,361" ng-click="toggleRight(floorNumber, '04')"></polygon>
+    <polygon class="clickable-building" points="298,26 504,26 504,168 298,168" ng-click="toggleRight(floorNumber, '05')"></polygon>
+    <polygon class="clickable-building" points="204,219 399,219 398,361 204,360" ng-click="toggleRight(floorNumber, '06')"></polygon>
+    <polygon class="clickable-building" points="508,26 693,26 693,168 507,168" ng-click="toggleRight(floorNumber, '07')"></polygon>
+    <polygon class="clickable-building" points="402,219 608,219 608,361 402,361" ng-click="toggleRight(floorNumber, '08')"></polygon>
+    <polygon class="clickable-building" points="697,26 817,26 816,168 697,168 " ng-click="toggleRight(floorNumber, '09')"></polygon>
+    <polygon class="clickable-building" points="611,219 816,219 816,361 611,360" ng-click="toggleRight(floorNumber, '10')"></polygon>
   </svg>
 </div>
-<!--<div class="larsen3" ng-show="currentBuilding === 'Larsen' && floorNumber == 3">
-  <svg class="larsen3-svg">
+
+<div class = "olson2" ng-class="floorClass" ng-show="currentBuilding === 'Olson' && floorNumber == 2">
+  <svg class="larsen2-svg">
+
+    <polygon class="clickable-building" points="4,5 191,5 191,155 4,155" ng-click="toggleRight(floorNumber, '01')"></polygon>
+    <polygon class="clickable-building" points="69,359 69,209 3,209 3,359 " ng-click="toggleRight(floorNumber, '02')"></polygon>
+    <polygon class="clickable-building" points="72,209 147,209 147,359 72,359" ng-click="toggleRight(floorNumber, '04')"></polygon>
+    <polygon class="clickable-building" points="298,5 504,5 504,155 298,155 " ng-click="toggleRight(floorNumber, '05')"></polygon>
+    <polygon class="clickable-building" points="204,359 398,359 398,209 204,209" ng-click="toggleRight(floorNumber, '06')"></polygon>
+    <polygon class="clickable-building" points="507,5 693,5 693,155 507,155" ng-click="toggleRight(floorNumber, '07')"></polygon>
+    <polygon class="clickable-building" points="402,209 607,209 608,359 402,359" ng-click="toggleRight(floorNumber, '08')"></polygon>
+    <polygon class="clickable-building" points="611,209 816,209 816,359 611,359" ng-click="toggleRight(floorNumber, '10')"></polygon>
   </svg>
 </div>
--->
-
 
 <div class = "olson3" ng-show="currentBuilding === 'Olson' && floorNumber == 3">
-  <svg class="larson2-svg">
+  <svg class="larsen2-svg">
+
+<polygon class="clickable-building" points="4,26 79,25 79,171 4,171" ng-click="toggleRight(floorNumber, '348')"></polygon>
+<polygon class="clickable-building" points="82,25 154,25 154,171 82,171 " ng-click="toggleRight(floorNumber, '346')"></polygon>
 
     <polygon class="clickable-building" points="200,26 286,25 287,169 200,170" ng-click="toggleRight(floorNumber, '344')"></polygon>
     <polygon class="clickable-building" points="290,24 378,24 377,170 290,169" ng-click="toggleRight(floorNumber, '342')"></polygon>
+
 
     <polygon class="clickable-building" points="380,24 461,23 461,169 380,169" ng-click="toggleRight(floorNumber, '340')"></polygon>
     <polygon class="clickable-building" points="464,24 551,23 551,170 464,171" ng-click="toggleRight(floorNumber, '338')"></polygon>
