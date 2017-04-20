@@ -42,6 +42,12 @@ app.controller("navCtl", function($scope, $location, $window, $mdDialog, getGrou
     }
   };
 
+  $scope.floorMiClasses = ['miller1','miller2', 'miller3', 'miller4', 'miller5', 'miller6', 'miller7', 'miller8'];
+  $scope.floorDiClasses = ['dieseth1','dieseth2', 'dieseth3', 'dieseth4', 'dieseth5', 'dieseth6', 'dieseth7', 'dieseth8']
+  $scope.floorLaClasses = ['larsen2', 'larsen3']
+  $scope.floorOlClasses = ['olson1','olson2']
+
+
   // List of all building names in order (according to number on campus map)
   $scope.buildingList = ["Dieseth", "Miller", "Larsen", "Olson"];
   // used to apply CSS rules on campus map buildings
