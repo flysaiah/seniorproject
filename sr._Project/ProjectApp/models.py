@@ -25,6 +25,7 @@ class Groups(db.Model):
 	groupId = db.Column(INTEGER, nullable=False, primary_key=True, autoincrement=True)
 	isRegistered = db.Column(BOOLEAN, nullable=False, server_default=('0'))
 	drawDate = db.Column(DATETIME)
+	timeInterval = db.Column(INTEGER)
 
 	def __repr__(self):
 		# formats/manually creates the JSON object
@@ -35,6 +36,7 @@ class Users(db.Model):
 	userName = db.Column(VARCHAR(30), nullable=False, primary_key=True)
 	firstName = db.Column(VARCHAR(30), nullable=False)
 	lastName = db.Column(VARCHAR(30), nullable=False)
+	role = db.Column(VARCHAR(30), nullable=False)
 	gId = db.Column(INTEGER, db.ForeignKey(Groups.groupId))
 	credits = db.Column(INTEGER, nullable=False)
 	roomDrawNum = db.Column(INTEGER, nullable=False)
@@ -61,7 +63,22 @@ class Rooms(db.Model):
 	capacity = db.Column(INTEGER, nullable=False)
 	gId = db.Column(INTEGER, db.ForeignKey(Groups.groupId))
 	isTaken = db.Column(BOOLEAN, nullable=False, server_default=('0'))
+	available = db.Column(BOOLEAN, nullable=False, server_default=('0'))
 
 	def __repr__(self):
 		# formats/manually creates the JSON object
 		return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+class Preferences(db.Model):
+	__tablename__ = 'Preferences'
+	enabled = db.Column(BOOLEAN, nullable=False, server_default=('0'))
+	defaultPref = db.Column(BOOLEAN, nullable=False, server_default=('0'))
+	roomNum = db.Column(INTEGER, db.ForeignKey(Rooms.roomNum), nullable=False, primary_key=True)
+	building = db.Column(VARCHAR(30), db.ForeignKey(Buildings.name), nullable=False, primary_key=True)
+	gId = db.Column(INTEGER, db.ForeignKey(Groups.groupId), nullable=False, primary_key=True)
+	prefNum = db.Column(INTEGER, nullable=False)
+
+	def __repr__(self):
+		# formats/manually creates the JSON object
+		return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+

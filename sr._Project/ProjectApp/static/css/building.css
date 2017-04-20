@@ -322,3 +322,90 @@
   stroke-width: 8px;
   stroke: #0000ee;
 }
+
+.admin-panel {
+  margin-right: auto;
+  width: 975px;
+}
+
+.manual-add-students-left {
+  width: 45%;
+  float: left;
+  margin-bottom: 10px;
+}
+
+.manual-add-students-right {
+  width: 40%;
+  float: right;
+  margin-bottom: 10px;
+}
+
+.manual-add-students-step3 {
+  clear: both;
+}
+
+.manual-add-student {
+  background-color: white !important;
+  margin-bottom: 10px;
+}
+
+.select-building-name {
+  width: 120px;
+}
+
+.manually-assign-button {
+  display: block;
+  margin-top: 10px;
+}
+
+.dialog-h2 {
+  font-size: 2.100rem !important;
+  font-weight: 400 !important;
+  line-height: 3.2rem !important;
+}
+
+.dialog-h3 {
+  font-size: 1.600rem !important;
+  font-weight: 400 !important;
+  line-height: 2.0rem !important;
+}
+
+.manual-fix-input-label {
+  /* TODO: Make this like the md-switch-position-fix*/
+  position: relative;
+  top: 5px;
+
+}
+
+.md-switch-position-fix {
+  margin-top: 21px;
+  margin-bottom: 16px;
+  margin-right: 10px;
+  align-items: center;
+}
+
+.admin-sidenav {
+  width: 500px !important;
+}
+
+.manual-remove-students-left {
+  width: 40%;
+  float: left;
+  margin-bottom: 10px;
+}
+
+.manual-remove-students-right {
+  width: 45%;
+  float: right;
+  margin-bottom: 10px;
+}
+
+.deadline-div {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.time-interval-select {
+  width: 70px;
+  display: inline-block;
+}

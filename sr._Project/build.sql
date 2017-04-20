@@ -53,7 +53,8 @@ USE projectdb;
 CREATE TABLE Groups (
   groupId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   isRegistered BOOLEAN NOT NULL DEFAULT false,
-  drawDate DATETIME)
+  drawDate DATETIME,
+  timeInterval INT)
 ENGINE = InnoDB;
 
 CREATE TABLE Users (
@@ -61,6 +62,7 @@ CREATE TABLE Users (
   firstName VARCHAR(30) NOT NULL,
   lastName VARCHAR(30) NOT NULL,
   gId INT,
+  role VARCHAR(20) NOT NULL,
   credits INT NOT NULL,
   roomDrawNum INT NOT NULL,
   isPending BOOLEAN NOT NULL DEFAULT false,
@@ -82,6 +84,7 @@ CREATE TABLE Rooms (
   capacity INT NOT NULL,
   gId INT,
   isTaken BOOLEAN NOT NULL DEFAULT false,
+  available BOOLEAN NOT NULL DEFAULT false,
   	PRIMARY KEY(roomNum,building),
     FOREIGN KEY (building)
     REFERENCES Buildings (name)
@@ -89,6 +92,28 @@ CREATE TABLE Rooms (
     ON UPDATE NO ACTION,
     FOREIGN KEY (gId)
     REFERENCES Groups (groupId)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE TABLE Preferences (
+  enabled BOOLEAN NOT NULL DEFAULT false,
+  defaultPref BOOLEAN NOT NULL DEFAULT false,
+  roomNum INT NOT NULL,
+  building VARCHAR(30) NOT NULL,
+  gId INT NOT NULL,
+  prefNum INT NOT NULL,
+    PRIMARY KEY(roomNum,building,gId),
+    FOREIGN KEY (building)
+    REFERENCES Buildings (name)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    FOREIGN KEY (gId)
+    REFERENCES Groups (groupId)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    FOREIGN KEY (roomNum)
+    REFERENCES Rooms (roomNum)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

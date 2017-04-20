@@ -1,4 +1,5 @@
 var app = angular.module("services",[]);
+// NOTE: Dummy data returned during errors for testing needs to be gone by production time
 app.factory('getGroupInfo', function($http) {
   // Get info about group members and group requests
   var getGroupInfo = {
@@ -53,6 +54,19 @@ app.factory('getGroupInfo', function($http) {
         return data;
       });
       return promise;
+    }, getAutoRegPref: function(groupID) {
+      // Get auto registration preferences for a given group
+      var body = {
+        "groupID": groupID
+      }
+      var promise = $http.post('/getAutoRegPref', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var data = {"autoRegEnabled": true, "autoRegPref": [{"buildingName": "Miller", "roomNumber": 103, "defaultPref": false},{"buildingName": "Dieseth", "roomNumber": 2, "defaultPref": true}]};
+        return data;
+      });
+      return promise;
     }
   };
   return getGroupInfo;
@@ -66,8 +80,10 @@ app.factory('updateGroupInfo', function($http) {
       var body = {
         "userID": userID
       }
-      var promise = $http.post('/acceptGroupRequest', body).error(function(response) {
-        console.log(response);
+      var promise = $http.post('/acceptGroupRequest', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
       });
       return promise;
     }, rejectRequest: function(userID) {
@@ -75,8 +91,10 @@ app.factory('updateGroupInfo', function($http) {
       var body = {
         "userID": userID
       }
-      var promise = $http.post('/rejectGroupRequest', body).error(function(response) {
-        console.log(response);
+      var promise = $http.post('/rejectGroupRequest', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
       });
       return promise;
     }, sendGroupRequest: function(sendingUserID, receivingUserID) {
@@ -85,8 +103,10 @@ app.factory('updateGroupInfo', function($http) {
         "sendingUserID": sendingUserID,   // ID of the person sending the request
         "receivingUserID": receivingUserID  // ID of the person whose group is receiving the request
       }
-      var promise = $http.post('/sendGroupRequest', body).error(function(response) {
-        console.log(response);
+      var promise = $http.post('/sendGroupRequest', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
       });
       return promise;
     }, leaveGroup: function(userID) {
@@ -94,8 +114,10 @@ app.factory('updateGroupInfo', function($http) {
       var body = {
         "userID": userID
       }
-      var promise = $http.post('/leaveGroup', body).error(function(response) {
-        console.log(response);
+      var promise = $http.post('/leaveGroup', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
       });
       return promise;
     }, createGroup: function(userID) {
@@ -105,6 +127,21 @@ app.factory('updateGroupInfo', function($http) {
       }
       var promise = $http.post('/createGroup', body).error(function(response) {
         console.log(response);
+      });
+      return promise;
+    }, saveAutoRegPref: function(groupID, autoRegEnabled, autoRegPref) {
+      // Saves group preferences for auto registration
+      var body = {
+        "groupID": groupID,
+        "autoRegEnabled": autoRegEnabled,  // boolean value
+        "autoRegPref": autoRegPref        // example: [ {"buildingName": "Miller", "roomNumber": 103, "defaultPref": false}, {}, {}, {}, {} ]
+      }
+      var promise = $http.post('/saveAutoRegPref', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var data = {"wasSuccessful": false};
+        return data;
       });
       return promise;
     }
@@ -228,7 +265,8 @@ app.factory('getRoomInfo', function($http) {
       }, function (err) {
         // for testing
         var testData = {
-          "101":         [
+          "101":
+          {"isTaken": true, "roomOccupants": [
             {
               "firstName": "Isaiah",
               "lastName": "Mayerchak",
@@ -239,15 +277,143 @@ app.factory('getRoomInfo', function($http) {
               "lastName": "Tester",
               "userID": "testuser01"
             }
-          ],
-          "102": [],
-          "103": []
+          ]},
+          "102": {"isTaken": false, "roomOccupants": []},
+          "103": {"isTaken": true, "roomOccupants": []}
         }
 
         return {"occupantsDict": testData};
       });
       return promise;
+    }, getAllRoomNumbers: function() {
+      // Return list of all building names + room numbers
+      var promise = $http.get('/getAllRoomNumbers').then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {
+          "Miller": [101, 102, 103, 104],
+          "Dieseth": [101, 102, 103, 104]
+        };
+
+        return {"allRoomsDict": testData};
+      });
+      return promise;
     }
   };
   return getRoomInfo;
+});
+app.factory('adminService', function($http) {
+  // Perform functions admins in Res Life can request
+  var adminService = {
+    switchRoomAvailability: function(buildingName, roomNumber) {
+      // manually changes room availability, turns room "on" or "off"
+      var body = {
+        "buildingName": buildingName,
+        "roomNumber": roomNumber
+      }
+      var promise = $http.post('/switchRoomAvailability', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {
+          "wasSuccessful": false
+        }
+
+        return {"wasSuccessful": testData};
+      });
+      return promise;
+    }, manuallyAssignStudentsToRoom: function(buildingName, roomNumber, studentObjectList) {
+      // manually assign students to room (duh)
+      var userList = [];
+      for (var i = 0; i < studentObjectList.length; i++) {
+        userList.push(studentObjectList[i].searchID);
+      }
+      var body = {
+        "buildingName": buildingName,
+        "roomNumber": roomNumber,
+        "userList": userList
+      }
+      var promise = $http.post('/manuallyAssignStudentsToRoom', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {
+          "wasSuccessful": false,
+        }
+
+        return {"wasSuccessful": testData};
+      });
+      return promise;
+    }, manuallyRemoveStudentsFromRoom: function(buildingName, roomNumber, studentObjectList) {
+      // manually remove students from room (duh)
+      var userList = [];
+      for (var i = 0; i < studentObjectList.length; i++) {
+        userList.push(studentObjectList[i].userID);
+      }
+      var body = {
+        "buildingName": buildingName,
+        "roomNumber": roomNumber,
+        "userList": userList
+      }
+      var promise = $http.post('/manuallyRemoveStudentsFromRoom', body).then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {
+          "wasSuccessful": false,
+        }
+
+        return {"wasSuccessful": testData};
+      });
+      return promise;
+    }, saveDeadlinePreferences: function(groupsDeadline, firstRegDate, lastRegDate, startTime, endTime, timeInterval) {
+      // update deadline for finding a group; when this deadline is hit, assign registration times
+      // update first & last date for registration
+      // update starting and ending times for registration each day
+      // update time interval for registration batches
+      var body = {
+        "groupsDeadline": {"year": groupsDeadline.getFullYear(), "month": groupsDeadline.getMonth()+1, "day": groupsDeadline.getDate()},
+        "firstRegistrationDate": {"year": firstRegDate.getFullYear(), "month": firstRegDate.getMonth()+1, "day": firstRegDate.getDate()},
+        "lastRegistrationDate": {"year": lastRegDate.getFullYear(), "month": lastRegDate.getMonth()+1, "day": lastRegDate.getDate()},
+        "startTime": {"hour": startTime.getHours(), "minute": startTime.getMinutes()},
+        "endTime": {"hour": endTime.getHours(), "minute": endTime.getMinutes()},
+        "timeInterval": timeInterval
+      }
+      var promise = $http.post('/saveDeadlinePreferences', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
+      });
+
+      return promise;
+    }, fetchDeadlinesPreferences: function() {
+      // get data to prepopulate fields in deadlines panel
+      var promise = $http.get('/fetchDeadlinesPreferences').then(function(response) {
+        // string formatting time
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        var retObj = response.data.deadlinePrefs;
+        retObj.groupsDeadline = new Date(retObj.groupsDeadline.split(" ")[3], months.indexOf(retObj.groupsDeadline.split(" ")[2]), retObj.groupsDeadline.split(" ")[1]);
+        retObj.firstRegistrationDate = new Date(retObj.firstRegistrationDate.split(" ")[3], months.indexOf(retObj.firstRegistrationDate.split(" ")[2]), retObj.firstRegistrationDate.split(" ")[1]);
+        retObj.lastRegistrationDate = new Date(retObj.lastRegistrationDate.split(" ")[3], months.indexOf(retObj.lastRegistrationDate.split(" ")[2]), retObj.lastRegistrationDate.split(" ")[1]);
+        retObj.startTime = new Date(2000, 1, 10, retObj.startTime.split(" ")[4].split(":")[0], retObj.startTime.split(" ")[4].split(":")[1], 0);
+        retObj.endTime = new Date(2000, 1, 10, retObj.endTime.split(" ")[4].split(":")[0], retObj.endTime.split(" ")[4].split(":")[1], 0);
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {
+          "groupsDeadline": new Date(2018, 2, 10),
+          "firstRegistrationDate": new Date(2018, 3, 5),
+          "lastRegistrationDate": new Date(2018, 3, 17),
+          "startTime": new Date(2018, 3, 5, 18, 0, 0),
+          "endTime": new Date(2018, 3, 5, 22, 30, 0),
+          "timeInterval": 5
+        };
+
+        return {"deadlinePrefs": testData};
+      });
+      return promise;
+    }
+  };
+  return adminService;
 });
