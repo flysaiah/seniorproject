@@ -25,6 +25,7 @@ class Groups(db.Model):
 	groupId = db.Column(INTEGER, nullable=False, primary_key=True, autoincrement=True)
 	isRegistered = db.Column(BOOLEAN, nullable=False, server_default=('0'))
 	drawDate = db.Column(DATETIME)
+	timeInterval = db.Column(INTEGER)
 
 	def __repr__(self):
 		# formats/manually creates the JSON object

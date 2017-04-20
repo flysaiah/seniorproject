@@ -80,8 +80,10 @@ app.factory('updateGroupInfo', function($http) {
       var body = {
         "userID": userID
       }
-      var promise = $http.post('/acceptGroupRequest', body).error(function(response) {
-        console.log(response);
+      var promise = $http.post('/acceptGroupRequest', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
       });
       return promise;
     }, rejectRequest: function(userID) {
@@ -89,8 +91,10 @@ app.factory('updateGroupInfo', function($http) {
       var body = {
         "userID": userID
       }
-      var promise = $http.post('/rejectGroupRequest', body).error(function(response) {
-        console.log(response);
+      var promise = $http.post('/rejectGroupRequest', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
       });
       return promise;
     }, sendGroupRequest: function(sendingUserID, receivingUserID) {
@@ -99,8 +103,10 @@ app.factory('updateGroupInfo', function($http) {
         "sendingUserID": sendingUserID,   // ID of the person sending the request
         "receivingUserID": receivingUserID  // ID of the person whose group is receiving the request
       }
-      var promise = $http.post('/sendGroupRequest', body).error(function(response) {
-        console.log(response);
+      var promise = $http.post('/sendGroupRequest', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
       });
       return promise;
     }, leaveGroup: function(userID) {
@@ -108,8 +114,10 @@ app.factory('updateGroupInfo', function($http) {
       var body = {
         "userID": userID
       }
-      var promise = $http.post('/leaveGroup', body).error(function(response) {
-        console.log(response);
+      var promise = $http.post('/leaveGroup', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
       });
       return promise;
     }, createGroup: function(userID) {
@@ -347,6 +355,52 @@ app.factory('adminService', function($http) {
         return response.data;
       }, function (err) {
         return {"wasSuccessful": false};
+      });
+      return promise;
+    }, saveDeadlinePreferences: function(groupsDeadline, firstRegDate, lastRegDate, startTime, endTime, timeInterval) {
+      // update deadline for finding a group; when this deadline is hit, assign registration times
+      // update first & last date for registration
+      // update starting and ending times for registration each day
+      // update time interval for registration batches
+      var body = {
+        "groupsDeadline": {"year": groupsDeadline.getFullYear(), "month": groupsDeadline.getMonth()+1, "day": groupsDeadline.getDate()},
+        "firstRegistrationDate": {"year": firstRegDate.getFullYear(), "month": firstRegDate.getMonth()+1, "day": firstRegDate.getDate()},
+        "lastRegistrationDate": {"year": lastRegDate.getFullYear(), "month": lastRegDate.getMonth()+1, "day": lastRegDate.getDate()},
+        "startTime": {"hour": startTime.getHours(), "minute": startTime.getMinutes()},
+        "endTime": {"hour": endTime.getHours(), "minute": endTime.getMinutes()},
+        "timeInterval": timeInterval
+      }
+      var promise = $http.post('/saveDeadlinePreferences', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
+      });
+
+      return promise;
+    }, fetchDeadlinesPreferences: function() {
+      // get data to prepopulate fields in deadlines panel
+      var promise = $http.get('/fetchDeadlinesPreferences').then(function(response) {
+        // string formatting time
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        var retObj = response.data.deadlinePrefs;
+        retObj.groupsDeadline = new Date(retObj.groupsDeadline.split(" ")[3], months.indexOf(retObj.groupsDeadline.split(" ")[2]), retObj.groupsDeadline.split(" ")[1]);
+        retObj.firstRegistrationDate = new Date(retObj.firstRegistrationDate.split(" ")[3], months.indexOf(retObj.firstRegistrationDate.split(" ")[2]), retObj.firstRegistrationDate.split(" ")[1]);
+        retObj.lastRegistrationDate = new Date(retObj.lastRegistrationDate.split(" ")[3], months.indexOf(retObj.lastRegistrationDate.split(" ")[2]), retObj.lastRegistrationDate.split(" ")[1]);
+        retObj.startTime = new Date(2000, 1, 10, retObj.startTime.split(" ")[4].split(":")[0], retObj.startTime.split(" ")[4].split(":")[1], 0);
+        retObj.endTime = new Date(2000, 1, 10, retObj.endTime.split(" ")[4].split(":")[0], retObj.endTime.split(" ")[4].split(":")[1], 0);
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = {
+          "groupsDeadline": new Date(2018, 2, 10),
+          "firstRegistrationDate": new Date(2018, 3, 5),
+          "lastRegistrationDate": new Date(2018, 3, 17),
+          "startTime": new Date(2018, 3, 5, 18, 0, 0),
+          "endTime": new Date(2018, 3, 5, 22, 30, 0),
+          "timeInterval": 5
+        };
+
+        return {"deadlinePrefs": testData};
       });
       return promise;
     }

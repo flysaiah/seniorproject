@@ -147,6 +147,37 @@
             </md-input-container>
           </md-content>
         </md-tab>
+        <md-tab label="Deadlines">
+          <!-- TODO: Better styling for this tab; line up buttons and make time inputs look nicer -->
+          <form name="deadlinesForm">
+            <div class="deadline-div">
+              Set deadline for finding a group:
+              <md-datepicker ng-model="groupsDeadline" md-placeholder="Enter date"></md-datepicker>
+            </div>
+            <div class="deadline-div">
+              Set starting date for registration:
+              <md-datepicker ng-model="firstRegistrationDate" md-placeholder="Enter date"></md-datepicker>
+            </div>
+            <div class="deadline-div">
+              Set ending date for registration:
+              <md-datepicker ng-model="lastRegistrationDate" md-placeholder="Enter date"></md-datepicker>
+            </div>
+            <div class="deadline-div">
+              Set start/end time for registration each day:
+              <input type="time" ng-model="startTime"></input>
+              <input type="time" ng-model="endTime"></input>
+            </div>
+            <div class="deadline-div">
+              Set interval between registration times (in minutes):
+              <md-select class="time-interval-select" ng-model="timeInterval">
+                <md-option ng-repeat="i in range(30) track by $index" ng-value="$index + 1">
+                  {{ $index + 1 }}
+                </md-option>
+              </md-select>
+            </div>
+            <md-button style="display: block;" class="md-primary md-raised" ng-disabled="!deadlinesForm.$dirty || !groupsDeadline || !firstRegistrationDate || !lastRegistrationDate || !startTime || !endTime || !timeInterval" aria-label="Update Preferences" ng-click="saveDeadlinePreferences()">Update Preferences</md-button>
+          </form>
+        </md-tab>
       </md-tabs>
     </md-card-content>
   </md-card>
