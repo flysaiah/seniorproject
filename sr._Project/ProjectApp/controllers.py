@@ -301,12 +301,11 @@ def manuallyAssignRoom():
 		return(jsonify(wasSuccessful=True))
 
 	except:
-		return(jsonify(wasSuccessful=False, reason=reason))
+		return(jsonify(wasSuccessful=False))
 
 
 @app.route('/manuallyRemoveStudentsFromRoom', methods=['POST'])
 def manuallyRemoveFromRoom():
-	reason = "Unknown"
 	try:
 		req = request.get_json()
 		build = req['buildingName']

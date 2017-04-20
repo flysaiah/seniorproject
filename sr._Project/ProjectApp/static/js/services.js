@@ -337,12 +337,7 @@ app.factory('adminService', function($http) {
       var promise = $http.post('/manuallyAssignStudentsToRoom', body).then(function (response) {
         return response.data;
       }, function (err) {
-        // for testing
-        var testData = {
-          "wasSuccessful": false,
-        }
-
-        return {"wasSuccessful": testData};
+        return {"wasSuccessful": false};
       });
       return promise;
     }, manuallyRemoveStudentsFromRoom: function(buildingName, roomNumber, studentObjectList) {
@@ -359,12 +354,7 @@ app.factory('adminService', function($http) {
       var promise = $http.post('/manuallyRemoveStudentsFromRoom', body).then(function (response) {
         return response.data;
       }, function (err) {
-        // for testing
-        var testData = {
-          "wasSuccessful": false,
-        }
-
-        return {"wasSuccessful": testData};
+        return {"wasSuccessful": false};
       });
       return promise;
     }, saveDeadlinePreferences: function(groupsDeadline, firstRegDate, lastRegDate, startTime, endTime, timeInterval) {

@@ -14,8 +14,8 @@
     <div class="form-group">
       <!-- TODO: Replace with md-select -->
       <label for="floorpicker">Floor number:</label>
-      <select class="form-control" id="floorpicker" ng-model="floorNumber" ng-init="floorNumber = '1'">
-        <option ng-repeat="floorNum in floorList">{{ floorNum }}</option>
+      <md-select class="floorpicker" id="floorpicker" ng-model="floorNumber">
+        <md-option ng-value="floorNum" ng-repeat="floorNum in floorList">{{ floorNum }}</option>
       </select>
     </div>
 
