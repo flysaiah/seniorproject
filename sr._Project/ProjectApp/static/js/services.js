@@ -125,8 +125,10 @@ app.factory('updateGroupInfo', function($http) {
       var body = {
         "userID": userID
       }
-      var promise = $http.post('/createGroup', body).error(function(response) {
-        console.log(response);
+      var promise = $http.post('/createGroup', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
       });
       return promise;
     }, saveAutoRegPref: function(groupID, autoRegEnabled, autoRegPref) {
