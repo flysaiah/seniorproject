@@ -348,6 +348,7 @@ def getRegistrationTime():
 	return jsonify(registrationTime=regTime)
 
 # def assignRoomDrawTimes():
+# 	dlp = fetchDeadlinesPreferences(True)
 # 	query = db.engine.execute(text('select gId, AVG(roomDrawNum) from Users where gId group by gId order by AVG(roomDrawNum);'))
 # 	for row in query:
 
@@ -444,7 +445,7 @@ def getAutoRegPref():
 	req = request.get_json()
 	gId = req["groupID"]
 	roomList = []
-	query = db.engine.execute(text('select enabled, building, defaultPref, roomNum from Preferences where Preferences.gId = "'+str(gId)+'";'))
+	query = db.engine.execute(text('select enabled, building, defaultPref, roomNum, prefNum from Preferences where Preferences.gId = "'+str(gId)+'" order by prefNum;'))
 	for row in query:
 		defPref = row.defaultPref
 		if row.enabled == False:
@@ -542,7 +543,7 @@ def saveDeadlinePreferences():
 	return(jsonify(''))
 
 @app.route('/fetchDeadlinesPreferences', methods=['GET'])
-def fetchDeadlinesPreferences():
+def fetchDeadlinesPreferences(fromPy=False):
 	query = db.engine.execute(text('select * from Groups where groupId<6;'))
 	for row in query:
 		groupId = row.groupId
@@ -558,5 +559,9 @@ def fetchDeadlinesPreferences():
 		if groupId == 5:
 			et = row.drawDate
 
-	return jsonify(deadlinePrefs=dict(groupsDeadline=gd, firstRegistrationDate=frd,lastRegistrationDate=lrd,startTime=st, endTime=et, timeInterval=interval))
+	deadlinePrefs = dict(groupsDeadline=gd, firstRegistrationDate=frd,lastRegistrationDate=lrd,startTime=st, endTime=et, timeInterval=interval)
+	if fromPy:
+		return deadlinePrefs
+
+	return jsonify(deadlinePrefs=deadlinePrefs)
 
