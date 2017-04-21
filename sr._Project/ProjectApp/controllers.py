@@ -289,7 +289,8 @@ def manuallyAssignRoom():
 
 		if gId == None:
 			db.engine.execute(text('INSERT INTO Groups() VALUES();'))
-			query = db.engine.execute(text('SELECT LAST_INSERT_ID();'))
+			# query = db.engine.execute(text('SELECT LAST_INSERT_ID();'))
+			query = db.engine.execute('select MAX(groupID) from Groups;')
 			for row in query:
 			 	gId = row[0]
 
@@ -542,3 +543,4 @@ def fetchDeadlinesPreferences():
 
 # def assignRoomDrawTimes():
 # 	query = db.engine.execute(text('select gId, AVG(roomDrawNum) from Users where gId group by gId order by AVG(roomDrawNum);'))
+# 	for row in query:
