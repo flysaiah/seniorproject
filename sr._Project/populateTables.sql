@@ -9,12 +9,18 @@
 
 USE projectdb
 
-INSERT INTO Groups() VALUES();
-INSERT INTO Groups() VALUES();
-INSERT INTO Groups() VALUES();
-INSERT INTO Groups() VALUES();
-INSERT INTO Groups() VALUES()8
+########################################
+## creatiing Groups for users to join ##
+########################################
 
+# The first 5 groups are reserved for deadline preferences
+INSERT INTO Groups() VALUES(); # stores group deadline and interval between available room draw times
+INSERT INTO Groups() VALUES(); # stores the starting registration date
+INSERT INTO Groups() VALUES(); # stores the final registration date
+INSERT INTO Groups() VALUES(); # stores start time
+INSERT INTO Groups() VALUES(); # stores end time
+
+# Creating Test Groups for test users
 INSERT INTO Groups(drawDate) VALUES ('2016-03-04 18:00:00');
 INSERT INTO Groups() VALUES();
 INSERT INTO Groups() VALUES();
@@ -24,7 +30,9 @@ INSERT INTO Groups() VALUES();
 INSERT INTO Groups() VALUES();
 INSERT INTO Groups() VALUES();
 
-
+########################################
+##        creatiing Test Users        ##
+########################################
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("smitze01","Zechariah","Smith", "admin", 6, 65, 20);
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("mayeis01","Isaiah","Mayerchak", "admin", 6, 120, 1);
 INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("saudih01","Ihab","Saud", "admin", 85, 2);
@@ -42,6 +50,9 @@ INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNu
 INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("test12","Testy","Testeese", "student", 12, 15);
 INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test13","Testy","Testington", "student", 8, 13, 16);
 
+########################################
+##        Inserting Building          ##
+########################################
 INSERT INTO Buildings(name, numFloors) VALUES("Miller", 8);
 INSERT INTO Buildings(name, numFloors) VALUES("Dieseth", 8);
 INSERT INTO Buildings(name, numFloors, hasBasement) VALUES("Larsen",3, true);

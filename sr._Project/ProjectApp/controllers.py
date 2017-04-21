@@ -1,3 +1,11 @@
+#######################################################
+#################     DESCRIPTION    ##################
+#######################################################
+#                                                     #
+#    This section will store api calls between the    #
+#                 front end and database              #
+#                                                     #
+#######################################################
 
 import os
 import datetime
@@ -40,9 +48,94 @@ def view_of_test():
 	response.headers['Expires'] = format_date_time(time.mktime(expires_time.timetuple()))
 	return response
 
+
+####################################
+##         Authentication         ##
+####################################
+
+@app.route('/login')
+def login():
+    return google.authorize(callback=url_for('authorized', _external=True))
+
+@app.route('/logout')
+def logout():
+    session.pop('google_token', None)
+    return redirect('/')
+
+@app.route('/login/authorized')
+def authorized():
+    resp = google.authorized_response()
+    if resp is None:
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error_reason'],
+            request.args['error_description']
+        )
+
+    session['google_token'] = (resp['access_token'], '')
+    me = google.get('userinfo')
+    if me.data['email'].split('@')[-1] != 'luther.edu':
+        # credentials.revoke(httplib2.Http())
+		# TODO: Make this a nice HTML page
+        session.pop('google_token', None)
+        return 'Access denied: reason=%s error=%s' % (
+			"Invalid User",
+			"This is not a valid Luther account"
+		)
+
+	# User is authorized only if they exist in our database
+    user = me.data['email'].split('@')[0]
+    query = db.engine.execute(text('select * from Users where userName="' + str(user) + '";'))
+    if query.rowcount < 1:
+	    # TODO: Make this a nice HTML page
+	    # credentials.revoke(httplib2.Http())
+	    session.pop('google_token', None)
+
+	    return 'Access denied: reason=%s error=%s' % (
+			"Invalid User",
+			"You are not in Res Life's records"
+		)
+
+    return redirect('/')
+
+
+@app.route('/getUserLogin', methods=['GET'])
+def getUserLogin():
+	role = None
+	if 'google_token' in session:
+		me = google.get('userinfo')
+		if 'email' in me.data:
+			email = me.data['email']
+			un = email.split('@')
+			userName = un[0]
+			query = db.engine.execute(text('select role from Users where userName="'+ str(userName)+'";'))
+			for row in query:
+				role = row.role
+
+			return jsonify({"userInfo": me.data, "role": role})
+	return jsonify({"userInfo": "", "role": role})
+
+@google.tokengetter
+def get_google_oauth_token():
+    return session.get('google_token')
+
+
 ####################################
 ##         Group Requests         ##
 ####################################
+
+@app.route('/createGroup', methods=['POST'])
+def createGroup():
+	req = request.get_json()
+	uID = req['userID']
+	group = db.engine.execute(text(('INSERT INTO Groups() VALUES ();')))
+	query = db.engine.execute(text('select * from Groups;'))
+	groupID=0
+	for row in query:
+		if row.groupId > groupID:
+			groupID = row.groupId
+	db.engine.execute(text('update Users set isPending=0, gId='+str(groupID)+' where userName="'+str(uID)+'";'))
+	return ''
+
 
 @app.route('/acceptGroupRequest', methods=['POST'])
 def acceptRequest():
@@ -79,6 +172,9 @@ def leaveGroup():
 	db.engine.execute(text('update Users set isPending=0, gId=NULL where userName="'+str(uID)+'";'))
 	return ""
 
+####################################
+##       Group Information        ##
+####################################
 
 @app.route('/getGroupMembers', methods=['POST'])
 def getGroupMembers():
@@ -103,6 +199,7 @@ def getGroupMembers():
 
 	return jsonify(groupMembers=user_List, requestingMembers=pending_user_List)
 
+
 @app.route('/isUserInGroup', methods=['POST'])
 def isUserInGroup():
 	req = request.get_json()
@@ -116,20 +213,6 @@ def isUserInGroup():
 	if ans == True:
 		return jsonify(hasGroup=ans, groupID=gID)
 	return jsonify(hasGroup=ans)
-
-
-@app.route('/createGroup', methods=['POST'])
-def createGroup():
-	req = request.get_json()
-	uID = req['userID']
-	group = db.engine.execute(text(('INSERT INTO Groups() VALUES ();')))
-	query = db.engine.execute(text('select * from Groups;'))
-	groupID=0
-	for row in query:
-		if row.groupId > groupID:
-			groupID = row.groupId
-	db.engine.execute(text('update Users set isPending=0, gId='+str(groupID)+' where userName="'+str(uID)+'";'))
-	return ''
 
 
 @app.route('/getAllGroupUsers', methods=['GET'])
@@ -233,6 +316,22 @@ def getRoomOccupantsDict():
 
 	return jsonify(occupantsDict=roomDict)
 
+@app.route('/getAllRoomNumbers', methods=['GET'])
+def getAllRooms():
+	allRoomsDict = {}
+	query= db.engine.execute(text('select name from Buildings;'))
+	for row in query:
+		build = row.name
+		allRoomsDict[build] = []
+
+	query2 = db.engine.execute(text('select roomNum, building from Rooms;'))
+	for row in query2:
+		buildName = row.building
+		roomNum = row.roomNum
+		allRoomsDict[buildName].append(roomNum)
+
+	return(jsonify(allRoomsDict=allRoomsDict))
+
 
 ####################################
 ##       Registration Time        ##
@@ -247,6 +346,10 @@ def getRegistrationTime():
 	for row in query:
 		regTime = row.drawDate
 	return jsonify(registrationTime=regTime)
+
+# def assignRoomDrawTimes():
+# 	query = db.engine.execute(text('select gId, AVG(roomDrawNum) from Users where gId group by gId order by AVG(roomDrawNum);'))
+# 	for row in query:
 
 
 ####################################
@@ -333,24 +436,8 @@ def manuallyRemoveFromRoom():
 
 
 ####################################
-##     AutoReg/Group Deadlines    ##
+##             AutoReg            ##
 ####################################
-@app.route('/getAllRoomNumbers', methods=['GET'])
-def getAllRooms():
-	allRoomsDict = {}
-	query= db.engine.execute(text('select name from Buildings;'))
-	for row in query:
-		build = row.name
-		allRoomsDict[build] = []
-
-	query2 = db.engine.execute(text('select roomNum, building from Rooms;'))
-	for row in query2:
-		buildName = row.building
-		roomNum = row.roomNum
-		allRoomsDict[buildName].append(roomNum)
-
-	return(jsonify(allRoomsDict=allRoomsDict))
-
 
 @app.route('/getAutoRegPref', methods=['POST'])
 def getAutoRegPref():
@@ -417,78 +504,11 @@ def saveAutoRegPref():
 	except:
 		return(jsonify(wasSuccessful=False))
 
+
+
 ####################################
-##         Authentication         ##
+##        Group Deadlines         ##
 ####################################
-
-
-@app.route('/login')
-def login():
-    return google.authorize(callback=url_for('authorized', _external=True))
-
-@app.route('/logout')
-def logout():
-    session.pop('google_token', None)
-    return redirect('/')
-
-@app.route('/login/authorized')
-def authorized():
-    resp = google.authorized_response()
-    if resp is None:
-        return 'Access denied: reason=%s error=%s' % (
-            request.args['error_reason'],
-            request.args['error_description']
-        )
-
-    session['google_token'] = (resp['access_token'], '')
-    me = google.get('userinfo')
-    if me.data['email'].split('@')[-1] != 'luther.edu':
-        # credentials.revoke(httplib2.Http())
-		# TODO: Make this a nice HTML page
-        session.pop('google_token', None)
-        return 'Access denied: reason=%s error=%s' % (
-			"Invalid User",
-			"This is not a valid Luther account"
-		)
-
-	# User is authorized only if they exist in our database
-    user = me.data['email'].split('@')[0]
-    query = db.engine.execute(text('select * from Users where userName="' + str(user) + '";'))
-    if query.rowcount < 1:
-	    # TODO: Make this a nice HTML page
-	    # credentials.revoke(httplib2.Http())
-	    session.pop('google_token', None)
-
-	    return 'Access denied: reason=%s error=%s' % (
-			"Invalid User",
-			"You are not in Res Life's records"
-		)
-
-    return redirect('/')
-
-
-@app.route('/getUserLogin', methods=['GET'])
-def getUserLogin():
-	role = None
-	if 'google_token' in session:
-		me = google.get('userinfo')
-		if 'email' in me.data:
-			email = me.data['email']
-			un = email.split('@')
-			userName = un[0]
-			query = db.engine.execute(text('select role from Users where userName="'+ str(userName)+'";'))
-			for row in query:
-				role = row.role
-
-			return jsonify({"userInfo": me.data, "role": role})
-	return jsonify({"userInfo": "", "role": role})
-
-@google.tokengetter
-def get_google_oauth_token():
-    return session.get('google_token')
-
-
-# autoReg()
 
 @app.route('/saveDeadlinePreferences', methods=['POST'])
 def saveDeadlinePreferences():
@@ -540,7 +560,3 @@ def fetchDeadlinesPreferences():
 
 	return jsonify(deadlinePrefs=dict(groupsDeadline=gd, firstRegistrationDate=frd,lastRegistrationDate=lrd,startTime=st, endTime=et, timeInterval=interval))
 
-
-# def assignRoomDrawTimes():
-# 	query = db.engine.execute(text('select gId, AVG(roomDrawNum) from Users where gId group by gId order by AVG(roomDrawNum);'))
-# 	for row in query:
