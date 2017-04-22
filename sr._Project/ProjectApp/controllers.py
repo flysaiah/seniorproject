@@ -334,23 +334,31 @@ def getAllRooms():
 
 
 ####################################
-##       Registration Time        ##
+##    Registration Time/Status    ##
 ####################################
 
 
-@app.route('/getRegistrationTime', methods=['POST'])
-def getRegistrationTime():
+@app.route('/getRegistrationStatus', methods=['POST'])
+def getRegistrationStatus():
 	req = request.get_json()
 	groupID = req['groupID']
-	query = db.engine.execute(text('select drawDate from Groups where groupId="'+str(groupID)+'";'))
+	query = db.engine.execute(text('select drawDate, isRegistered, roomNum, building from Groups, Rooms where groupId="'+str(groupID)+'" and gId="'+str(groupID)+'";'))
 	for row in query:
 		regTime = row.drawDate
-	return jsonify(registrationTime=regTime)
+		isRegistered = row.isRegistered
+		roomNum = row.roomNum
+		buildingName = row.building
+	return jsonify(registrationTime=regTime, hasRegistered=isRegistered, roomNumber=roomNum, buildingName=buildingName)
 
 # def assignRoomDrawTimes():
 # 	dlp = fetchDeadlinesPreferences(True)
 # 	query = db.engine.execute(text('select gId, AVG(roomDrawNum) from Users where gId group by gId order by AVG(roomDrawNum);'))
+# 	dt = dlp['firstRegistrationDate']
 # 	for row in query:
+# 		db.engine.execute(text('update Groups set drawDate=thing where groupID="'+str(gId)+'";'))
+# 		if dt >= dlp['lastRegistrationDate']:
+# 			continue
+# 		elif dt
 
 
 ####################################
@@ -520,18 +528,17 @@ def saveDeadlinePreferences():
 	gdt = datetime.datetime(gd['year'], gd['month'], gd['day'])
 	interval = req['timeInterval']
 
-	frd = req['firstRegistrationDate']
-	frdt = datetime.datetime(frd['year'], frd['month'], frd['day'])
-
-	lrd = req['lastRegistrationDate']
-	lrdt = datetime.datetime(lrd['year'], lrd['month'], lrd['day'])
-
 	st = req['startTime']
 	stt = datetime.datetime(1111, 1, 1, st['hour'], st['minute'])
 
 	et = req['endTime']
 	ett = datetime.datetime(1111, 1, 1, et['hour'], et['minute'])
 
+	frd = req['firstRegistrationDate']
+	frdt = datetime.datetime(frd['year'], frd['month'], frd['day'], st['hour'], st['minute'])
+
+	lrd = req['lastRegistrationDate']
+	lrdt = datetime.datetime(lrd['year'], lrd['month'], lrd['day'], et['hour'], et['minute'])
 
 
 	db.engine.execute(text('update Groups set drawDate="'+str(gdt)+'", timeInterval="'+str(interval)+'" where groupId=1;'))
