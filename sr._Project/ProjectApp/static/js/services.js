@@ -220,15 +220,17 @@ app.factory('registrationService', function($http) {
         return data;
       });
       return promise;
-    }, getRegistrationTime: function(groupID) {
+    }, getRegistrationStatus: function(groupID) {
+      // check if group has registered; if yes, then also return groupnumber + roomnumber
+      // either way, also return registration time
       var body = {
         "groupID": groupID,
       }
-      var promise = $http.post('/getRegistrationTime', body).then(function (response) {
+      var promise = $http.post('/getRegistrationStatus', body).then(function (response) {
         return response.data;
       }, function (err) {
         // for testing
-        var data = {"registrationTime": "3/9/16 at 9:30pm"};
+        var data = {"hasRegistered": true, "roomNumber": 970, "buildingName": "Test", "registrationTime": "3/9/16 at 9:30pm"};
         return data;
       });
       return promise;

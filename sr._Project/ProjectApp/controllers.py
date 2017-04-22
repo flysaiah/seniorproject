@@ -261,7 +261,7 @@ def registerForRoom():
 		if row.isTaken == 1:
 			return jsonify(wasSuccessful=False, reason='taken')
 	for row in query2:
-		if row.drawDate > now:
+		if row.drawDate is None or row.drawDate > now:
 			return jsonify(wasSuccessful=False, reason='time')
 	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(groupID)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
 	db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(groupID)+'";'))
@@ -343,6 +343,7 @@ def getRegistrationStatus():
 	req = request.get_json()
 	groupID = req['groupID']
 	query = db.engine.execute(text('select drawDate, isRegistered, roomNum, building from Groups, Rooms where groupId="'+str(groupID)+'" and gId="'+str(groupID)+'";'))
+	regTime = isRegistered = roomNum = buildingName = None
 	for row in query:
 		regTime = row.drawDate
 		isRegistered = row.isRegistered
@@ -571,4 +572,3 @@ def fetchDeadlinesPreferences(fromPy=False):
 		return deadlinePrefs
 
 	return jsonify(deadlinePrefs=deadlinePrefs)
-

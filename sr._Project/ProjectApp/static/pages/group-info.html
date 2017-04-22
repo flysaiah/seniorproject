@@ -11,15 +11,15 @@
           <md-content class="md-padding">
             <p ng-repeat="groupMember in groupMembers">{{ groupMember.FirstName }} {{ groupMember.LastName }} ({{ groupMember.userID }})</p>
           </md-content>
-          <md-button class="md-warn md-raised" aria-label="Leave Group" ng-click="leaveGroup()">Leave Group</md-button>
+          <md-button ng-disabled="hasRegistered" class="md-warn md-raised" aria-label="Leave Group" ng-click="leaveGroup()">Leave Group</md-button>
         </md-tab>
         <md-tab label="Requests">
           <md-content class="md-padding">
             <p ng-repeat="requestingMember in requestingMembers">{{ requestingMember.FirstName }} {{ requestingMember.LastName }} ({{ requestingMember.userID }})
-              <md-button ng-click="acceptRequest(requestingMember.userID)" class="md-icon-button" aria-label="Favorite">
+              <md-button ng-disabled="hasRegistered" ng-click="acceptRequest(requestingMember.userID)" class="md-icon-button" aria-label="Favorite">
                 <md-icon md-svg-icon="/static/img/icons/accept.svg"></md-icon>
               </md-button>
-              <md-button ng-click="rejectRequest(requestingMember.userID)" class="md-icon-button" aria-label="Favorite">
+              <md-button ng-disabled="hasRegistered" ng-click="rejectRequest(requestingMember.userID)" class="md-icon-button" aria-label="Favorite">
                 <md-icon md-svg-icon="/static/img/icons/reject.svg"></md-icon>
               </md-button>
             </p>
@@ -28,10 +28,11 @@
         </md-tab>
         <md-tab label="Registration Information">
           <md-content class="md-padding">
-            <span ng-show="registrationTime">Registration time: {{ registrationTime }}</span>
-            <span ng-show="!registrationTime">You have not received a registration time yet. Please wait for administration to assign you a time.</span>
+            <span ng-show="registrationTime && !hasRegistered">Registration time: {{ registrationTime }}</span>
+            <span ng-show="!registrationTime && !hasRegistered">You have not received a registration time yet. Please wait for administration to assign you a time.</span>
+            <span ng-show="hasRegistered"> You are successfully registered for {{ buildingName }} {{ roomNumber }}!</span>
           </md-content>
-          <form name="autoRegForm">
+          <form name="autoRegForm" ng-hide="hideAutoReg">
             <div layout="row">
                 <span class="md-switch-position-fix">Auto Registration:</span>
                 <span class="md-switch-position-fix" style="margin-left: 10px;">Off</span>

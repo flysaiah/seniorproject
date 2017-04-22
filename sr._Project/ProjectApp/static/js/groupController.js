@@ -32,8 +32,16 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
         if (res.hasGroup) {
           $scope.groupID = res.groupID;
           if ($scope.groupID) {
-            registrationService.getRegistrationTime($scope.groupID).then(function(res) {
-              $scope.registrationTime = res.registrationTime;
+            // update information in "Registration Information" tab
+            registrationService.getRegistrationStatus($scope.groupID).then(function(res) {
+              $scope.hasRegistered = res.hasRegistered;
+              if ($scope.hasRegistered) {
+                $scope.roomNumber = res.roomNumber;
+                $scope.buildingName = res.buildingName;
+                $scope.hideAutoReg = true;
+              } else {
+                $scope.registrationTime = res.registrationTime;
+              }
             });
             getGroupInfo.getAutoRegPref($scope.groupID).then(function(res) {
               $scope.autoRegPref = res.autoRegPref;
