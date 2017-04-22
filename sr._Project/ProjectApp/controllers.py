@@ -62,6 +62,12 @@ def logout():
     session.pop('google_token', None)
     return redirect('/')
 
+# ensures our app works with HTML5 mode for angularjs
+@app.route('/groupInfo')
+@app.route('/adminPanel')
+def html5ModeFix():
+    return app.send_static_file('index.html')
+
 @app.route('/login/authorized')
 def authorized():
     resp = google.authorized_response()
