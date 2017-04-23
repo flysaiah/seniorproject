@@ -222,7 +222,7 @@ def isUserInGroup():
 
 
 @app.route('/getAllGroupUsers', methods=['GET'])
-def getAllUsers():
+def getAllGroupUsers():
 	user_List = []
 	query = db.engine.execute(text('select firstName, lastName, role, userName, isPending, gId from Users;'))
 	for row in query:
@@ -231,6 +231,16 @@ def getAllUsers():
 		if row.gId != None and row.isPending == 0:
 			user_List.append(dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName))
 	return jsonify(allGroupUsers=user_List)
+
+@app.route('/getAllUsers', methods=['GET'])
+def getAllUsers():
+	user_List = []
+	query = db.engine.execute(text('select firstName, lastName, role, userName from Users;'))
+	for row in query:
+		if row.role == 'admin':
+			continue
+		user_List.append(dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName))
+	return jsonify(allUsers=user_List)
 
 ####################################
 ##      Buildings and Rooms       ##

@@ -1,6 +1,6 @@
 var app = angular.module("admin", ["ngMaterial", "services"]);
 
-app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUsers, loginService, adminService, getRoomInfo) {
+app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllUsers, loginService, adminService, getRoomInfo) {
   $scope.manualAddStudentsList = [];
   $scope.buildingNames = ["Dieseth", "Miller", "Larsen", "Olson"];   // TODO: Get this data from a service
 
@@ -35,9 +35,9 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
     }
   };
 
-  getAllGroupUsers.fetchData().then(function(res) {
+  getAllUsers.fetchData().then(function(res) {
     // get list of all users for autocomplete
-    $scope.allGroupUsers = res.allGroupUsers.map(function(user) {
+    $scope.allUsers = res.allUsers.map(function(user) {
       return {
         displayName: user.firstName + " " + user.lastName + " (" + user.userID + ")",
         searchName: angular.lowercase(user.firstName) + " " + angular.lowercase(user.lastName),
@@ -47,10 +47,10 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
 
     $scope.querySearch = function(query) {
       // filter query for autocomplete based on entered text
-      var results = query ? $scope.allGroupUsers.filter( function(user) {
+      var results = query ? $scope.allUsers.filter( function(user) {
         return (user.searchName.indexOf(angular.lowercase(query)) === 0)
         || (user.searchID.indexOf(angular.lowercase(query)) === 0)
-      } ) : $scope.allGroupUsers,
+      } ) : $scope.allUsers,
       deferred;
       return results;
     };
