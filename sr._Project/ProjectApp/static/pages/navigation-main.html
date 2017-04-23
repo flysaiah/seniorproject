@@ -248,7 +248,7 @@
       <md-button ng-show="role === 'admin'" ng-disabled="occupantsDict[roomNumber].roomOccupants.length" class="md-warn md-raised" aria-label="Turn {{ occupantsDict[roomNumber].isTaken && occupantsDict[roomNumber].roomOccupants.length < 1 ? 'On' : 'Off' }} Room" ng-click="switchRoomAvailability()">Turn {{ occupantsDict[roomNumber].isTaken && occupantsDict[roomNumber].roomOccupants.length < 1 ? 'On' : 'Off' }} Room</md-button>
     </div>
 
-    <div ng-show="occupantsDict[roomNumber].isTaken">
+    <div ng-show="occupantsDict[roomNumber].isTaken && isLoggedIn">
       <span>Room unavailable. {{ occupantsDict[roomNumber].roomOccupants.length ? 'Current occupants:' : '' }}</span>
       <md-list>
         <md-list-item style="margin-bottom: 10px;" class="md-2-line veggie-option" ng-repeat="occupant in occupantsDict[roomNumber].roomOccupants" layout="row"
@@ -261,6 +261,9 @@
         </md-list-item>
       </md-list>
       <md-button ng-show="role === 'admin'" ng-disabled="occupantsDict[roomNumber].roomOccupants.length" class="md-warn md-raised" aria-label="Turn {{ occupantsDict[roomNumber].isTaken && occupantsDict[roomNumber].roomOccupants.length < 1 ? 'On' : 'Off' }} Room" ng-click="switchRoomAvailability()">Turn {{ occupantsDict[roomNumber].isTaken && occupantsDict[roomNumber].roomOccupants.length < 1 ? 'On' : 'Off' }} Room</md-button>
+    </div>
+    <div ng-show="occupantsDict[roomNumber].isTaken && !isLoggedIn">
+      <span>Room unavailable. You must be logged in to see who is registered for this room.</span>
     </div>
 
     <md-button ng-click="close()" class="md-primary">
