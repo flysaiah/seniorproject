@@ -502,6 +502,38 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(821, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(822, "Dieseth", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(823, "Dieseth", 2);
 
+#######################################################
+#######################################################
+##                                                   ##
+##                Adding Larsen's Rooms              ##
+##                                                   ##
+#######################################################
+#######################################################
+
+####################################
+##        Larsen basement         ##
+####################################
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(005, "Larsen", 3);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(006, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(007, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(008, "Larsen", 2);
+
+####################################
+##        Larsen Floor 1          ##
+####################################
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(101, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(102, "Larsen", 3);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(103, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(104, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(105, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(106, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(107, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(112, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(113, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(116, "Larsen", 1);
+
+
+
 
 ####################################
 ##        Preference Test         ##
