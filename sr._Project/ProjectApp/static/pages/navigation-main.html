@@ -105,7 +105,7 @@
   </svg>
 </div>
 
-<div class="larsenB" ng-show="currentBuilding === 'Larsen' && floorNumber == B">
+<div class="larsenB" ng-show="currentBuilding === 'Larsen' && floorNumber == 'B'">
   <svg class="larsenB-svg">
 
     <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '08'].isTaken}" class="clickable-building" points="7,283 290,281 292,344 9,345" ng-click="toggleRight(floorNumber, '08')"></polygon>
@@ -190,29 +190,29 @@
 <div class = "olson3" ng-show="currentBuilding === 'Olson' && floorNumber == 3">
   <svg class="larsen2-svg">
 
-<polygon ng-class="{'room-taken': occupantsDict[floorNumber + '48'].isTaken}" class="clickable-building" points="4,26 79,25 79,171 4,171" ng-click="toggleRight(floorNumber, '348')"></polygon>
-<polygon ng-class="{'room-taken': occupantsDict[floorNumber + '46'].isTaken}" class="clickable-building" points="82,25 154,25 154,171 82,171 " ng-click="toggleRight(floorNumber, '346')"></polygon>
+<polygon ng-class="{'room-taken': occupantsDict[floorNumber + '48'].isTaken}" class="clickable-building" points="4,26 79,25 79,171 4,171" ng-click="toggleRight(floorNumber, '48')"></polygon>
+<polygon ng-class="{'room-taken': occupantsDict[floorNumber + '46'].isTaken}" class="clickable-building" points="82,25 154,25 154,171 82,171 " ng-click="toggleRight(floorNumber, '46')"></polygon>
 
-    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '44'].isTaken}" class="clickable-building" points="200,26 286,25 287,169 200,170" ng-click="toggleRight(floorNumber, '344')"></polygon>
-    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '42'].isTaken}" class="clickable-building" points="290,24 378,24 377,170 290,169" ng-click="toggleRight(floorNumber, '342')"></polygon>
+    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '44'].isTaken}" class="clickable-building" points="200,26 286,25 287,169 200,170" ng-click="toggleRight(floorNumber, '44')"></polygon>
+    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '42'].isTaken}" class="clickable-building" points="290,24 378,24 377,170 290,169" ng-click="toggleRight(floorNumber, '42')"></polygon>
 
 
-    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '40'].isTaken}" class="clickable-building" points="380,24 461,23 461,169 380,169" ng-click="toggleRight(floorNumber, '340')"></polygon>
-    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '38'].isTaken}" class="clickable-building" points="464,24 551,23 551,170 464,171" ng-click="toggleRight(floorNumber, '338')"></polygon>
+    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '40'].isTaken}" class="clickable-building" points="380,24 461,23 461,169 380,169" ng-click="toggleRight(floorNumber, '40')"></polygon>
+    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '38'].isTaken}" class="clickable-building" points="464,24 551,23 551,170 464,171" ng-click="toggleRight(floorNumber, '38')"></polygon>
 
-    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '36'].isTaken}" class="clickable-building" points="554,25 639,23 638,170 554,169" ng-click="toggleRight(floorNumber, '336')"></polygon>
-    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '34'].isTaken}" class="clickable-building" points="642,25 715,25 715,171 642,170" ng-click="toggleRight(floorNumber, '334')"></polygon>
+    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '36'].isTaken}" class="clickable-building" points="554,25 639,23 638,170 554,169" ng-click="toggleRight(floorNumber, '36')"></polygon>
+    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '34'].isTaken}" class="clickable-building" points="642,25 715,25 715,171 642,170" ng-click="toggleRight(floorNumber, '34')"></polygon>
 
-    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '32'].isTaken}" class="clickable-building" points="719,25 792,24 790,169 718,170" ng-click="toggleRight(floorNumber, '332')"></polygon>
-    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '45'].isTaken}" class="clickable-building" points="3,213 80,212 79,358 3,358" ng-click="toggleRight(floorNumber, '345')"></polygon>
+    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '32'].isTaken}" class="clickable-building" points="719,25 792,24 790,169 718,170" ng-click="toggleRight(floorNumber, '32')"></polygon>
+    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '45'].isTaken}" class="clickable-building" points="3,213 80,212 79,358 3,358" ng-click="toggleRight(floorNumber, '45')"></polygon>
 
-    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '43'].isTaken}" class="clickable-building" points="83,212 155,212 155,358 83,358" ng-click="toggleRight(floorNumber, '343')"></polygon>
-    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '41'].isTaken}" class="clickable-building" points="290,212 377,213 377,358 290,358" ng-click="toggleRight(floorNumber, '341')"></polygon>
+    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '43'].isTaken}" class="clickable-building" points="83,212 155,212 155,358 83,358" ng-click="toggleRight(floorNumber, '43')"></polygon>
+    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '41'].isTaken}" class="clickable-building" points="290,212 377,213 377,358 290,358" ng-click="toggleRight(floorNumber, '41')"></polygon>
 
-    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '39'].isTaken}" class="clickable-building" points="380,212 462,212 462,358 380,357" ng-click="toggleRight(floorNumber, '339')"></polygon>
-    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '37'].isTaken}" class="clickable-building" points="465,213 552,212 552,358 466,358" ng-click="toggleRight(floorNumber, '337')"></polygon>
+    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '39'].isTaken}" class="clickable-building" points="380,212 462,212 462,358 380,357" ng-click="toggleRight(floorNumber, '39')"></polygon>
+    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '37'].isTaken}" class="clickable-building" points="465,213 552,212 552,358 466,358" ng-click="toggleRight(floorNumber, '37')"></polygon>
 
-    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '35'].isTaken}" class="clickable-building" points="556,212 639,212 637,358 555,358" ng-click="toggleRight(floorNumber, '335')"></polygon>
+    <polygon ng-class="{'room-taken': occupantsDict[floorNumber + '35'].isTaken}" class="clickable-building" points="556,212 639,212 637,358 555,358" ng-click="toggleRight(floorNumber, '35')"></polygon>
   </svg>
 </div>
 

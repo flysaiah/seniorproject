@@ -303,6 +303,7 @@ def getRoomOccupantsDict():
 		else:
 			query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
 			query2 = db.engine.execute(text('select isTaken, available, capacity from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			# BUG: if availability or isTaken are undefined, this block fails on line 320
 
 			for row in query2:
 				availability = row.available
