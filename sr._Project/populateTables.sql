@@ -532,6 +532,139 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(112, "Larsen", 1);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(113, "Larsen", 1);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(116, "Larsen", 1);
 
+####################################
+##        Larsen Floor 2          ##
+####################################
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(200, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(201, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(202, "Larsen", 3);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(203, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(204, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(205, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(606, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(207, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(208, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(209, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(210, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(211, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(212, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(213, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(216, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(217, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(218, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(219, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(220, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(223, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(224, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(225, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(226, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(227, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(228, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(229, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(230, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(231, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(232, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(233, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(234, "Larsen", 3);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(235, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(236, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(237, "Larsen", 1);
+
+
+####################################
+##        Larsen Floor 3          ##
+####################################
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(300, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(301, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(302, "Larsen", 3);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(303, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(304, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(305, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(306, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(307, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(308, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(309, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(310, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(311, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(312, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(313, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(316, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(317, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(318, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(319, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(320, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(323, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(324, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(325, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(326, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(327, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(328, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(329, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(330, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(331, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(332, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(333, "Larsen", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(334, "Larsen", 3);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(335, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(336, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(337, "Larsen", 1);
+
+
+
+####################################
+##        Olson Floor 1          ##
+####################################
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(101, "Olson", 4);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(102, "Olson", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(104, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(105, "Olson", 4);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(106, "Olson", 4);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(107, "Olson", 4);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(108, "Olson", 4);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(109, "Olson", 3);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(110, "Olson", 4);
+
+
+
+####################################
+##        Olson Floor 2          ##
+####################################
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(201, "Olson", 4);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(202, "Olson", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(204, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(205, "Olson", 4);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(206, "Olson", 4);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(207, "Olson", 4);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(208, "Olson", 4);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(209, "Olson", 3);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(210, "Olson", 4);
+
+
+####################################
+##        Olson Floor 3          ##
+####################################
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(332, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(334, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(335, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(336, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(337, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(338, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(339, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(340, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(341, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(342, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(343, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(344, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(345, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(346, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(348, "Olson", 2);
+
+
+
+
+
+
+
 
 
 
