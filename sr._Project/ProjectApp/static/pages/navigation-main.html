@@ -5,8 +5,8 @@
     <svg class="campus-svg">
       <polygon ng-class="{ 'clickable-building-hover': buildingDict['Dieseth'] }" class="clickable-building" points="501,294 500,296 498,294 495,298 496,300 496,301 502,310 503,311 504,312 505,312 505,312 512,316 514,315 516,316 519,313 518,310 519,309 513,301 510,299 502,294" ng-click="navigate('Dieseth')"></polygon>
       <polygon ng-class="{ 'clickable-building-hover': buildingDict['Miller'] }" class="clickable-building" points="534,333 534,333 530,335 530,337 528,338 530,345 529,346 531,349 531,349 537,358 539,358 541,360 544,358 545,355 546,355 544,345 542,340 538,335 " ng-click="navigate('Miller')"></polygon>
-      <polygon ng-class="{ 'clickable-building-hover': buildingDict['Larsen'] }" class="clickable-building" points="166,306 170,308 169,311 166,310 163,321 146,319 147,316 145,314 146,310 156,311 148,310 156,311 157,303 148,300 147,299 148,296 150,296 150,294 166,296" ng-click="currentBuilding = 'Larsen'; refreshFloors();"></polygon>
-      <polygon ng-class="{ 'clickable-building-hover': buildingDict['Olson'] }" class="clickable-building" points="108,317 108,321 110,322 110,324 109,324 108,345 110,346 110,353 103,353 104,366 103,375 105,375 105,377 103,378 103,382 95,382 96,352 99,351 99,346 101,345 100,330 101,317" ng-click="currentBuilding = 'Olson'; refreshFloors();"></polygon>
+      <polygon ng-class="{ 'clickable-building-hover': buildingDict['Larsen'] }" class="clickable-building" points="166,306 170,308 169,311 166,310 163,321 146,319 147,316 145,314 146,310 156,311 148,310 156,311 157,303 148,300 147,299 148,296 150,296 150,294 166,296" ng-click="navigate('Larsen')"></polygon>
+      <polygon ng-class="{ 'clickable-building-hover': buildingDict['Olson'] }" class="clickable-building" points="108,317 108,321 110,322 110,324 109,324 108,345 110,346 110,353 103,353 104,366 103,375 105,375 105,377 103,378 103,382 95,382 96,352 99,351 99,346 101,345 100,330 101,317" ng-click="navigate('Olson')"></polygon>
     </svg>
   </div>
   <div ng-show="currentBuilding !== 'campus'">
