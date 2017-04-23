@@ -137,6 +137,12 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
       adminService.manuallyRemoveStudentsFromRoom($scope.removeStudentRoom.buildingName, $scope.removeStudentRoom.roomNumber, [student]).then(function(res) {
         if (!res.wasSuccessful) {
           console.log("Error removing student from room");
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('There was a problem removing the student from the room.')
+            .position('top right')
+            .hideDelay(5000)
+          );
         } else {
           $mdToast.show(
             $mdToast.simple()
@@ -169,6 +175,12 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
     adminService.switchRoomAvailability($scope.checkAvailabilityRoom.buildingName, $scope.checkAvailabilityRoom.roomNumber).then(function(res) {
       if (!res.wasSuccessful) {
         console.log("Error switching room availability");
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('There was a problem switching the availability of the room.')
+          .position('top right')
+          .hideDelay(5000)
+        );
       } else {
         var offOrOn = res.isTaken ? "off" : "on";
         $mdToast.show(
@@ -184,7 +196,23 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
 
   $scope.saveDeadlinePreferences = function() {
     // save preferences for all options in the deadline panel
-    adminService.saveDeadlinePreferences($scope.groupsDeadline, $scope.firstRegistrationDate, $scope.lastRegistrationDate, $scope.startTime, $scope.endTime, $scope.timeInterval);
+    adminService.saveDeadlinePreferences($scope.groupsDeadline, $scope.firstRegistrationDate, $scope.lastRegistrationDate, $scope.startTime, $scope.endTime, $scope.timeInterval).then(function(res) {
+      if (!res.wasSuccessful) {
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('There was a problem saving your preferences.')
+          .position('top right')
+          .hideDelay(5000)
+        );
+      } else {
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('Your deadline preferences have been saved.')
+          .position('top right')
+          .hideDelay(5000)
+        );
+      }
+    });
   };
 
   $scope.range = function(n) {

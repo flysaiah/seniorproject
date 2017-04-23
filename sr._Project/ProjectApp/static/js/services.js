@@ -375,9 +375,10 @@ app.factory('adminService', function($http) {
         "timeInterval": timeInterval
       }
       var promise = $http.post('/saveDeadlinePreferences', body).then(function(response) {
-        return response.data;
+        return {"wasSuccessful": true};
       }, function (err) {
         console.log(err);
+        return {"wasSuccessful": false};
       });
 
       return promise;
