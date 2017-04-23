@@ -1,6 +1,6 @@
 var app = angular.module("navigation", ["ngMaterial", "services"]);
 
-app.controller("navCtl", function($scope, $location, $window, $mdDialog, getGroupInfo, loginService, getFloorInfo, registrationService, getRoomInfo, adminService, $mdSidenav, $mdToast) {
+app.controller("navCtl", function($scope, $location, $window, $mdDialog, $rootScope, getGroupInfo, loginService, getFloorInfo, registrationService, getRoomInfo, adminService, $mdSidenav, $mdToast) {
 
   // hardcoded room lists
   // TODO: Deal with this
@@ -62,6 +62,18 @@ app.controller("navCtl", function($scope, $location, $window, $mdDialog, getGrou
   // Determines which floor plan we see in the nav window--defaults to campus map
   $scope.currentBuilding = "campus";
 
+  $scope.logoNavigate = function() {
+    /* special function used to navigate back to 'main campus' view by clicking main logo
+    We need this because a separate instance of navCtl will be managing that and we need
+    that instance to be able to communicate with the main instance */
+    $rootScope.$broadcast("logonavigate", {});
+  }
+
+  $scope.$on('logonavigate', function (event, data) {
+    // listener for $scope.logoNavigate broadcast
+    $scope.navigate("campus");
+  });
+
   $scope.navigate = function(building) {
     // Navigate to certain building on campus
     $scope.currentBuilding = building;
@@ -73,10 +85,6 @@ app.controller("navCtl", function($scope, $location, $window, $mdDialog, getGrou
       $scope.floorNumber = 1;
     }
     refreshRoomInfo();
-  }
-
-  $scope.reload = function() {
-    $window.location.reload();
   }
 
   $scope.groupInfo = function() {
