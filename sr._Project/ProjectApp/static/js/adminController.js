@@ -2,7 +2,7 @@ var app = angular.module("admin", ["ngMaterial", "services"]);
 
 app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllUsers, loginService, adminService, getRoomInfo) {
   $scope.manualAddStudentsList = [];
-  $scope.buildingNames = ["Dieseth", "Miller", "Larsen", "Olson"];   // TODO: Get this data from a service
+  $scope.buildingNames = ["Dieseth", "Miller", "Larsen", "Olson"];
 
   loginService.getUserLogin().then(function(res) {
     // Determine if user is logged in; if so, get group information from refresh()

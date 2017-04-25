@@ -3,7 +3,6 @@ var app = angular.module("navigation", ["ngMaterial", "services"]);
 app.controller("navCtl", function($scope, $location, $window, $mdDialog, $rootScope, getGroupInfo, loginService, getFloorInfo, registrationService, getRoomInfo, adminService, $mdSidenav, $mdToast) {
 
   // hardcoded room lists
-  // TODO: Deal with this
   var room_dict = {
     'Miller': {
       "allFloorsAreSame": true,
