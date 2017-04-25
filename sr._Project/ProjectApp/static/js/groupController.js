@@ -1,6 +1,6 @@
 var app = angular.module("groupinfo", ["ngMaterial", "ngMessages", "services"]);
 
-app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroupInfo, getAllGroupUsers, loginService, registrationService, getFloorInfo) {
+app.controller("groupCtl", function($scope, $mdDialog, $mdToast, getGroupInfo, updateGroupInfo, getAllGroupUsers, loginService, registrationService, getFloorInfo) {
   $scope.buildingNames = ["Dieseth", "Miller", "Larsen", "Olson"];   // TODO: Get this data from a service
   $scope.autoRegEnabled = false;   // explicitly begin with this as false so as to make sure it is never null--this is important because it makes it easier on the back end
   $scope.numberOfAutoRegPrefs = 5;   // static number of maximum preferences a user can list
@@ -172,6 +172,19 @@ app.controller("groupCtl", function($scope, $mdDialog, getGroupInfo, updateGroup
       // TODO: Toast with results
       if (!res.wasSuccessful) {
         console.log("Unknown error in saving auto registration preferences")
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('There was a problem saving your preferences. Please contact Res Life.')
+          .position('bottom left')
+          .hideDelay(5000)
+        );
+      } else {
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('Your auto registration preferences have been saved.')
+          .position('bottom left')
+          .hideDelay(5000)
+        );
       }
     });
   }

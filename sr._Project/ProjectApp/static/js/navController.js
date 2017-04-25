@@ -1,45 +1,62 @@
 var app = angular.module("navigation", ["ngMaterial", "services"]);
 
-app.controller("navCtl", function($scope, $location, $window, $mdDialog, getGroupInfo, loginService, getFloorInfo, registrationService, getRoomInfo, adminService, $mdSidenav, $mdToast) {
+app.controller("navCtl", function($scope, $location, $window, $mdDialog, $rootScope, getGroupInfo, loginService, getFloorInfo, registrationService, getRoomInfo, adminService, $mdSidenav, $mdToast) {
 
   // hardcoded room lists
   // TODO: Deal with this
   var room_dict = {
     'Miller': {
-      "allFloorsAreSame": "true",
-      "givenInRangeFormat": "true",
+      "allFloorsAreSame": true,
+      "givenInRangeFormat": true,
       "floors": [01, 23]
-    },     'Dieseth': {
-      "allFloorsAreSame": "true",
-      "givenInRangeFormat": "true",
+    }, 'Dieseth': {
+      "allFloorsAreSame": true,
+      "givenInRangeFormat": true,
       "floors": [01, 23]
+    }, 'Larsen': {
+      "allFloorsAreSame": false,
+      "givenInRangeFormat": false,
+      "floors": {
+        "B": [05, 06, 07, 08],
+        "1": [01, 02, 03, 04, 05, 06, 07, 12, 13, 16],
+        "2": [00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 16, 17, 18, 19, 20, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37],
+        "3": [00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 16, 17, 18, 19, 20, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37]
+      }
+    }, 'Olson': {
+      "allFloorsAreSame": false,
+      "givenInRangeFormat": false,
+      "floors": {
+        "1": [01, 02, 04, 05, 06, 07, 08, 09, 10],
+        "2": [01, 02, 04, 05, 06, 07, 08, 09, 10],
+        "3": [32, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 48]
+      }
     }
-  }//,  'Larsen': {
-    //   "allFloorsAreSame": "true",
-    //   "givenInRangeFormat": "true",
-    //   "floors": [01, 23]
-    // },    'Olson': {
-    //   "allFloorsAreSame": "true",
-    //   "givenInRangeFormat": "true",
-    //   "floors": [01, 23]
-    // },
+  }
 
   function generateRoomList(buildingName, floorNumber) {
     // generate list of room numbers to be used in service call for getting room occupants
     var building = room_dict[buildingName];
+    var floorNum = floorNumber;
+    if (floorNumber == "B") {
+      // make sure we can parse floorNum as an integer
+      floorNum = 0;
+    }
+    floorNum = parseInt(floorNum) * 100
+    var arr = [];
     // if all floor plans are identical with room names then floor number isn't as important
     if (building.allFloorsAreSame) {
       if (building.givenInRangeFormat) {
-        var arr = [];
         for (var i = building.floors[0]; i < building.floors[1] + 1; i++) {
-          var floorNum = parseInt(floorNumber) * 100;
-          arr.push(floorNum + i)
+          arr.push(floorNum + i);
         }
-        return arr;
       }
     } else {
-      // TODO: see if we need this
+      var rooms = building.floors[floorNumber];
+      for (var i = 0; i < rooms.length; i++) {
+        arr.push(floorNum + rooms[i]);
+      }
     }
+    return arr;
   };
 
   $scope.floorMiClasses = ['miller1','miller2', 'miller3', 'miller4', 'miller5', 'miller6', 'miller7', 'miller8'];
@@ -62,6 +79,18 @@ app.controller("navCtl", function($scope, $location, $window, $mdDialog, getGrou
   // Determines which floor plan we see in the nav window--defaults to campus map
   $scope.currentBuilding = "campus";
 
+  $scope.logoNavigate = function() {
+    /* special function used to navigate back to 'main campus' view by clicking main logo
+    We need this because a separate instance of navCtl will be managing that and we need
+    that instance to be able to communicate with the main instance */
+    $rootScope.$broadcast("logonavigate", {});
+  }
+
+  $scope.$on('logonavigate', function (event, data) {
+    // listener for $scope.logoNavigate broadcast
+    $scope.navigate("campus");
+  });
+
   $scope.navigate = function(building) {
     // Navigate to certain building on campus
     $scope.currentBuilding = building;
@@ -73,10 +102,6 @@ app.controller("navCtl", function($scope, $location, $window, $mdDialog, getGrou
       $scope.floorNumber = 1;
     }
     refreshRoomInfo();
-  }
-
-  $scope.reload = function() {
-    $window.location.reload();
   }
 
   $scope.groupInfo = function() {
@@ -155,7 +180,11 @@ app.controller("navCtl", function($scope, $location, $window, $mdDialog, getGrou
   });
 
   $scope.toggleRight = function(roomNum1, roomNum2) {
-    $scope.roomNumber = roomNum1.toString() + roomNum2.toString();
+    // change B to 0 if we're in basement
+    if (roomNum1 == "B") {
+      roomNum1 = "0";
+    }
+    $scope.roomNumber = parseInt(roomNum1.toString() + roomNum2.toString());
     $scope.headerTitle = $scope.currentBuilding.toLowerCase() + " " + $scope.roomNumber;
     $scope.roomOccupants = $scope.occupantsDict[$scope.roomNumber].roomOccupants;
     $mdSidenav('right').toggle();
