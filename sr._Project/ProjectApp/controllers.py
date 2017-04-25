@@ -606,4 +606,3 @@ def fetchDeadlinesPreferences(fromPy=False):
 		return deadlinePrefs
 
 	return jsonify(deadlinePrefs=deadlinePrefs)
-assignRoomDrawTimes()
