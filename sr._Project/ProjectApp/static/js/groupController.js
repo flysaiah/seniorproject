@@ -153,6 +153,16 @@ app.controller("groupCtl", function($scope, $mdDialog, $mdToast, getGroupInfo, u
   $scope.requestMembership = function(userObj) {
     // request to be added to the group of the person currently selected in autocomplete
     updateGroupInfo.sendGroupRequest($scope.currentUserID, userObj.searchID);
+    $mdToast.show(
+      $mdToast.simple()
+      .textContent('You have sent ' + userObj.searchID + ' a group request.')
+      .position('top right')
+      .hideDelay(50000)
+    );
+    // clear field
+    // clear field
+    $scope.searchText = "";
+    $scope.selectedItem = undefined;
   };
 
   $scope.showAutoRegExplanation = function(ev) {
