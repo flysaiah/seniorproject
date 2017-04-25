@@ -522,7 +522,7 @@ def registerForRoom(args):
 	gId = args[0]
 	build = args[1]
 	room = args[2]
-	query = db.engine.execute(text('select isTaken, isRegistered from Rooms, Groups where groupId="'+str(gId)+'" and roomNum=+str(roomNum)+;'))
+	query = db.engine.execute(text('select isTaken, isRegistered from Rooms, Groups where groupId="'+str(gId)+'" and roomNum="'+str(roomNum)+'";'))
 	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
 
 @app.route('/saveAutoRegPref', methods=['POST'])
