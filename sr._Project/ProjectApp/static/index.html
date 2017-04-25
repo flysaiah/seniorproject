@@ -27,8 +27,7 @@
             <a href="/" ng-click="logoNavigate();">LUTHER COLLEGE | Room Draw</a>
           </h1>
           <span flex></span>
-          <!-- TODO: Only show this when user is logged in -->
-          <md-button ng-show="isLoggedIn">
+          <md-button class="noclick" ng-show="isLoggedIn">
             Hello, {{ currentUserName }}
           </md-button>
           <md-button ng-click="groupInfo()" aria-label="Group Info" ng-show="isLoggedIn && role !== 'admin'">
