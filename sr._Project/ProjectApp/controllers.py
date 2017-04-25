@@ -540,8 +540,9 @@ def saveAutoRegPref():
 			num = dic['roomNumber']
 			isPref = dic['defaultPref']
 
-			db.engine.execute(text('INSERT INTO Preferences(enabled, roomNum, building, defaultPref, gId, prefNum) VALUES('+str(enabled)+', '+str(num)+', "'+str(building)+'", '+str(isPref)+', '+str(gId)+', '+str(inc)+');'))
 
+
+			db.engine.execute(text('INSERT INTO Preferences(enabled, roomNum, building, defaultPref, gId, prefNum) VALUES('+str(enabled)+', '+str(num)+', "'+str(building)+'", '+str(isPref)+', '+str(gId)+', '+str(inc)+');'))
 
 		return(jsonify(wasSuccessful=True))
 

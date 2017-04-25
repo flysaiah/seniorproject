@@ -112,10 +112,6 @@ CREATE TABLE Preferences (
     REFERENCES Groups (groupId)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-    FOREIGN KEY (roomNum)
-    REFERENCES Rooms (roomNum)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 CREATE VIEW groupsWithAverage AS
