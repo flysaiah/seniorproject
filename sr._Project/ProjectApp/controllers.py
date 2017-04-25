@@ -222,7 +222,7 @@ def isUserInGroup():
 
 
 @app.route('/getAllGroupUsers', methods=['GET'])
-def getAllUsers():
+def getAllGroupUsers():
 	user_List = []
 	query = db.engine.execute(text('select firstName, lastName, role, userName, isPending, gId from Users;'))
 	for row in query:
@@ -231,6 +231,16 @@ def getAllUsers():
 		if row.gId != None and row.isPending == 0:
 			user_List.append(dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName))
 	return jsonify(allGroupUsers=user_List)
+
+@app.route('/getAllUsers', methods=['GET'])
+def getAllUsers():
+	user_List = []
+	query = db.engine.execute(text('select firstName, lastName, role, userName from Users;'))
+	for row in query:
+		if row.role == 'admin':
+			continue
+		user_List.append(dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName))
+	return jsonify(allUsers=user_List)
 
 ####################################
 ##      Buildings and Rooms       ##
@@ -303,6 +313,7 @@ def getRoomOccupantsDict():
 		else:
 			query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
 			query2 = db.engine.execute(text('select isTaken, available, capacity from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			# BUG: if availability or isTaken are undefined, this block fails on line 320
 
 			for row in query2:
 				availability = row.available
@@ -357,15 +368,32 @@ def getRegistrationStatus():
 		buildingName = row.building
 	return jsonify(registrationTime=regTime, hasRegistered=isRegistered, roomNumber=roomNum, buildingName=buildingName)
 
-# def assignRoomDrawTimes():
-# 	dlp = fetchDeadlinesPreferences(True)
-# 	query = db.engine.execute(text('select gId, AVG(roomDrawNum) from Users where gId group by gId order by AVG(roomDrawNum);'))
-# 	dt = dlp['firstRegistrationDate']
-# 	for row in query:
-# 		db.engine.execute(text('update Groups set drawDate=thing where groupID="'+str(gId)+'";'))
-# 		if dt >= dlp['lastRegistrationDate']:
-# 			continue
-# 		elif dt
+def assignRoomDrawTimes():
+	dlp = fetchDeadlinesPreferences(True)
+	query = db.engine.execute(text('select gId, AVG(roomDrawNum) from Users where gId group by gId order by AVG(roomDrawNum) DESC;'))
+	dt = dlp['firstRegistrationDate']
+	startTime= dlp['startTime']
+	inc = dlp['timeInterval']
+	for row in query:
+		gId = row.gId
+		if dt > dlp['lastRegistrationDate']:
+			dlp['lastRegistrationDate']
+
+		db.engine.execute(text('update Groups set drawDate="'+str(dt)+'" where groupID="'+str(gId)+'";'))
+
+		if dt == dlp['lastRegistrationDate']:
+			dlp['lastRegistrationDate']
+
+		elif dt.weekday() == 4 and dt.time() >= dlp['endTime'].time():
+			dt = dt.combine(dt.date(), startTime.time())
+			dt = dt + datetime.timedelta(days=3)
+
+		elif dt.time() >= dlp['endTime'].time():
+			dt = dt.combine(dt.date(), startTime.time())
+			dt = dt + datetime.timedelta(days=1)
+
+		else:
+			dt = dt + datetime.timedelta(minutes=inc)
 
 
 ####################################
@@ -494,33 +522,42 @@ def registerForRoom(args):
 	gId = args[0]
 	build = args[1]
 	room = args[2]
-	query = db.engine.execute(text('select isTaken, isRegistered from Rooms, Groups where groupId="'+str(gId)+'" and roomNum=+str(roomNum)+;'))
+	query = db.engine.execute(text('select isTaken, isRegistered from Rooms, Groups where groupId="'+str(gId)+'" and roomNum="'+str(roomNum)+'";'))
 	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
 
 @app.route('/saveAutoRegPref', methods=['POST'])
 def saveAutoRegPref():
-	try:
-		req = request.get_json()
-		gId = req["groupID"]
-		enabled = req["autoRegEnabled"]
-		prefs = req["autoRegPref"]
-		db.engine.execute(text('DELETE from Preferences where gId='+str(gId)+';'))
-		inc = 0
-		for dic in prefs:
-			inc += 1
-			building = dic['buildingName']
-			num = dic['roomNumber']
-			isPref = dic['defaultPref']
+	req = request.get_json()
+	gId = req["groupID"]
+	enabled = req["autoRegEnabled"]
+	prefs = req["autoRegPref"]
+	# before we do anything, we need to validate the room selections
+	prefStatusArr = []
+	valid = True
+	for pref in prefs:
+		if pref['defaultPref']:
+			continue
+		building = pref['buildingName']
+		num = pref['roomNumber']
+		query = db.engine.execute(text('select roomNum from Rooms where building="' + str(building) + '" and roomNum="' + str(num) + '";'))
+		if query.rowcount < 1:
+			prefStatusArr.append(False)
+			valid = False
+		else:
+			prefStatusArr.append(True)
+	if not valid:
+		return(jsonify(wasSuccessful=False, prefStatusArr=prefStatusArr))
+	db.engine.execute(text('DELETE from Preferences where gId='+str(gId)+';'))
+	inc = 0
+	for dic in prefs:
+		inc += 1
+		building = dic['buildingName']
+		num = dic['roomNumber']
+		isPref = dic['defaultPref']
 
-			db.engine.execute(text('INSERT INTO Preferences(enabled, roomNum, building, defaultPref, gId, prefNum) VALUES('+str(enabled)+', '+str(num)+', "'+str(building)+'", '+str(isPref)+', '+str(gId)+', '+str(inc)+');'))
+		db.engine.execute(text('INSERT INTO Preferences(enabled, roomNum, building, defaultPref, gId, prefNum) VALUES('+str(enabled)+', '+str(num)+', "'+str(building)+'", '+str(isPref)+', '+str(gId)+', '+str(inc)+');'))
 
-
-		return(jsonify(wasSuccessful=True))
-
-	except:
-		return(jsonify(wasSuccessful=False))
-
-
+	return(jsonify(wasSuccessful=True))
 
 ####################################
 ##        Group Deadlines         ##

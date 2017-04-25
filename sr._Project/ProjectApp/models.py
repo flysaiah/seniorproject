@@ -73,7 +73,7 @@ class Preferences(db.Model):
 	__tablename__ = 'Preferences'
 	enabled = db.Column(BOOLEAN, nullable=False, server_default=('0'))
 	defaultPref = db.Column(BOOLEAN, nullable=False, server_default=('0'))
-	roomNum = db.Column(INTEGER, db.ForeignKey(Rooms.roomNum), nullable=False, primary_key=True)
+	roomNum = db.Column(INTEGER, nullable=False, primary_key=True)
 	building = db.Column(VARCHAR(30), db.ForeignKey(Buildings.name), nullable=False, primary_key=True)
 	gId = db.Column(INTEGER, db.ForeignKey(Groups.groupId), nullable=False, primary_key=True)
 	prefNum = db.Column(INTEGER, nullable=False)

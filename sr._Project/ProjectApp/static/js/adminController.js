@@ -1,8 +1,8 @@
 var app = angular.module("admin", ["ngMaterial", "services"]);
 
-app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUsers, loginService, adminService, getRoomInfo) {
+app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllUsers, loginService, adminService, getRoomInfo) {
   $scope.manualAddStudentsList = [];
-  $scope.buildingNames = ["Dieseth", "Miller", "Larsen", "Olson"];   // TODO: Get this data from a service
+  $scope.buildingNames = ["Dieseth", "Miller", "Larsen", "Olson"];
 
   loginService.getUserLogin().then(function(res) {
     // Determine if user is logged in; if so, get group information from refresh()
@@ -35,9 +35,9 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
     }
   };
 
-  getAllGroupUsers.fetchData().then(function(res) {
+  getAllUsers.fetchData().then(function(res) {
     // get list of all users for autocomplete
-    $scope.allGroupUsers = res.allGroupUsers.map(function(user) {
+    $scope.allUsers = res.allUsers.map(function(user) {
       return {
         displayName: user.firstName + " " + user.lastName + " (" + user.userID + ")",
         searchName: angular.lowercase(user.firstName) + " " + angular.lowercase(user.lastName),
@@ -47,10 +47,10 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
 
     $scope.querySearch = function(query) {
       // filter query for autocomplete based on entered text
-      var results = query ? $scope.allGroupUsers.filter( function(user) {
+      var results = query ? $scope.allUsers.filter( function(user) {
         return (user.searchName.indexOf(angular.lowercase(query)) === 0)
         || (user.searchID.indexOf(angular.lowercase(query)) === 0)
-      } ) : $scope.allGroupUsers,
+      } ) : $scope.allUsers,
       deferred;
       return results;
     };
@@ -137,6 +137,12 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
       adminService.manuallyRemoveStudentsFromRoom($scope.removeStudentRoom.buildingName, $scope.removeStudentRoom.roomNumber, [student]).then(function(res) {
         if (!res.wasSuccessful) {
           console.log("Error removing student from room");
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('There was a problem removing the student from the room.')
+            .position('top right')
+            .hideDelay(5000)
+          );
         } else {
           $mdToast.show(
             $mdToast.simple()
@@ -169,6 +175,12 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
     adminService.switchRoomAvailability($scope.checkAvailabilityRoom.buildingName, $scope.checkAvailabilityRoom.roomNumber).then(function(res) {
       if (!res.wasSuccessful) {
         console.log("Error switching room availability");
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('There was a problem switching the availability of the room.')
+          .position('top right')
+          .hideDelay(5000)
+        );
       } else {
         var offOrOn = res.isTaken ? "off" : "on";
         $mdToast.show(
@@ -184,7 +196,23 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllGroupUser
 
   $scope.saveDeadlinePreferences = function() {
     // save preferences for all options in the deadline panel
-    adminService.saveDeadlinePreferences($scope.groupsDeadline, $scope.firstRegistrationDate, $scope.lastRegistrationDate, $scope.startTime, $scope.endTime, $scope.timeInterval);
+    adminService.saveDeadlinePreferences($scope.groupsDeadline, $scope.firstRegistrationDate, $scope.lastRegistrationDate, $scope.startTime, $scope.endTime, $scope.timeInterval).then(function(res) {
+      if (!res.wasSuccessful) {
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('There was a problem saving your preferences.')
+          .position('top right')
+          .hideDelay(5000)
+        );
+      } else {
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('Your deadline preferences have been saved.')
+          .position('top right')
+          .hideDelay(5000)
+        );
+      }
+    });
   };
 
   $scope.range = function(n) {

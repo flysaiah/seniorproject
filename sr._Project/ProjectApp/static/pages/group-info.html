@@ -1,5 +1,5 @@
 <div class="right-panel">
-  <md-card class="group-info" ng-show="isLoggedIn">
+  <md-card class="group-info" ng-show="isLoggedIn && role !== 'admin'">
     <md-card-title>
       <md-card-title-text>
         <span class="md-headline">Group Information</span>
@@ -59,9 +59,12 @@
                 </md-input-container>
                 <md-input-container>
                   <label>Room Number</label>
-                  <input name="roomNumberInput{{ $index }}" ng-model="pref.roomNumber" roomselection="{{ pref.buildingName }}">
-                  <div ng-messages="autoRegForm['roomNumberInput' +  $index ].$error.roomselection" ng-show="autoRegForm['roomNumberInput' +  $index ].$error.roomselection">
-                    <div ng-messages="autoRegForm['roomNumberInput' +  $index ].$error.roomselection">Invalid room number for the selected building.</div>
+                  <input name="roomNumberInput{{ $index }}" ng-model="pref.roomNumber" numbersonly="">
+                  <div ng-messages="autoRegForm['roomNumberInput' +  $index ].$error.numbersonly" ng-show="autoRegForm['roomNumberInput' +  $index ].$error.numbersonly">
+                    <div ng-messages="autoRegForm['roomNumberInput' +  $index ].$error.numbersonly">You need to enter a number.</div>
+                  </div>
+                  <div ng-messages="autoRegForm['roomNumberInput' +  $index ].$error.invalidnumber" ng-show="autoRegForm['roomNumberInput' +  $index ].$error.invalidnumber">
+                    <div ng-messages="autoRegForm['roomNumberInput' +  $index ].$error.invalidnumber">This room number is invalid for the selected building.</div>
                   </div>
                 </md-input-container>
               </div>
@@ -79,7 +82,7 @@
                   </md-input-container>
                   <md-input-container>
                     <label>Building</label>
-                    <md-select class="select-building-name" ng-model="defaultBuildingName">
+                    <md-select class="select-building-name" ng-model="defaultPref.buildingName">
                       <md-option><em>None</em></md-option>
                       <md-option ng-repeat="building in buildingNames" ng-value="building">
                         {{building}}

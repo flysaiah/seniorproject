@@ -202,6 +202,35 @@ app.factory('getAllGroupUsers', function($http) {
   return getAllGroupUsers;
 });
 
+app.factory('getAllUsers', function($http) {
+  // Return list of all active users
+  var getAllUsers = {
+    fetchData: function() {
+      var promise = $http.get('/getAllUsers').then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = [
+          {
+            "firstName": "Isaiah",
+            "lastName": "Mayerchak",
+            "userID": "mayeis01"
+          },
+          {
+            "firstName": "Testy",
+            "lastName": "Tester",
+            "userID": "testuser01"
+          }
+        ];
+
+        return {"allUsers": testData};
+      });
+      return promise;
+    }
+  };
+  return getAllUsers;
+});
+
 app.factory('registrationService', function($http) {
   // Perform services dealing with registration
   var registrationService = {
@@ -375,9 +404,10 @@ app.factory('adminService', function($http) {
         "timeInterval": timeInterval
       }
       var promise = $http.post('/saveDeadlinePreferences', body).then(function(response) {
-        return response.data;
+        return {"wasSuccessful": true};
       }, function (err) {
         console.log(err);
+        return {"wasSuccessful": false};
       });
 
       return promise;

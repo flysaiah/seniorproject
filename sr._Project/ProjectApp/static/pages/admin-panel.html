@@ -30,7 +30,7 @@
                 </md-not-found>
               </md-autocomplete>
               <md-button class="md-accent md-raised" aria-label="Add Student" ng-click="addStudentToGroup(selectedItem)"
-              ng-disabled="allGroupUsers.indexOf(selectedItem) === -1">Add Student</md-button>
+              ng-disabled="allUsers.indexOf(selectedItem) === -1">Add Student</md-button>
               <br>
             </form>
           </md-content>
@@ -93,7 +93,6 @@
                 <input ng-model="removeStudentRoom.roomNumber">
               </md-input-container>
             </div>
-            <!-- TODO: Better validation would be nice here to check for invalid building/room combinations -->
             <md-button class="md-accent md-raised" aria-label="Get Room Occupants" ng-click="selectRoomForRemoval()"
             ng-disabled="!removeStudentRoom.buildingName || removeStudentRoom.buildingName === 'None' || !removeStudentRoom.roomNumber">Get Room Occupants</md-button>
           </md-content>
@@ -134,7 +133,6 @@
                 <input ng-model="checkAvailabilityRoom.roomNumber">
               </md-input-container>
             </div>
-            <!-- TODO: Better validation would be nice here to check for invalid building/room combinations -->
             <md-button class="md-accent md-raised" aria-label="Check availability" ng-click="checkRoomAvailability()"
             ng-disabled="!checkAvailabilityRoom.buildingName || !checkAvailabilityRoom.buildingName === 'None' || !checkAvailabilityRoom.roomNumber">Check Availability</md-button>
           </md-content>

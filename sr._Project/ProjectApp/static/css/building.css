@@ -282,11 +282,6 @@
   background-size: 820px 385px;
   float:left;
 }
-.larsen2-svg {
-  width: 820px;
-  height: 385px;
-}
-
 
 .clickable-building {
   opacity: 0;
@@ -413,4 +408,12 @@
 .time-interval-select {
   width: 70px;
   display: inline-block;
+}
+
+.noclick {
+  cursor: default;
+}
+
+.noclick: hover {
+  cursor: default;
 }
