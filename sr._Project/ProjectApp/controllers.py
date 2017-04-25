@@ -351,15 +351,32 @@ def getRegistrationStatus():
 		buildingName = row.building
 	return jsonify(registrationTime=regTime, hasRegistered=isRegistered, roomNumber=roomNum, buildingName=buildingName)
 
-# def assignRoomDrawTimes():
-# 	dlp = fetchDeadlinesPreferences(True)
-# 	query = db.engine.execute(text('select gId, AVG(roomDrawNum) from Users where gId group by gId order by AVG(roomDrawNum);'))
-# 	dt = dlp['firstRegistrationDate']
-# 	for row in query:
-# 		db.engine.execute(text('update Groups set drawDate=thing where groupID="'+str(gId)+'";'))
-# 		if dt >= dlp['lastRegistrationDate']:
-# 			continue
-# 		elif dt
+def assignRoomDrawTimes():
+	dlp = fetchDeadlinesPreferences(True)
+	query = db.engine.execute(text('select gId, AVG(roomDrawNum) from Users where gId group by gId order by AVG(roomDrawNum) DESC;'))
+	dt = dlp['firstRegistrationDate']
+	startTime= dlp['startTime']
+	inc = dlp['timeInterval']
+	for row in query:
+		gId = row.gId
+		if dt > dlp['lastRegistrationDate']:
+			dlp['lastRegistrationDate']
+
+		db.engine.execute(text('update Groups set drawDate="'+str(dt)+'" where groupID="'+str(gId)+'";'))
+
+		if dt == dlp['lastRegistrationDate']:
+			dlp['lastRegistrationDate']
+
+		elif dt.weekday() == 4 and dt.time() >= dlp['endTime'].time():
+			dt = dt.combine(dt.date(), startTime.time())
+			dt = dt + datetime.timedelta(days=3)
+
+		elif dt.time() >= dlp['endTime'].time():
+			dt = dt.combine(dt.date(), startTime.time())
+			dt = dt + datetime.timedelta(days=1)
+
+		else:
+			dt = dt + datetime.timedelta(minutes=inc)
 
 
 ####################################
@@ -572,3 +589,4 @@ def fetchDeadlinesPreferences(fromPy=False):
 		return deadlinePrefs
 
 	return jsonify(deadlinePrefs=deadlinePrefs)
+assignRoomDrawTimes()
