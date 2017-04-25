@@ -527,29 +527,37 @@ def registerForRoom(args):
 
 @app.route('/saveAutoRegPref', methods=['POST'])
 def saveAutoRegPref():
-	try:
-		req = request.get_json()
-		gId = req["groupID"]
-		enabled = req["autoRegEnabled"]
-		prefs = req["autoRegPref"]
-		db.engine.execute(text('DELETE from Preferences where gId='+str(gId)+';'))
-		inc = 0
-		for dic in prefs:
-			inc += 1
-			building = dic['buildingName']
-			num = dic['roomNumber']
-			isPref = dic['defaultPref']
+	req = request.get_json()
+	gId = req["groupID"]
+	enabled = req["autoRegEnabled"]
+	prefs = req["autoRegPref"]
+	# before we do anything, we need to validate the room selections
+	prefStatusArr = []
+	valid = True
+	for pref in prefs:
+		if pref['defaultPref']:
+			continue
+		building = pref['buildingName']
+		num = pref['roomNumber']
+		query = db.engine.execute(text('select roomNum from Rooms where building="' + str(building) + '" and roomNum="' + str(num) + '";'))
+		if query.rowcount < 1:
+			prefStatusArr.append(False)
+			valid = False
+		else:
+			prefStatusArr.append(True)
+	if not valid:
+		return(jsonify(wasSuccessful=False, prefStatusArr=prefStatusArr))
+	db.engine.execute(text('DELETE from Preferences where gId='+str(gId)+';'))
+	inc = 0
+	for dic in prefs:
+		inc += 1
+		building = dic['buildingName']
+		num = dic['roomNumber']
+		isPref = dic['defaultPref']
 
+		db.engine.execute(text('INSERT INTO Preferences(enabled, roomNum, building, defaultPref, gId, prefNum) VALUES('+str(enabled)+', '+str(num)+', "'+str(building)+'", '+str(isPref)+', '+str(gId)+', '+str(inc)+');'))
 
-
-			db.engine.execute(text('INSERT INTO Preferences(enabled, roomNum, building, defaultPref, gId, prefNum) VALUES('+str(enabled)+', '+str(num)+', "'+str(building)+'", '+str(isPref)+', '+str(gId)+', '+str(inc)+');'))
-
-		return(jsonify(wasSuccessful=True))
-
-	except:
-		return(jsonify(wasSuccessful=False))
-
-
+	return(jsonify(wasSuccessful=True))
 
 ####################################
 ##        Group Deadlines         ##

@@ -67,7 +67,7 @@ app.controller("groupCtl", function($scope, $mdDialog, $mdToast, getGroupInfo, u
     for (var i = 0; i < $scope.autoRegPref.length; i++) {
       if ($scope.autoRegPref[i].defaultPref) {
         $scope.defaultPrefEnabled = true;
-        $scope.defaultPref = {"buildingName": $scope.autoRegPref[i].buildingName, "floorNumber": $scope.autoRegPref[i].roomNumber};
+        $scope.defaultPref = {"buildingName": $scope.autoRegPref[i].buildingName, "floorNumber": $scope.autoRegPref[i].roomNumber == 0 ? "B" : $scope.autoRegPref[i].roomNumber};
       } else {
         newAutoRegPref.push({"buildingName": $scope.autoRegPref[i].buildingName, "roomNumber": $scope.autoRegPref[i].roomNumber});
       }
@@ -94,15 +94,15 @@ app.controller("groupCtl", function($scope, $mdDialog, $mdToast, getGroupInfo, u
       }
     }
     if ($scope.defaultPrefEnabled) {
-      newAutoRegPref.push({"buildingName": $scope.defaultPref.buildingName, "roomNumber": $scope.defaultPref.floorNumber, "defaultPref": true});
+      newAutoRegPref.push({"buildingName": $scope.defaultPref.buildingName, "roomNumber": $scope.defaultPref.floorNumber === "B" ? 0 : $scope.defaultPref.floorNumber, "defaultPref": true});
     }
     return newAutoRegPref;
   };
 
-  $scope.$watch('defaultBuildingName', function() {
+  $scope.$watch('defaultPref.buildingName', function() {
     // make sure we have the correct amount of floors for the building we select
-    if ($scope.defaultBuildingName) {
-      getFloorInfo.fetchData($scope.defaultBuildingName.toLowerCase()).then(function(res) {
+    if ($scope.defaultPref.buildingName) {
+      getFloorInfo.fetchData($scope.defaultPref.buildingName.toLowerCase()).then(function(res) {
         // fetches info about number of floor sfor a given building
         $scope.floorList = res.floorList;
       });
@@ -169,15 +169,30 @@ app.controller("groupCtl", function($scope, $mdDialog, $mdToast, getGroupInfo, u
     // Saves group preferences for auto registration
     var autoRegPref = getFormattedPrefsForSaving();
     updateGroupInfo.saveAutoRegPref($scope.groupID, $scope.autoRegEnabled, autoRegPref).then(function(res) {
-      // TODO: Toast with results
       if (!res.wasSuccessful) {
-        console.log("Unknown error in saving auto registration preferences")
-        $mdToast.show(
-          $mdToast.simple()
-          .textContent('There was a problem saving your preferences. Please contact Res Life.')
-          .position('bottom left')
-          .hideDelay(5000)
-        );
+        // likely it failed because of an invalid room number
+        if (res.prefStatusArr) {
+          for (var i = 0; i < res.prefStatusArr.length; i++) {
+            // prefStatusArr is an array of booleans, each corresponding to the index of a preference.
+            // if true, then the pref is valid. false => invalid room number for preference
+            if (!res.prefStatusArr[i]) {
+              $scope.autoRegForm['roomNumberInput' + i.toString()].$setValidity("invalidnumber", false)
+            }
+          }
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('There was a problem saving your preferences. Please check your room selections.')
+            .position('bottom left')
+            .hideDelay(5000)
+          );
+        } else {
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('There was a problem saving your preferences. Please contact Res Life.')
+            .position('bottom left')
+            .hideDelay(5000)
+          );
+        }
       } else {
         $mdToast.show(
           $mdToast.simple()
@@ -194,43 +209,16 @@ app.controller("groupCtl", function($scope, $mdDialog, $mdToast, getGroupInfo, u
   };
 });
 
-app.directive('roomselection', function (getRoomInfo){
-  /* Validation function for room number inputs on the auto reg preferences page
-     Ensures that students don't select a room which is invalid for a given building */
-  var allRoomsDict = null;
+app.directive('numbersonly', function () {
+  // Validation function that ensures numbers are entered for room
   return {
     require: 'ngModel',
     link: function(scope, elem, attr, ngModel) {
-      function getValidity(allRoomsDict, buildingName, roomNumber) {
-        buildingName = "Miller"
-        var valid = true;
-        if (!buildingName || buildingName === "None" || isNaN(roomNumber) || allRoomsDict[buildingName].indexOf(parseInt(roomNumber)) === -1) {
-          // they haven't selected a building or the room number they gave is invalid for the given building
-          valid = false;
-        }
-        if (!roomNumber && (!buildingName || buildingName === "None")) {
-          // Nothing to validate, defaults to true
-          valid = true;
-        }
-        return valid;
-      }
-      var buildingName = attr.roomselection;
-      var allRoomsDict = -1;
-      var valid;
       ngModel.$parsers.unshift(function(value) {
-        if (allRoomsDict === -1) {
-          getRoomInfo.getAllRoomNumbers().then(function(res) {
-            // fetches dictionary of all room numbers with buildings as the key
-            allRoomsDict = res.allRoomsDict;
-            valid = getValidity(allRoomsDict, attr.roomselection, value);
-            ngModel.$setValidity('roomselection', valid);
-            return valid ? value : false;
-          });
-        } else {
-          valid = getValidity(allRoomsDict, attr.roomselection, value);
-          ngModel.$setValidity('roomselection', valid);
-          return valid ? value : false;
-        }
+        ngModel.$setValidity('numbersonly', !(isNaN(value)));
+        // also reset the validity for other validation if they've changed the field
+        ngModel.$setValidity('invalidnumber', true);
+        return isNaN(value) ? false : value;
       });
     }
   };
