@@ -125,8 +125,10 @@ app.factory('updateGroupInfo', function($http) {
       var body = {
         "userID": userID
       }
-      var promise = $http.post('/createGroup', body).error(function(response) {
-        console.log(response);
+      var promise = $http.post('/createGroup', body).then(function(response) {
+        return response.data;
+      }, function (err) {
+        console.log(err);
       });
       return promise;
     }, saveAutoRegPref: function(groupID, autoRegEnabled, autoRegPref) {
@@ -200,6 +202,35 @@ app.factory('getAllGroupUsers', function($http) {
   return getAllGroupUsers;
 });
 
+app.factory('getAllUsers', function($http) {
+  // Return list of all active users
+  var getAllUsers = {
+    fetchData: function() {
+      var promise = $http.get('/getAllUsers').then(function (response) {
+        return response.data;
+      }, function (err) {
+        // for testing
+        var testData = [
+          {
+            "firstName": "Isaiah",
+            "lastName": "Mayerchak",
+            "userID": "mayeis01"
+          },
+          {
+            "firstName": "Testy",
+            "lastName": "Tester",
+            "userID": "testuser01"
+          }
+        ];
+
+        return {"allUsers": testData};
+      });
+      return promise;
+    }
+  };
+  return getAllUsers;
+});
+
 app.factory('registrationService', function($http) {
   // Perform services dealing with registration
   var registrationService = {
@@ -218,15 +249,17 @@ app.factory('registrationService', function($http) {
         return data;
       });
       return promise;
-    }, getRegistrationTime: function(groupID) {
+    }, getRegistrationStatus: function(groupID) {
+      // check if group has registered; if yes, then also return groupnumber + roomnumber
+      // either way, also return registration time
       var body = {
         "groupID": groupID,
       }
-      var promise = $http.post('/getRegistrationTime', body).then(function (response) {
+      var promise = $http.post('/getRegistrationStatus', body).then(function (response) {
         return response.data;
       }, function (err) {
         // for testing
-        var data = {"registrationTime": "3/9/16 at 9:30pm"};
+        var data = {"hasRegistered": true, "roomNumber": 970, "buildingName": "Test", "registrationTime": "3/9/16 at 9:30pm"};
         return data;
       });
       return promise;
@@ -371,9 +404,10 @@ app.factory('adminService', function($http) {
         "timeInterval": timeInterval
       }
       var promise = $http.post('/saveDeadlinePreferences', body).then(function(response) {
-        return response.data;
+        return {"wasSuccessful": true};
       }, function (err) {
         console.log(err);
+        return {"wasSuccessful": false};
       });
 
       return promise;

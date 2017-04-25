@@ -24,12 +24,9 @@
       <md-toolbar class="main-navbar">
         <div class="md-toolbar-tools" ng-controller="navCtl">
           <h1>
-            <a href="/" ng-click="reload();">LUTHER COLLEGE | Room Draw</a>
+            <a href="/" ng-click="logoNavigate();">LUTHER COLLEGE | Room Draw</a>
           </h1>
           <span flex></span>
-          <!-- <md-button class="md-raised" aria-label="Learn More">
-            Learn More
-          </md-button>-->
           <!-- TODO: Only show this when user is logged in -->
           <md-button ng-show="isLoggedIn">
             Hello, {{ currentUserName }}
