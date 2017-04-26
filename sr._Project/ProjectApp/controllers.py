@@ -307,6 +307,8 @@ def getRoomOccupantsDict():
 		capacity = None
 		personList = []
 		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(room)+ '"and building="'+str(build)+'";'))
+		availability = 0
+		isTaken = 0
 		if check == None:
 			roomDict[room] = []
 

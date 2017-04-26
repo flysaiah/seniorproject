@@ -1,7 +1,7 @@
 var app = angular.module("groupinfo", ["ngMaterial", "ngMessages", "services"]);
 
 app.controller("groupCtl", function($scope, $mdDialog, $mdToast, getGroupInfo, updateGroupInfo, getAllGroupUsers, loginService, registrationService, getFloorInfo) {
-  $scope.buildingNames = ["Dieseth", "Miller", "Larsen", "Olson"];   // TODO: Get this data from a service
+  $scope.buildingNames = ["Dieseth", "Miller", "Larsen", "Olson"];
   $scope.autoRegEnabled = false;   // explicitly begin with this as false so as to make sure it is never null--this is important because it makes it easier on the back end
   $scope.numberOfAutoRegPrefs = 5;   // static number of maximum preferences a user can list
   $scope.defaultPref = {};
@@ -153,6 +153,16 @@ app.controller("groupCtl", function($scope, $mdDialog, $mdToast, getGroupInfo, u
   $scope.requestMembership = function(userObj) {
     // request to be added to the group of the person currently selected in autocomplete
     updateGroupInfo.sendGroupRequest($scope.currentUserID, userObj.searchID);
+    $mdToast.show(
+      $mdToast.simple()
+      .textContent('You have sent ' + userObj.searchID + ' a group request.')
+      .position('top right')
+      .hideDelay(50000)
+    );
+    // clear field
+    // clear field
+    $scope.searchText = "";
+    $scope.selectedItem = undefined;
   };
 
   $scope.showAutoRegExplanation = function(ev) {

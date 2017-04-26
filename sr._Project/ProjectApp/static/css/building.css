@@ -409,3 +409,11 @@
   width: 70px;
   display: inline-block;
 }
+
+.noclick {
+  cursor: default;
+}
+
+.noclick: hover {
+  cursor: default;
+}
