@@ -395,6 +395,16 @@
   margin-bottom: 10px;
 }
 
+.import-export-left {
+  width: 45%;
+  float: left;
+}
+
+.import-export-right {
+  width: 45%;
+  float: right;
+}
+
 .floorpicker {
   width: 50px;
   display: inline-block;
@@ -416,4 +426,9 @@
 
 .noclick: hover {
   cursor: default;
+}
+
+.import-export {
+  margin-right: auto;
+  width: 860px;
 }

@@ -18,6 +18,8 @@ from flask import Flask, request, Response, session
 from flask import render_template, url_for, redirect, send_from_directory
 from flask import send_file, make_response, abort, jsonify
 
+import flask_excel as excel
+
 
 from sqlalchemy import text, func
 
@@ -65,6 +67,7 @@ def logout():
 # ensures our app works with HTML5 mode for angularjs
 @app.route('/groupInfo')
 @app.route('/adminPanel')
+@app.route('/importExport')
 def html5ModeFix():
     return app.send_static_file('index.html')
 
@@ -564,6 +567,17 @@ def saveAutoRegPref():
 ####################################
 ##        Group Deadlines         ##
 ####################################
+
+@app.route("/uploadStudentRecords", methods=['POST'])
+def uploadStudentRecords():
+    print("----------\n\n", request.get_array(field_name='file'), "\n\n---------------")
+    return redirect("/importExport")
+
+@app.route("/uploadRoomRecords", methods=['POST'])
+def uploadRoomRecords():
+    print("----------\n\n", request.get_array(field_name='file'), "\n\n---------------")
+    return redirect("/importExport")
+
 
 @app.route('/saveDeadlinePreferences', methods=['POST'])
 def saveDeadlinePreferences():
