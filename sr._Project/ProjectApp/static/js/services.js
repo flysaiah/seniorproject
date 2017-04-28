@@ -287,11 +287,12 @@ app.factory('loginService', function($http) {
 app.factory('getRoomInfo', function($http) {
   // Get information regarding rooms
   var getRoomInfo = {
-    getOccupantsDict: function(buildingName, roomArray) {
+    getOccupantsDict: function(buildingName, roomArray, isAdmin) {
       // Return list of current occupants of each room
       var body = {
         "buildingName": buildingName,
-        "roomArray": roomArray
+        "roomArray": roomArray,
+        "isAdmin": isAdmin
       }
       var promise = $http.post('/getRoomOccupantsDict', body).then(function (response) {
         return response.data;

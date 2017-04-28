@@ -64,7 +64,10 @@
                 </md-input-container>
                 <md-input-container>
                   <label>Room Number</label>
-                  <input required ng-model="roomNumber">
+                  <input name="roomNum" required ng-model="roomNumber">
+                  <div ng-messages="addStudentsForm.roomNum.$error.invalidnumber" ng-show="addStudentsForm.roomNum.$error.invalidnumber">
+                    <div ng-messages="addStudentsForm.roomNum.$error.invalidnumber">This room number is invalid for the selected building.</div>
+                  </div>
                 </md-input-container>
               </div>
             </md-content>
@@ -75,27 +78,32 @@
           </br></br>
           Manually remove students from a room:
           </br></br>
-          <md-content class="md-padding manual-remove-students-left">
-            Please select a room.
-            </br>
-            <div layout="row">
-              <md-input-container>
-                <label>Building</label>
-                <md-select class="select-building-name" ng-model="removeStudentRoom.buildingName">
-                  <md-option><em>None</em></md-option>
-                  <md-option ng-repeat="building in buildingNames" ng-value="building">
-                    {{building}}
-                  </md-option>
-                </md-select>
-              </md-input-container>
-              <md-input-container>
-                <label>Room Number</label>
-                <input ng-model="removeStudentRoom.roomNumber">
-              </md-input-container>
-            </div>
-            <md-button class="md-accent md-raised" aria-label="Get Room Occupants" ng-click="selectRoomForRemoval()"
-            ng-disabled="!removeStudentRoom.buildingName || removeStudentRoom.buildingName === 'None' || !removeStudentRoom.roomNumber">Get Room Occupants</md-button>
-          </md-content>
+          <form name="removeStudentForm">
+            <md-content class="md-padding manual-remove-students-left">
+              Please select a room.
+              </br>
+              <div layout="row">
+                <md-input-container>
+                  <label>Building</label>
+                  <md-select class="select-building-name" ng-model="removeStudentRoom.buildingName">
+                    <md-option><em>None</em></md-option>
+                    <md-option ng-repeat="building in buildingNames" ng-value="building">
+                      {{building}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <md-input-container>
+                  <label>Room Number</label>
+                  <input name="roomNum" ng-model="removeStudentRoom.roomNumber">
+                  <div ng-messages="removeStudentForm.roomNum.$error.invalidnumber" ng-show="removeStudentForm.roomNum.$error.invalidnumber">
+                    <div ng-messages="removeStudentForm.roomNum.$error.invalidnumber">This room number is invalid for the selected building.</div>
+                  </div>
+                </md-input-container>
+              </div>
+              <md-button class="md-accent md-raised" aria-label="Get Room Occupants" ng-click="selectRoomForRemoval()"
+              ng-disabled="!removeStudentRoom.buildingName || removeStudentRoom.buildingName === 'None' || !removeStudentRoom.roomNumber">Get Room Occupants</md-button>
+            </md-content>
+          </form>
           <md-content class="md-padding manual-remove-students-right">
             <span style="display: block;" ng-show="manualRemoveStudentList.length">Room: {{ selectedRemoveStudentsRoom.buildingName }} {{ selectedRemoveStudentsRoom.roomNumber }}</span>
             <md-list ng-show="manualRemoveStudentList.length">
@@ -118,23 +126,28 @@
           <md-content class="md-padding manual-remove-students-left">
             Please select a room.
             </br>
-            <div layout="row">
-              <md-input-container>
-                <label>Building</label>
-                <md-select class="select-building-name" ng-model="checkAvailabilityRoom.buildingName">
-                  <md-option><em>None</em></md-option>
-                  <md-option ng-repeat="building in buildingNames" ng-value="building">
-                    {{building}}
-                  </md-option>
-                </md-select>
-              </md-input-container>
-              <md-input-container>
-                <label>Room Number</label>
-                <input ng-model="checkAvailabilityRoom.roomNumber">
-              </md-input-container>
-            </div>
-            <md-button class="md-accent md-raised" aria-label="Check availability" ng-click="checkRoomAvailability()"
-            ng-disabled="!checkAvailabilityRoom.buildingName || !checkAvailabilityRoom.buildingName === 'None' || !checkAvailabilityRoom.roomNumber">Check Availability</md-button>
+            <form name="checkAvailabilityForm">
+              <div layout="row">
+                <md-input-container>
+                  <label>Building</label>
+                  <md-select class="select-building-name" ng-model="checkAvailabilityRoom.buildingName">
+                    <md-option><em>None</em></md-option>
+                    <md-option ng-repeat="building in buildingNames" ng-value="building">
+                      {{building}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <md-input-container>
+                  <label>Room Number</label>
+                  <input name="roomNum" ng-model="checkAvailabilityRoom.roomNumber">
+                  <div ng-messages="checkAvailabilityForm.roomNum.$error.invalidnumber" ng-show="checkAvailabilityForm.roomNum.$error.invalidnumber">
+                    <div ng-messages="checkAvailabilityForm.roomNum.$error.invalidnumber">This room number is invalid for the selected building.</div>
+                  </div>
+                </md-input-container>
+              </div>
+              <md-button class="md-accent md-raised" aria-label="Check availability" ng-click="checkRoomAvailability()"
+              ng-disabled="!checkAvailabilityRoom.buildingName || !checkAvailabilityRoom.buildingName === 'None' || !checkAvailabilityRoom.roomNumber">Check Availability</md-button>
+            </form>
           </md-content>
           <md-content class="md-padding manual-remove-students-right">
             <span ng-show="!selectedCheckAvailabilityRoom">Status of room availability will appear here.</span>

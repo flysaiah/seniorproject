@@ -78,13 +78,15 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllUsers, lo
   $scope.manuallyAssignStudentsToRoom = function() {
     adminService.manuallyAssignStudentsToRoom($scope.buildingName, $scope.roomNumber, $scope.manualAddStudentsList).then(function(res) {
       if (!res.wasSuccessful) {
+        $scope.addStudentsForm.roomNum.$setValidity('invalidroom', false);
         $mdToast.show(
           $mdToast.simple()
-          .textContent('Error assigning student to room. Be sure you have a valid room number.')
+          .textContent('Error assigning students. Please ensure you have a valid room number.')
           .position('top right')
           .hideDelay(5000)
         );
       } else {
+        $scope.addStudentsForm.roomNum.$setValidity('invalidroom', true);
         $mdToast.show(
           $mdToast.simple()
           .textContent('You have successfully assigned the student to the room!')
@@ -104,19 +106,30 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllUsers, lo
 
   $scope.selectRoomForRemoval = function() {
     // Updates manualRemoveStudentList with list of occupants of the room that was just selected
-    getRoomInfo.getOccupantsDict($scope.removeStudentRoom.buildingName, [$scope.removeStudentRoom.roomNumber]).then(function(res) {
-      // TODO: We need a flag like wasSuccessful here so that we know if we can index into the dictionary with the room number
-      $scope.manualRemoveStudentList =  res.occupantsDict[$scope.removeStudentRoom.roomNumber].roomOccupants;
-      if (!$scope.manualRemoveStudentList.length) {
+    getRoomInfo.getOccupantsDict($scope.removeStudentRoom.buildingName, [$scope.removeStudentRoom.roomNumber], true).then(function(res) {
+      if (res.wasSuccessful) {
+        $scope.removeStudentForm.roomNum.$setValidity('invalidroom', true);
+        $scope.manualRemoveStudentList =  res.occupantsDict[$scope.removeStudentRoom.roomNumber].roomOccupants;
+        if (!$scope.manualRemoveStudentList.length) {
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('The room you selected has no occupants.')
+            .position('bottom left')
+            .hideDelay(5000)
+          );
+        } else {
+          $scope.selectedRemoveStudentsRoom = {"buildingName": $scope.removeStudentRoom.buildingName, "roomNumber": $scope.removeStudentRoom.roomNumber};
+        }
+      } else {
+        $scope.removeStudentForm.roomNum.$setValidity('invalidroom', false);
         $mdToast.show(
           $mdToast.simple()
-          .textContent('The room you selected has no occupants.')
-          .position('bottom left')
+          .textContent('Please ensure you have selected a valid room number.')
+          .position('top right')
           .hideDelay(5000)
         );
-      } else {
-        $scope.selectedRemoveStudentsRoom = {"buildingName": $scope.removeStudentRoom.buildingName, "roomNumber": $scope.removeStudentRoom.roomNumber};
       }
+
     });
   };
 
@@ -136,7 +149,6 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllUsers, lo
     $mdDialog.show(confirm).then(function() {
       adminService.manuallyRemoveStudentsFromRoom($scope.removeStudentRoom.buildingName, $scope.removeStudentRoom.roomNumber, [student]).then(function(res) {
         if (!res.wasSuccessful) {
-          console.log("Error removing student from room");
           $mdToast.show(
             $mdToast.simple()
             .textContent('There was a problem removing the student from the room.')
@@ -157,16 +169,27 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllUsers, lo
   };
 
   $scope.checkRoomAvailability = function() {
-    getRoomInfo.getOccupantsDict($scope.checkAvailabilityRoom.buildingName, [$scope.checkAvailabilityRoom.roomNumber]).then(function(res) {
-      // TODO: We need a flag like wasSuccessful here so that we know if we can index into the dictionary with the room number
-      var room = res.occupantsDict[$scope.checkAvailabilityRoom.roomNumber];
-      $scope.currentRoomAvailability = (room.isTaken) ? 0 : 1;
-      // occupantsInCARoom is true if there are occupants in the room; this disables the "Turn on room" button
-      $scope.occupantsInCARoom = room.roomOccupants.length ? 1 : 0;
-      // TODO: Have a helpful message appear saying "There are occupants in the room!"
+    getRoomInfo.getOccupantsDict($scope.checkAvailabilityRoom.buildingName, [$scope.checkAvailabilityRoom.roomNumber], true).then(function(res) {
+      if (!res.wasSuccessful) {
+        $scope.checkAvailabilityForm.roomNum.$setValidity('invalidroom', false);
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('Please ensure you have selected a valid room number.')
+          .position('top right')
+          .hideDelay(5000)
+        );
+      } else {
+        // reset validity
+        $scope.checkAvailabilityForm.roomNum.$setValidity('invalidroom', true);
+        var room = res.occupantsDict[$scope.checkAvailabilityRoom.roomNumber];
+        $scope.currentRoomAvailability = (room.isTaken) ? 0 : 1;
+        // occupantsInCARoom is true if there are occupants in the room; this disables the "Turn on room" button
+        $scope.occupantsInCARoom = room.roomOccupants.length ? 1 : 0;
+        // TODO: Have a helpful message appear saying "There are occupants in the room!"
 
-      // scope variable that remembers the room that was last "selected"
-      $scope.selectedCheckAvailabilityRoom = {"buildingName": $scope.checkAvailabilityRoom.buildingName, "roomNumber": $scope.checkAvailabilityRoom.roomNumber};
+        // scope variable that remembers the room that was last "selected"
+        $scope.selectedCheckAvailabilityRoom = {"buildingName": $scope.checkAvailabilityRoom.buildingName, "roomNumber": $scope.checkAvailabilityRoom.roomNumber};
+      }
     });
   };
 

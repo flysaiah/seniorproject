@@ -167,7 +167,7 @@ app.controller("navCtl", function($scope, $location, $window, $mdDialog, $rootSc
     // if we're looking at a floor plan, get information about room occupants of that floor
     if ($scope.currentBuilding !== 'campus' && $scope.floorNumber) {
       var roomList = generateRoomList($scope.currentBuilding, $scope.floorNumber);
-      getRoomInfo.getOccupantsDict($scope.currentBuilding, roomList).then(function(res) {
+      getRoomInfo.getOccupantsDict($scope.currentBuilding, roomList, false).then(function(res) {
         $scope.occupantsDict = res.occupantsDict;
       });
     }
