@@ -526,7 +526,7 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(102, "Larsen", 3);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(103, "Larsen", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(104, "Larsen", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(105, "Larsen", 2);
-INSERT INTO Rooms(roomNum, building, capacity) VALUES(106, "Larsen", 1);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(106, "Larsen", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(107, "Larsen", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(112, "Larsen", 1);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(113, "Larsen", 1);
@@ -657,7 +657,7 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(343, "Olson", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(344, "Olson", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(345, "Olson", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(346, "Olson", 2);
-INSERT INTO Rooms(roomNum, building, capacity) VALUES(348, "Olson", 2);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(348, "Olson", 1);
 
 
 
