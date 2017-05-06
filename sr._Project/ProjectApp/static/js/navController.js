@@ -150,6 +150,20 @@ app.controller("navCtl", function($scope, $location, $window, $mdDialog, $rootSc
           $scope.groupID = res.groupID;
           if ($scope.groupID) {
             $scope.canRegister = true;
+            // keep track of number of people in group / genders so we can check for capacity & gender restrictions
+            getGroupInfo.fetchGroupMembers($scope.currentUserID).then(function(res) {
+              $scope.numberOfGroupMembers = res.groupMembers.length;
+              var groupGender = null;
+              for (var i = 0; i < res.groupMembers.length; i++) {
+                var person = res.groupMembers[i];
+                if (!groupGender) {
+                  groupGender = person.sex;
+                } else if (groupGender == "M" && person.sex == "F" || groupGender == "F" && person.sex == "M") {
+                  groupGender = "B";
+                }
+              }
+              $scope.groupGender = groupGender;   // M = male, F = female, B = both/other
+            });
           }
         }
       });

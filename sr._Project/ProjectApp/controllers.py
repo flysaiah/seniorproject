@@ -301,18 +301,20 @@ def getRoomOccupantsDict():
 		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(room)+ '"and building="'+str(build)+'";'))
 		availability = 0
 		isTaken = 0
+		gender = ""
 		if check == None:
 			roomDict[room] = []
 
 		else:
 			query = db.engine.execute(text('select firstName, lastName, userName, isPending from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
-			query2 = db.engine.execute(text('select isTaken, available, capacity from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			query2 = db.engine.execute(text('select isTaken, available, capacity, sex from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
 			# BUG: if availability or isTaken are undefined, this block fails on line 320
 
 			for row in query2:
 				availability = row.available
 				isTaken = row.isTaken
 				capacity = row.capacity
+				gender = row.sex
 
 			for row in query:
 				isPending = row.isPending
@@ -325,7 +327,7 @@ def getRoomOccupantsDict():
 
 
 			availability = availability | isTaken
-			roomDict[room] = dict(roomOccupants=personList, isTaken=availability, capacity=capacity)
+			roomDict[room] = dict(roomOccupants=personList, isTaken=availability, capacity=capacity, gender=gender)
 
 	return jsonify(wasSuccessful=True, occupantsDict=roomDict)
 
