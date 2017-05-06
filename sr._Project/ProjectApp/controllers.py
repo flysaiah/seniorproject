@@ -195,13 +195,13 @@ def getGroupMembers():
 	for row in group_id_query:
 		group_id = row.gId
 
-	query = db.engine.execute(text('select firstName, lastName, userName, isPending from Users where ' + ' gId="'+str(group_id) +'";'))
+	query = db.engine.execute(text('select firstName, lastName, userName, isPending, sex from Users where ' + ' gId="'+str(group_id) +'";'))
 
 	for row in query:
 		if row.isPending == 0:
-			user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, userID=row.userName))
+			user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, userID=row.userName, sex=row.sex))
 		elif row.userName != uID:
-			pending_user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, userID=row.userName))
+			pending_user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, userID=row.userName, sex=row.sex))
 
 	return jsonify(groupMembers=user_List, requestingMembers=pending_user_List)
 
@@ -283,57 +283,53 @@ def registerForRoom():
 	db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(groupID)+'";'))
 	return jsonify(wasSuccessful=True)
 
-
-@app.route('/getRoomOccupants', methods=['POST'])
-def getRoomOccupants():
-	user_List = []
-	req = request.get_json()
-	build = req['buildingName'].capitalize()
-	roomNum = req['roomNumber']
-	query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where roomNum="'+str(roomNum)+'" and building="'+str(build)+'" and Users.gId=Rooms.gId;'))
-	for row in query:
-		x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
-		user_List.append(x)
-	return jsonify(roomOccupants=user_List)
-
-
 @app.route('/getRoomOccupantsDict', methods=['POST'])
 def getRoomOccupantsDict():
 	req = request.get_json()
 	roomDict = {}
 	build = req["buildingName"]
 	roomList = req["roomArray"]
+	isAdmin = req["isAdmin"]
+	if isAdmin:
+		# If this is being used in the admin panel, we need to check if the selected room is valid first
+		query = db.engine.execute(text('select available from Rooms where roomNum="' + str(roomList[0]) + '" and building="' + str(build) + '";'))
+		if query.rowcount < 1:
+			return jsonify(wasSuccessful=False)
 	for room in roomList:
 		capacity = None
 		personList = []
 		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(room)+ '"and building="'+str(build)+'";'))
 		availability = 0
 		isTaken = 0
+		gender = ""
 		if check == None:
 			roomDict[room] = []
 
 		else:
-			query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
-			query2 = db.engine.execute(text('select isTaken, available, capacity from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			query = db.engine.execute(text('select firstName, lastName, userName, isPending from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			query2 = db.engine.execute(text('select isTaken, available, capacity, sex from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
 			# BUG: if availability or isTaken are undefined, this block fails on line 320
 
 			for row in query2:
 				availability = row.available
 				isTaken = row.isTaken
 				capacity = row.capacity
+				gender = row.sex
 
 			for row in query:
-				x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
-				personList.append(x)
+				isPending = row.isPending
+				if isPending == False:
+					x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
+					personList.append(x)
 
 			if personList == []:
 				db.engine.execute(text('update Rooms set isTaken=0, gId=NULL where roomNum="'+str(room)+'" and building="'+str(build)+'";'))
 
 
 			availability = availability | isTaken
-			roomDict[room] = dict(roomOccupants=personList, isTaken=availability, capacity=capacity)
+			roomDict[room] = dict(roomOccupants=personList, isTaken=availability, capacity=capacity, gender=gender)
 
-	return jsonify(occupantsDict=roomDict)
+	return jsonify(wasSuccessful=True, occupantsDict=roomDict)
 
 @app.route('/getAllRoomNumbers', methods=['GET'])
 def getAllRooms():
@@ -361,11 +357,13 @@ def getAllRooms():
 def getRegistrationStatus():
 	req = request.get_json()
 	groupID = req['groupID']
-	query = db.engine.execute(text('select drawDate, isRegistered, roomNum, building from Groups, Rooms where groupId="'+str(groupID)+'" and gId="'+str(groupID)+'";'))
+	query = db.engine.execute(text('select drawDate, isRegistered from Groups where groupId="'+str(groupID)+'";'))
+	query2 = db.engine.execute(text('select roomNum, building from Rooms where gId="'+str(groupID)+'";'))
 	regTime = isRegistered = roomNum = buildingName = None
 	for row in query:
 		regTime = row.drawDate
 		isRegistered = row.isRegistered
+	for row in query2:
 		roomNum = row.roomNum
 		buildingName = row.building
 	return jsonify(registrationTime=regTime, hasRegistered=isRegistered, roomNumber=roomNum, buildingName=buildingName)
@@ -422,36 +420,34 @@ def switchRoomAvailablility():
 
 @app.route('/manuallyAssignStudentsToRoom', methods=['POST'])
 def manuallyAssignRoom():
-	reason = "Unknown"
-	try:
-		req = request.get_json()
-		build = req['buildingName']
-		roomNum = req['roomNumber']
-		userList = req['userList']
+	req = request.get_json()
+	build = req['buildingName']
+	roomNum = req['roomNumber']
+	userList = req['userList']
+	# First we need to check if the room number is valid 
+	query = db.engine.execute(text('select available from Rooms where roomNum="' + str(roomNum) + '" and building="' + str(build) + '";'))
+	if query.rowcount < 1:
+		return jsonify(wasSuccessful=False)
+	gId = None
+	check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+	if check == None:
+		return(jsonify(wasSuccessful=False, reason="RB"))
+	for row in check:
+		gId = row.gId
 
-		gId = None
-		check = db.engine.execute(text('select gId from Rooms where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
-		if check == None:
-			return(jsonify(wasSuccessful=False, reason="RB"))
-		for row in check:
-			gId = row.gId
+	if gId == None:
+		db.engine.execute(text('INSERT INTO Groups() VALUES();'))
+		# query = db.engine.execute(text('SELECT LAST_INSERT_ID();'))
+		query = db.engine.execute('select MAX(groupID) from Groups;')
+		for row in query:
+		 	gId = row[0]
 
-		if gId == None:
-			db.engine.execute(text('INSERT INTO Groups() VALUES();'))
-			# query = db.engine.execute(text('SELECT LAST_INSERT_ID();'))
-			query = db.engine.execute('select MAX(groupID) from Groups;')
-			for row in query:
-			 	gId = row[0]
+	for user in userList:
+		db.engine.execute(text('update Users set isPending=0, gId="'+str(gId)+'" where userName="'+str(user)+'";'))
 
-		for user in userList:
-			db.engine.execute(text('update Users set isPending=0, gId="'+str(gId)+'" where userName="'+str(user)+'";'))
-
-		db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
-		db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(gId)+'";'))
-		return(jsonify(wasSuccessful=True))
-
-	except:
-		return(jsonify(wasSuccessful=False))
+	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+	db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(gId)+'";'))
+	return(jsonify(wasSuccessful=True))
 
 
 @app.route('/manuallyRemoveStudentsFromRoom', methods=['POST'])

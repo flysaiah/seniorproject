@@ -12,7 +12,6 @@
   <div ng-show="currentBuilding !== 'campus'">
     <p>Welcome to {{ currentBuilding }}!</p>
     <div class="form-group">
-      <!-- TODO: Replace with md-select -->
       <label for="floorpicker">Floor number:</label>
       <md-select class="floorpicker" id="floorpicker" ng-model="floorNumber">
         <md-option ng-value="floorNum" ng-repeat="floorNum in floorList">{{ floorNum }}</option>
@@ -243,8 +242,13 @@
   <md-content ng-controller="RightCtrl" layout-padding>
 
     <div ng-show="!occupantsDict[roomNumber].isTaken">
+      Capacity: {{ occupantsDict[roomNumber].capacity }}
+      <br>
+      Gender: {{ occupantsDict[roomNumber].gender == "M" ? "Male" : (occupantsDict[roomNumber].gender == "F" ? "Female" : "Gender neutral")}}
+      <br>
+      <br>
       Room currently available.
-      <md-button ng-show="role !== 'admin'" class="md-primary md-raised" ng-disabled="!canRegister" aria-label="Register" ng-click="registerForRoom()">Register</md-button>
+      <md-button ng-show="role !== 'admin'" class="md-primary md-raised" ng-disabled="!canRegister || numberOfGroupMembers > occupantsDict[roomNumber].capacity || (groupGender != occupantsDict[roomNumber].gender && occupantsDict[roomNumber].gender != 'B')" aria-label="Register" ng-click="registerForRoom()">Register</md-button>
       <md-button ng-show="role === 'admin'" ng-disabled="occupantsDict[roomNumber].roomOccupants.length" class="md-warn md-raised" aria-label="Turn {{ occupantsDict[roomNumber].isTaken && occupantsDict[roomNumber].roomOccupants.length < 1 ? 'On' : 'Off' }} Room" ng-click="switchRoomAvailability()">Turn {{ occupantsDict[roomNumber].isTaken && occupantsDict[roomNumber].roomOccupants.length < 1 ? 'On' : 'Off' }} Room</md-button>
     </div>
 
