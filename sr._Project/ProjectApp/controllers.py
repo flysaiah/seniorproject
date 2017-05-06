@@ -313,7 +313,7 @@ def getRoomOccupantsDict():
 			roomDict[room] = []
 
 		else:
-			query = db.engine.execute(text('select firstName, lastName, userName from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
+			query = db.engine.execute(text('select firstName, lastName, userName, isPending from Rooms, Users where Rooms.gId = Users.gId and roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
 			query2 = db.engine.execute(text('select isTaken, available, capacity from Rooms where roomNum ="' +str(room)+ '"and building="'+str(build)+'";'))
 			# BUG: if availability or isTaken are undefined, this block fails on line 320
 
@@ -323,8 +323,10 @@ def getRoomOccupantsDict():
 				capacity = row.capacity
 
 			for row in query:
-				x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
-				personList.append(x)
+				isPending = row.isPending
+				if isPending == False:
+					x = dict(firstName=row.firstName, lastName=row.lastName, userID=row.userName)
+					personList.append(x)
 
 			if personList == []:
 				db.engine.execute(text('update Rooms set isTaken=0, gId=NULL where roomNum="'+str(room)+'" and building="'+str(build)+'";'))
@@ -361,11 +363,13 @@ def getAllRooms():
 def getRegistrationStatus():
 	req = request.get_json()
 	groupID = req['groupID']
-	query = db.engine.execute(text('select drawDate, isRegistered, roomNum, building from Groups, Rooms where groupId="'+str(groupID)+'" and gId="'+str(groupID)+'";'))
+	query = db.engine.execute(text('select drawDate, isRegistered from Groups where groupId="'+str(groupID)+'";'))
+	query2 = db.engine.execute(text('select roomNum, building from Rooms where gId="'+str(groupID)+'";'))
 	regTime = isRegistered = roomNum = buildingName = None
 	for row in query:
 		regTime = row.drawDate
 		isRegistered = row.isRegistered
+	for row in query2:
 		roomNum = row.roomNum
 		buildingName = row.building
 	return jsonify(registrationTime=regTime, hasRegistered=isRegistered, roomNumber=roomNum, buildingName=buildingName)

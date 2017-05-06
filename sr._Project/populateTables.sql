@@ -14,14 +14,15 @@ USE projectdb
 ########################################
 
 # The first 5 groups are reserved for deadline preferences
-INSERT INTO Groups() VALUES(); # stores group deadline and interval between available room draw times
-INSERT INTO Groups() VALUES(); # stores the starting registration date
-INSERT INTO Groups() VALUES(); # stores the final registration date
-INSERT INTO Groups() VALUES(); # stores start time
-INSERT INTO Groups() VALUES(); # stores end time
+INSERT INTO Groups(drawDate,timeInterval) VALUES('2017-02-04 18:00:00', 5); # stores group deadline and interval between available room draw times
+INSERT INTO Groups(drawDate) VALUES('2017-03-04 18:00:00'); # stores the starting registration date
+INSERT INTO Groups(drawDate) VALUES('2017-05-15 18:00:00'); # stores the final registration date
+INSERT INTO Groups(drawDate) VALUES('1111-11-11 18:00:00'); # stores start time
+INSERT INTO Groups(drawDate) VALUES('1111-11-11 22:00:00'); # stores end time
+
 
 # Creating Test Groups for test users
-INSERT INTO Groups(drawDate) VALUES ('2016-03-04 18:00:00');
+INSERT INTO Groups(drawDate) VALUES ('2017-05-03 06:00:00');
 INSERT INTO Groups() VALUES();
 INSERT INTO Groups() VALUES();
 INSERT INTO Groups() VALUES();
@@ -33,22 +34,22 @@ INSERT INTO Groups() VALUES();
 ########################################
 ##        creatiing Test Users        ##
 ########################################
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("smitze01","Zechariah","Smith", "admin", 6, 65, 20);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("mayeis01","Isaiah","Mayerchak", "admin", 6, 120, 1);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("smitze01","Zechariah","Smith", "student", 6, 65, 20);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("mayeis01","Isaiah","Mayerchak", "student", 6, 120, 1);
 INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("saudih01","Ihab","Saud", "admin", 85, 2);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum, isPending) VALUES ("test01","Testy","McTest", "student", 7, 1, 4, true);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test02","Testy","Test", "student", 6, 2, 5);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test03","Testy","MacTest", "student", 6, 3, 6);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test04","Testy","Testerson", "student", 8, 4, 7);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test05","Testy","Testus", "student", 6, 5, 8);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test06","Testy","Tester", "student", 8, 6, 9);
-INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("test07","Testy","Testin", "student", 7, 10);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test08","Testy","Testenheimer", "student", 7, 8, 11);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test09","Testy","Testbuscus", "student", 6, 9, 12);
-INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("test10","Testy","Testicule", "student", 10, 13);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test11","Testy","McT", "student", 9, 11, 14);
-INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("test12","Testy","Testeese", "student", 12, 15);
-INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test13","Testy","Testington", "student", 8, 13, 16);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum, isPending) VALUES ("test01","Adam","Larsen", "student", 7, 1, 4, true);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum, isPending) VALUES ("vangca01","Carl","Van Gogh", "student", 6, 2, 5, true);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("yasiro01","Ro-Dog","Yasinovskyy", "student", 10, 3, 6);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("leeke01","Kent","Lee", "student", 8, 4, 7);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("millbr01","Brad","Miller", "student", 8, 5, 8);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("provto01","Tomi","Provo", "student", 12, 6, 9);
+INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("lariga02","Gary","Larimore", "student", 7, 10);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("test08","Elane","Cheadle", "student", 7, 8, 11);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum, isPending) VALUES ("leja01","Jack","Le", "student", 6, 9, 12, true);
+INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("gileis03","Isaac","Giles", "student", 10, 13);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("webbfa02","Fatima","Webb", "student", 9, 11, 14);
+INSERT INTO Users (userName, firstName, lastName, role, credits, roomDrawNum) VALUES ("pottka06","Kaitlynn","Potter", "student", 12, 15);
+INSERT INTO Users (userName, firstName, lastName, role, gId, credits, roomDrawNum) VALUES ("bradda02","Daisy","Bradley", "student", 10, 13, 16);
 
 ########################################
 ##        Inserting Building          ##
@@ -131,7 +132,7 @@ INSERT INTO Rooms(roomNum, building, capacity) VALUES(302, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity, isTaken, gId) VALUES(303, "Miller", 2, true, 8);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(304, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(305, "Miller", 2);
-INSERT INTO Rooms(roomNum, building, capacity, isTaken, gId) VALUES(306, "Miller", 2, true, 6);
+INSERT INTO Rooms(roomNum, building, capacity) VALUES(306, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(307, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(308, "Miller", 2);
 INSERT INTO Rooms(roomNum, building, capacity) VALUES(309, "Miller", 2);
