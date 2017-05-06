@@ -195,13 +195,13 @@ def getGroupMembers():
 	for row in group_id_query:
 		group_id = row.gId
 
-	query = db.engine.execute(text('select firstName, lastName, userName, isPending from Users where ' + ' gId="'+str(group_id) +'";'))
+	query = db.engine.execute(text('select firstName, lastName, userName, isPending, sex from Users where ' + ' gId="'+str(group_id) +'";'))
 
 	for row in query:
 		if row.isPending == 0:
-			user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, userID=row.userName))
+			user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, userID=row.userName, sex=row.sex))
 		elif row.userName != uID:
-			pending_user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, userID=row.userName))
+			pending_user_List.append(dict(FirstName=row.firstName, LastName=row.lastName, userID=row.userName, sex=row.sex))
 
 	return jsonify(groupMembers=user_List, requestingMembers=pending_user_List)
 
