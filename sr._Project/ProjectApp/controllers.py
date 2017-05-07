@@ -26,6 +26,7 @@ from ProjectApp import app, db, models, google
 
 from apscheduler.schedulers.background import BackgroundScheduler
 sched = BackgroundScheduler()
+sched.add_jobstore('sqlalchemy', engine=db.engine)
 sched.start()
 
 @app.after_request
@@ -441,7 +442,14 @@ def manuallyAssignRoom():
 		 	gId = row[0]
 
 	for user in userList:
+		query = db.engine.execute(text('select gId from Users where userName="'+str(user)+'";'))
+		for row in query:
+			uId = row.gId
+		query2 = db.engine.execute(text('select * from Users where gId="'+str(uId)+'";'))
+		if query2.rowcount <= 1:
+			db.engine.execute(text('update Rooms set isTaken=0, gId=NULL where gId="'+str(uId)+'";'))
 		db.engine.execute(text('update Users set isPending=0, gId="'+str(gId)+'" where userName="'+str(user)+'";'))
+
 
 	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
 	db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(gId)+'";'))
@@ -496,31 +504,6 @@ def getAutoRegPref():
 	return jsonify(autoRegEnabled=True,autoRegPref=roomList)
 
 
-def autoReg():
-	query = db.engine.execute(text('select * from Groups where drawDate and groupID>5;'))
-	for row in query:
-		isReg = row.isRegistered
-		gId =row.groupId
-		drawDate = row.drawDate
-		if isReg == True:
-			continue
-		query2 = db.engine.execute(text('select enabled, building, defaultPref, roomNum from Preferences where Preferences.gId = "'+str(gId)+'";'))
-		for row2 in query2:
-			args = []
-			if row2.enabled == False:
-				break
-			args.append(gId)
-			args.append(row2.building)
-			args.append(row2.roomNum)
-			sched.add_date_job(registerForRoom, drawDate, args)
-
-def registerForRoom(args):
-	gId = args[0]
-	build = args[1]
-	room = args[2]
-	query = db.engine.execute(text('select isTaken, isRegistered from Rooms, Groups where groupId="'+str(gId)+'" and roomNum="'+str(roomNum)+'";'))
-	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
-
 @app.route('/saveAutoRegPref', methods=['POST'])
 def saveAutoRegPref():
 	req = request.get_json()
@@ -555,9 +538,61 @@ def saveAutoRegPref():
 
 	return(jsonify(wasSuccessful=True))
 
+
+def schedAutoReg():
+	query = db.engine.execute(text('select * from Groups where drawDate and groupID>5;')) # because the first 5 entries of groups are reserved for deadlines
+	for row in query:
+		isReg = row.isRegistered
+		gId =row.groupId
+		drawDate = row.drawDate
+		if isReg == True:
+			continue
+		args = [gId]
+		sched.add_date_job(registerForRoom, drawDate, args, id=str(gId))
+
+def autoReg(args):
+	gId = args[0]
+	query2 = db.engine.execute(text('select enabled, building, defaultPref, roomNum from Preferences where Preferences.gId = "'+str(gId)+'";'))
+	roomList = []
+	for row2 in query2:
+		args = []
+		if row2.enabled == False:
+			break
+		roomList.append(dict(building=row2.building, roomNum=row2.roomNum, defaultPref=row2.defaultPref, gId=gId))
+
+	index = 0
+	for room in roomList:
+		gId = room[gId]
+		roomNum = room[roomNum]
+		building = room[building]
+		if room[defaultPref] == True:
+			defIndex = index
+			continue
+		index += 1
+
+		query = db.engine.execute(text('select isTaken, isRegistered from Rooms, Groups where groupId="'+str(gId)+'" and roomNum="'+str(roomNum)+'";'))
+		for row in query:
+			if row.isTaken == True or row.isRegistered == True:
+				return
+			db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+
+	gId = roomList[defIndex][gId]
+	roomNum = roomList[defIndex][roomNum]
+	building = roomList[defIndex][building]
+
+	query = db.engine.execute(text('select isTaken, isRegistered from Rooms, Groups where groupId="'+str(gId)+'" and roomNum regexp "^'+str(roomNum)+'";'))
+	for row in query:
+		if row.isTaken == True or row.isRegistered == True:
+			return
+		db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+
+
 ####################################
 ##        Group Deadlines         ##
 ####################################
+def hitDeadline():
+	assignRoomDrawTimes() # assignes roomDraw times for groups
+	schedAutoReg()
 
 @app.route('/saveDeadlinePreferences', methods=['POST'])
 def saveDeadlinePreferences():
@@ -567,6 +602,8 @@ def saveDeadlinePreferences():
 	gd = req['groupsDeadline']
 	gdt = datetime.datetime(gd['year'], gd['month'], gd['day'])
 	interval = req['timeInterval']
+
+	sched.add_date_job(hitDeadline, gdt, id="groupDeadline",replace_existing=True) #updates the APSechduler for when autoReg is called
 
 	st = req['startTime']
 	stt = datetime.datetime(1111, 1, 1, st['hour'], st['minute'])
