@@ -16,12 +16,14 @@ app.factory('getGroupInfo', function($http) {
           {
             "FirstName": "Isaiah",
             "LastName": "Mayerchak",
-            "userID": "mayeis01"
+            "userID": "mayeis01",
+            "sex": "M"
           },
           {
             "FirstName": "Testy",
             "LastName": "Tester",
-            "userID": "testuser01"
+            "userID": "testuser01",
+            "sex": "F"
           }
         ];
 
@@ -29,12 +31,14 @@ app.factory('getGroupInfo', function($http) {
           {
             "FirstName": "Zeke",
             "LastName": "Smith",
-            "userID": "smitze01"
+            "userID": "smitze01",
+            "sex": "M"
           },
           {
             "FirstName": "Ihab",
             "LastName": "Saud",
-            "userID": "saudih01"
+            "userID": "saudih01",
+            "sex": "F"
           }
         ];
         var data = {"groupMembers": testGroupMembers, "requestingMembers": testRequestingMembers}
@@ -300,7 +304,7 @@ app.factory('getRoomInfo', function($http) {
         // for testing
         var testData = {
           "101":
-          {"isTaken": true, "roomOccupants": [
+          {"isTaken": true, "capacity": 2, "gender": "M", "roomOccupants": [
             {
               "firstName": "Isaiah",
               "lastName": "Mayerchak",
@@ -312,8 +316,8 @@ app.factory('getRoomInfo', function($http) {
               "userID": "testuser01"
             }
           ]},
-          "102": {"isTaken": false, "roomOccupants": []},
-          "103": {"isTaken": true, "roomOccupants": []}
+          "102": {"isTaken": false, "capacity": 2, "gender": "M", "roomOccupants": []},
+          "103": {"isTaken": true, "capacity": 2, "gender": "M", "roomOccupants": []}
         }
 
         return {"occupantsDict": testData};

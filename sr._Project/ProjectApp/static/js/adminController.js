@@ -122,6 +122,7 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllUsers, lo
         }
       } else {
         $scope.removeStudentForm.roomNum.$setValidity('invalidroom', false);
+        $scope.manualRemoveStudentList = [];
         $mdToast.show(
           $mdToast.simple()
           .textContent('Please ensure you have selected a valid room number.')
@@ -172,6 +173,7 @@ app.controller("adminCtl", function($scope, $mdDialog, $mdToast, getAllUsers, lo
     getRoomInfo.getOccupantsDict($scope.checkAvailabilityRoom.buildingName, [$scope.checkAvailabilityRoom.roomNumber], true).then(function(res) {
       if (!res.wasSuccessful) {
         $scope.checkAvailabilityForm.roomNum.$setValidity('invalidroom', false);
+        $scope.selectedCheckAvailabilityRoom = null;
         $mdToast.show(
           $mdToast.simple()
           .textContent('Please ensure you have selected a valid room number.')
