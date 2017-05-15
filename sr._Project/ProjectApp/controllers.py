@@ -12,6 +12,7 @@ import datetime
 import time
 import json
 import datetime
+import math
 from wsgiref.handlers import format_date_time
 
 from flask import Flask, request, Response, session
@@ -371,30 +372,50 @@ def getRegistrationStatus():
 
 def assignRoomDrawTimes():
 	dlp = fetchDeadlinesPreferences(True)
-	query = db.engine.execute(text('select gId, AVG(roomDrawNum) from Users where gId group by gId order by AVG(roomDrawNum) DESC;'))
+	query = db.engine.execute(text('select gId, AVG(roomDrawNum) from Users where isPending="0" and gId group by gId order by AVG(roomDrawNum);'))
 	dt = dlp['firstRegistrationDate']
+	lrt = dlp['lastRegistrationDate']
 	startTime= dlp['startTime']
 	inc = dlp['timeInterval']
+	time = dt
+	count = 0
+	while time.date() < lrt.date():
+		if time.weekday() == 4:
+			time += datetime.timedelta(days=3)
+		else:
+			time += datetime.timedelta(days=1)
+		count += 1
+
+	mins = (dlp['endTime'].hour - startTime.hour) * 60
+	n = math.ceil(query.rowcount/((mins//5)*count))
+	dayn = 0
 	for row in query:
 		gId = row.gId
-		if dt > dlp['lastRegistrationDate']:
-			dlp['lastRegistrationDate']
-
-		db.engine.execute(text('update Groups set drawDate="'+str(dt)+'" where groupID="'+str(gId)+'";'))
-
-		if dt == dlp['lastRegistrationDate']:
-			dlp['lastRegistrationDate']
-
-		elif dt.weekday() == 4 and dt.time() >= dlp['endTime'].time():
-			dt = dt.combine(dt.date(), startTime.time())
-			dt = dt + datetime.timedelta(days=3)
-
-		elif dt.time() >= dlp['endTime'].time():
-			dt = dt.combine(dt.date(), startTime.time())
-			dt = dt + datetime.timedelta(days=1)
-
+		print("dayn", dayn,"n", n)
+		if dayn < n:
+			dayn += 1
+			db.engine.execute(text('update Groups set drawDate="'+str(dt)+'" where groupID="'+str(gId)+'";'))
 		else:
-			dt = dt + datetime.timedelta(minutes=inc)
+			dayn = 0
+			if dt > dlp['lastRegistrationDate']:
+				dt = dlp['lastRegistrationDate']
+
+
+			if dt == dlp['lastRegistrationDate']:
+				dt = dlp['lastRegistrationDate']
+
+			elif dt.weekday() == 4 and dt.time() >= dlp['endTime'].time():
+				dt = dt.combine(dt.date(), startTime.time())
+				dt = dt + datetime.timedelta(days=3)
+
+			elif dt.time() >= dlp['endTime'].time():
+				dt = dt.combine(dt.date(), startTime.time())
+				dt = dt + datetime.timedelta(days=1)
+
+			else:
+				dt = dt + datetime.timedelta(minutes=inc)
+
+			db.engine.execute(text('update Groups set drawDate="'+str(dt)+'" where groupID="'+str(gId)+'";'))
 
 
 ####################################
@@ -650,3 +671,6 @@ def fetchDeadlinesPreferences(fromPy=False):
 		return deadlinePrefs
 
 	return jsonify(deadlinePrefs=deadlinePrefs)
+
+
+assignRoomDrawTimes()

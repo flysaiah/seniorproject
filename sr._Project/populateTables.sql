@@ -34,22 +34,22 @@ INSERT INTO Groups() VALUES();
 ########################################
 ##        creatiing Test Users        ##
 ########################################
-INSERT INTO Users (userName, firstName, lastName, role, gId, sex, credits, roomDrawNum) VALUES ("smitze01","Zechariah","Smith", "student", 6, "M", 65, 20);
-INSERT INTO Users (userName, firstName, lastName, role, gId, sex, credits, roomDrawNum) VALUES ("mayeis01","Isaiah","Mayerchak", "student", 6, "M", 120, 1);
-INSERT INTO Users (userName, firstName, lastName, role, sex, credits, roomDrawNum) VALUES ("saudih01","Ihab","Saud", "admin", "M", 85, 2);
-INSERT INTO Users (userName, firstName, lastName, role, gId, sex, credits, roomDrawNum, isPending) VALUES ("test01","Adam","Larsen", "student", 7, "M", 1, 4, true);
-INSERT INTO Users (userName, firstName, lastName, role, gId, sex, credits, roomDrawNum, isPending) VALUES ("vangca01","Carl","Van Gogh", "student", 6, "M", 2, 5, true);
-INSERT INTO Users (userName, firstName, lastName, role, gId, sex, credits, roomDrawNum) VALUES ("yasiro01","Ro-Dog","Yasinovskyy", "student", 10, "M", 3, 6);
-INSERT INTO Users (userName, firstName, lastName, role, gId, sex, credits, roomDrawNum) VALUES ("leeke01","Kent","Lee", "student", 8, "M", 4, 7);
-INSERT INTO Users (userName, firstName, lastName, role, gId, sex, credits, roomDrawNum) VALUES ("millbr01","Brad","Miller", "student", 8, "M", 5, 8);
-INSERT INTO Users (userName, firstName, lastName, role, gId, sex, credits, roomDrawNum) VALUES ("provto01","Tomi","Provo", "student", 12, "M", 6, 9);
-INSERT INTO Users (userName, firstName, lastName, role, sex, credits, roomDrawNum) VALUES ("lariga02","Gary","Larimore", "student", "M", 7, 10);
-INSERT INTO Users (userName, firstName, lastName, role, gId, sex, credits, roomDrawNum) VALUES ("test08","Elane","Cheadle", "student", 7, "F", 8, 11);
-INSERT INTO Users (userName, firstName, lastName, role, gId, sex, credits, roomDrawNum, isPending) VALUES ("leja01","Jack","Le", "student", 6, "M", 9, 12, true);
-INSERT INTO Users (userName, firstName, lastName, role, sex, credits, roomDrawNum) VALUES ("gileis03","Isaac","Giles", "student", "M", 10, 13);
-INSERT INTO Users (userName, firstName, lastName, role, gId, sex, credits, roomDrawNum) VALUES ("webbfa02","Fatima","Webb", "student", 9, "F", 11, 14);
-INSERT INTO Users (userName, firstName, lastName, role, sex, credits, roomDrawNum) VALUES ("pottka06","Kaitlynn","Potter", "student", "F", 12, 15);
-INSERT INTO Users (userName, firstName, lastName, role, gId, sex, credits, roomDrawNum) VALUES ("bradda02","Daisy","Bradley", "student", 10, "F", 13, 16);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "smitze01","Zechariah","Smith", "student", 6, "M", 20);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "mayeis01","Isaiah","Mayerchak", "student", 6, "M", 1);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, sex, roomDrawNum) VALUES (123456, "saudih01","Ihab","Saud", "admin", "M", 85, 2);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum, isPending) VALUES (123456, "test01","Adam","Larsen", "student", 7, "M", 4, true);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum, isPending) VALUES (123456, "vangca01","Carl","Van Gogh", "student", 6, "M", 5, true);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "yasiro01","Ro-Dog","Yasinovskyy", "student", 10, "M", 6);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "leeke01","Kent","Lee", "student", 8, "M", 7);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "millbr01","Brad","Miller", "student", 8, "M", 8);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "provto01","Tomi","Provo", "student", 12, "M", 9);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "lariga02","Gary","Larimore", "student", 13, "M", 10);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "test08","Elane","Cheadle", "student", 7, "F", 11);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum, isPending) VALUES (123456, "leja01","Jack","Le", "student", 6, "M", 12, true);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "gileis03","Isaac","Giles", "student", 11, "M",  13);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "webbfa02","Fatima","Webb", "student", 9, "F",  14);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "pottka06","Kaitlynn","Potter", "student", 11, "F",  15);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "bradda02","Daisy","Bradley", "student", 10, "F",  16);
 
 ########################################
 ##        Inserting Building          ##
