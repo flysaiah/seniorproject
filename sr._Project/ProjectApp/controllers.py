@@ -621,14 +621,33 @@ def hitDeadline():
 
 @app.route("/uploadStudentRecords", methods=['POST'])
 def uploadStudentRecords():
-    print("----------\n\n", request.get_array(field_name='file'), "\n\n---------------")
-    return redirect("/importExport")
+	excel_doc = request.get_array(field_name='file')
+	#print("----------\n\n", excel_doc, "\n\n---------------")
+	firstRow = True
+	for row in excel_doc:
+		if firstRow:   # First row is just column names
+			firstRow = False
+			continue
+		if row[0] == "":
+			# we've hit the EOF or there's an empty line
+			continue
+		rdNum = row[5]
+		if rdNum == "":
+			rdNum = 0
+		print("DSJLKDJKLSDJFKLLDKJFD")
+		print(row)
+		query = 'INSERT INTO Users (userName, firstName, lastName, role, sex, roomDrawNum, studentId) VALUES ("{}", "{}", "{}", "{}", "{}", "{}", "{}") ON DUPLICATE KEY UPDATE firstName="{}", lastName="{}", role="{}", sex="{}", roomDrawNum="{}", studentId="{}"'
+		db.engine.execute(text(query.format(row[4].split("@")[0], row[1], row[2], row[6], row[3], rdNum, row[0], row[1], row[2], row[6], row[3], rdNum, row[0])))
+	return redirect("/importExport")
 
 @app.route("/uploadRoomRecords", methods=['POST'])
 def uploadRoomRecords():
-    print("----------\n\n", request.get_array(field_name='file'), "\n\n---------------")
-    return redirect("/importExport")
+	print("----------\n\n", request.get_array(field_name='file'), "\n\n---------------")
+	return redirect("/importExport")
 
+@app.route("/exportStudentRecords", methods=['GET'])
+def export_records():
+	return excel.make_response_from_array([[1,2], [3, 4]], "xlsx", file_name="student_records")
 
 @app.route('/saveDeadlinePreferences', methods=['POST'])
 def saveDeadlinePreferences():

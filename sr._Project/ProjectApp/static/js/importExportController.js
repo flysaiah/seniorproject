@@ -12,15 +12,4 @@ app.controller("importExportCtl", function($scope, loginService) {
       $scope.role = null;
     }
   });
-
-  $scope.exportStudentRecords = function() {
-    // export student info as an excel doc
-    console.log("Export student records");
-  };
-
-  $scope.exportRoomRecords = function() {
-    // export room info as an excel doc
-    console.log("Export room records");
-  };
-
 });
