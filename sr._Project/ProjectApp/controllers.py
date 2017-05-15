@@ -391,7 +391,6 @@ def assignRoomDrawTimes():
 	dayn = 0
 	for row in query:
 		gId = row.gId
-		print("dayn", dayn,"n", n)
 		if dayn < n:
 			dayn += 1
 			db.engine.execute(text('update Groups set drawDate="'+str(dt)+'" where groupID="'+str(gId)+'";'))

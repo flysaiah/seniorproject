@@ -34,9 +34,9 @@ INSERT INTO Groups() VALUES();
 ########################################
 ##        creatiing Test Users        ##
 ########################################
-INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "smitze01","Zechariah","Smith", "student", 6, "M", 20);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "smitze01","Zechariah","Smith", "admin", 6, "M", 20);
 INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "mayeis01","Isaiah","Mayerchak", "student", 6, "M", 1);
-INSERT INTO Users (studentId,userName, firstName, lastName, role, sex, roomDrawNum) VALUES (123456, "saudih01","Ihab","Saud", "admin", "M", 85, 2);
+INSERT INTO Users (studentId,userName, firstName, lastName, role, sex, roomDrawNum) VALUES (123456, "saudih01","Ihab","Saud", "admin", "M", 2);
 INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum, isPending) VALUES (123456, "test01","Adam","Larsen", "student", 7, "M", 4, true);
 INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum, isPending) VALUES (123456, "vangca01","Carl","Van Gogh", "student", 6, "M", 5, true);
 INSERT INTO Users (studentId,userName, firstName, lastName, role, gId, sex, roomDrawNum) VALUES (123456, "yasiro01","Ro-Dog","Yasinovskyy", "student", 10, "M", 6);
