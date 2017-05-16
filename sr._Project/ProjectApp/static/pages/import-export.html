@@ -36,8 +36,12 @@
           Export data from database as an Excel document.
           </br></br>
           <div class="md-padding">
-            <md-button ng-click="exportStudentRecords()" type="submit" class="md-warn md-raised">Export Student Records</md-button>
-            <md-button ng-click="exportRoomRecords()" type="submit" class="md-warn md-raised">Export Room Records</md-button>
+            <form style="display: inline" action="/exportStudentRecords" method="get" download="student_records">
+              <md-button type="submit" class="md-warn md-raised">Export Student Records</md-button>
+            </form>
+            <form style="display: inline" action="/exportRoomRecords" method="get" download="room_records">
+              <md-button type="submit" class="md-warn md-raised">Export Room Records</md-button>
+            </form>
           </div>
         </md-tab>
       </md-tabs>
