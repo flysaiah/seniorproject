@@ -108,7 +108,11 @@ app.controller("navCtl", function($scope, $location, $window, $mdDialog, $rootSc
   }
 
   $scope.adminPanel = function() {
-    $location.path("/adminPanel")
+    $location.path("/adminPanel");
+  }
+
+  $scope.importExport = function() {
+    $location.path("/importExport");
   }
 
   $scope.logout = function() {

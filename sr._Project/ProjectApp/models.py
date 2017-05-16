@@ -33,13 +33,13 @@ class Groups(db.Model):
 
 class Users(db.Model):
 	__tablename__ = 'Users'
+	studentId = db.Column(INTEGER, nullable=False)
 	userName = db.Column(VARCHAR(30), nullable=False, primary_key=True)
 	firstName = db.Column(VARCHAR(30), nullable=False)
 	lastName = db.Column(VARCHAR(30), nullable=False)
 	role = db.Column(VARCHAR(30), nullable=False)
 	gId = db.Column(INTEGER, db.ForeignKey(Groups.groupId))
 	sex = db.Column(VARCHAR(30), nullable=False)
-	credits = db.Column(INTEGER, nullable=False)
 	roomDrawNum = db.Column(INTEGER, nullable=False)
 	isPending = db.Column(BOOLEAN, nullable=False, server_default=('0'))
 

@@ -157,7 +157,7 @@ app.controller("groupCtl", function($scope, $mdDialog, $mdToast, getGroupInfo, u
       $mdToast.simple()
       .textContent('You have sent ' + userObj.searchID + ' a group request.')
       .position('top right')
-      .hideDelay(50000)
+      .hideDelay(5000)
     );
     // clear field
     // clear field

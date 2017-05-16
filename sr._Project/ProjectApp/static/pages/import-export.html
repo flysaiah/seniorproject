@@ -1,0 +1,49 @@
+<div class="right-panel">
+  <md-card class="import-export" ng-show="isLoggedIn && role === 'admin'">
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">Import/Export Data</span>
+      </md-card-title-text>
+    </md-card-title>
+    <md-card-content ng-show="isLoggedIn && role === 'admin'">
+      <md-tabs md-dynamic-height md-border-bottom>
+        <md-tab label="Import Data">
+          </br></br>
+          Upload Excel documents (.xlsx) here to update the database.
+          </br></br>
+          <md-content class="md-padding import-export-left">
+            Update student records here.
+            </br>
+            <!-- NOTE: Not sure how secure this is -->
+            <div layout="row">
+              <form action="/uploadStudentRecords" method=post enctype=multipart/form-data><p>
+                <input type=file name=file><input id="uploadSR" type=submit value=Upload>
+              </form>
+            </div>
+          </md-content>
+          <md-content class="md-padding manual-remove-students-right">
+            Update room records here.
+          </br>
+          <div layout="row">
+            <form action="/uploadRoomRecords" method=post enctype=multipart/form-data><p>
+              <input type=file name=file><input type=submit value=Upload>
+            </form>
+          </div>
+          </md-content>
+        </md-tab>
+        <md-tab label="Export Data">
+          </br></br>
+          Export data from database as an Excel document.
+          </br></br>
+          <div class="md-padding">
+            <md-button ng-click="exportStudentRecords()" type="submit" class="md-warn md-raised">Export Student Records</md-button>
+            <md-button ng-click="exportRoomRecords()" type="submit" class="md-warn md-raised">Export Room Records</md-button>
+          </div>
+        </md-tab>
+      </md-tabs>
+    </md-card-content>
+  </md-card>
+  <md-button href="/" ng-click="refresh();" class="md-primary">
+    Go back to the map
+  </md-button>
+</div>

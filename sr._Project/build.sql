@@ -58,13 +58,13 @@ CREATE TABLE Groups (
 ENGINE = InnoDB;
 
 CREATE TABLE Users (
+  studentId INT NOT NULL,
   userName VARCHAR(30) NOT NULL PRIMARY KEY,
   firstName VARCHAR(30) NOT NULL,
   lastName VARCHAR(30) NOT NULL,
   gId INT,
   sex VARCHAR(30) NOT NULL,
   role VARCHAR(20) NOT NULL,
-  credits INT NOT NULL,
   roomDrawNum INT NOT NULL,
   isPending BOOLEAN NOT NULL DEFAULT false,
     FOREIGN KEY (gId)

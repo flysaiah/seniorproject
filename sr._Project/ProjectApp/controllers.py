@@ -12,11 +12,14 @@ import datetime
 import time
 import json
 import datetime
+import math
 from wsgiref.handlers import format_date_time
 
 from flask import Flask, request, Response, session
 from flask import render_template, url_for, redirect, send_from_directory
 from flask import send_file, make_response, abort, jsonify
+
+import flask_excel as excel
 
 
 from sqlalchemy import text, func
@@ -26,6 +29,7 @@ from ProjectApp import app, db, models, google
 
 from apscheduler.schedulers.background import BackgroundScheduler
 sched = BackgroundScheduler()
+sched.add_jobstore('sqlalchemy', engine=db.engine)
 sched.start()
 
 @app.after_request
@@ -65,6 +69,7 @@ def logout():
 # ensures our app works with HTML5 mode for angularjs
 @app.route('/groupInfo')
 @app.route('/adminPanel')
+@app.route('/importExport')
 def html5ModeFix():
     return app.send_static_file('index.html')
 
@@ -370,30 +375,49 @@ def getRegistrationStatus():
 
 def assignRoomDrawTimes():
 	dlp = fetchDeadlinesPreferences(True)
-	query = db.engine.execute(text('select gId, AVG(roomDrawNum) from Users where gId group by gId order by AVG(roomDrawNum) DESC;'))
+	query = db.engine.execute(text('select gId, AVG(roomDrawNum) from Users where isPending="0" and gId group by gId order by AVG(roomDrawNum);'))
 	dt = dlp['firstRegistrationDate']
+	lrt = dlp['lastRegistrationDate']
 	startTime= dlp['startTime']
 	inc = dlp['timeInterval']
+	time = dt
+	count = 0
+	while time.date() < lrt.date():
+		if time.weekday() == 4:
+			time += datetime.timedelta(days=3)
+		else:
+			time += datetime.timedelta(days=1)
+		count += 1
+
+	mins = (dlp['endTime'].hour - startTime.hour) * 60
+	n = math.ceil(query.rowcount/((mins//5)*count))
+	dayn = 0
 	for row in query:
 		gId = row.gId
-		if dt > dlp['lastRegistrationDate']:
-			dlp['lastRegistrationDate']
-
-		db.engine.execute(text('update Groups set drawDate="'+str(dt)+'" where groupID="'+str(gId)+'";'))
-
-		if dt == dlp['lastRegistrationDate']:
-			dlp['lastRegistrationDate']
-
-		elif dt.weekday() == 4 and dt.time() >= dlp['endTime'].time():
-			dt = dt.combine(dt.date(), startTime.time())
-			dt = dt + datetime.timedelta(days=3)
-
-		elif dt.time() >= dlp['endTime'].time():
-			dt = dt.combine(dt.date(), startTime.time())
-			dt = dt + datetime.timedelta(days=1)
-
+		if dayn < n:
+			dayn += 1
+			db.engine.execute(text('update Groups set drawDate="'+str(dt)+'" where groupID="'+str(gId)+'";'))
 		else:
-			dt = dt + datetime.timedelta(minutes=inc)
+			dayn = 0
+			if dt > dlp['lastRegistrationDate']:
+				dt = dlp['lastRegistrationDate']
+
+
+			if dt == dlp['lastRegistrationDate']:
+				dt = dlp['lastRegistrationDate']
+
+			elif dt.weekday() == 4 and dt.time() >= dlp['endTime'].time():
+				dt = dt.combine(dt.date(), startTime.time())
+				dt = dt + datetime.timedelta(days=3)
+
+			elif dt.time() >= dlp['endTime'].time():
+				dt = dt.combine(dt.date(), startTime.time())
+				dt = dt + datetime.timedelta(days=1)
+
+			else:
+				dt = dt + datetime.timedelta(minutes=inc)
+
+			db.engine.execute(text('update Groups set drawDate="'+str(dt)+'" where groupID="'+str(gId)+'";'))
 
 
 ####################################
@@ -443,7 +467,14 @@ def manuallyAssignRoom():
 		 	gId = row[0]
 
 	for user in userList:
+		query = db.engine.execute(text('select gId from Users where userName="'+str(user)+'";'))
+		for row in query:
+			uId = row.gId
+		query2 = db.engine.execute(text('select * from Users where gId="'+str(uId)+'";'))
+		if query2.rowcount <= 1:
+			db.engine.execute(text('update Rooms set isTaken=0, gId=NULL where gId="'+str(uId)+'";'))
 		db.engine.execute(text('update Users set isPending=0, gId="'+str(gId)+'" where userName="'+str(user)+'";'))
+
 
 	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
 	db.engine.execute(text('update Groups set isRegistered=1 where groupId="'+str(gId)+'";'))
@@ -498,31 +529,6 @@ def getAutoRegPref():
 	return jsonify(autoRegEnabled=True,autoRegPref=roomList)
 
 
-def autoReg():
-	query = db.engine.execute(text('select * from Groups where drawDate and groupID>5;'))
-	for row in query:
-		isReg = row.isRegistered
-		gId =row.groupId
-		drawDate = row.drawDate
-		if isReg == True:
-			continue
-		query2 = db.engine.execute(text('select enabled, building, defaultPref, roomNum from Preferences where Preferences.gId = "'+str(gId)+'";'))
-		for row2 in query2:
-			args = []
-			if row2.enabled == False:
-				break
-			args.append(gId)
-			args.append(row2.building)
-			args.append(row2.roomNum)
-			sched.add_date_job(registerForRoom, drawDate, args)
-
-def registerForRoom(args):
-	gId = args[0]
-	build = args[1]
-	room = args[2]
-	query = db.engine.execute(text('select isTaken, isRegistered from Rooms, Groups where groupId="'+str(gId)+'" and roomNum="'+str(roomNum)+'";'))
-	db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
-
 @app.route('/saveAutoRegPref', methods=['POST'])
 def saveAutoRegPref():
 	req = request.get_json()
@@ -557,9 +563,91 @@ def saveAutoRegPref():
 
 	return(jsonify(wasSuccessful=True))
 
+
+def schedAutoReg():
+	query = db.engine.execute(text('select * from Groups where drawDate and groupID>5;')) # because the first 5 entries of groups are reserved for deadlines
+	for row in query:
+		isReg = row.isRegistered
+		gId =row.groupId
+		drawDate = row.drawDate
+		if isReg == True:
+			continue
+		args = [gId]
+		sched.add_date_job(registerForRoom, drawDate, args, id=str(gId))
+
+def autoReg(args):
+	gId = args[0]
+	query2 = db.engine.execute(text('select enabled, building, defaultPref, roomNum from Preferences where Preferences.gId = "'+str(gId)+'";'))
+	roomList = []
+	for row2 in query2:
+		args = []
+		if row2.enabled == False:
+			break
+		roomList.append(dict(building=row2.building, roomNum=row2.roomNum, defaultPref=row2.defaultPref, gId=gId))
+
+	index = 0
+	for room in roomList:
+		gId = room[gId]
+		roomNum = room[roomNum]
+		building = room[building]
+		if room[defaultPref] == True:
+			defIndex = index
+			continue
+		index += 1
+
+		query = db.engine.execute(text('select isTaken, isRegistered from Rooms, Groups where groupId="'+str(gId)+'" and roomNum="'+str(roomNum)+'";'))
+		for row in query:
+			if row.isTaken == True or row.isRegistered == True:
+				return
+			db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+
+	gId = roomList[defIndex][gId]
+	roomNum = roomList[defIndex][roomNum]
+	building = roomList[defIndex][building]
+
+	query = db.engine.execute(text('select isTaken, isRegistered from Rooms, Groups where groupId="'+str(gId)+'" and roomNum regexp "^'+str(roomNum)+'";'))
+	for row in query:
+		if row.isTaken == True or row.isRegistered == True:
+			return
+		db.engine.execute(text('update Rooms set isTaken=1, gId="'+str(gId)+'" where roomNum="'+str(roomNum)+'" and building="'+str(build)+'";'))
+
+
 ####################################
 ##        Group Deadlines         ##
 ####################################
+def hitDeadline():
+	assignRoomDrawTimes() # assignes roomDraw times for groups
+	schedAutoReg()
+
+@app.route("/uploadStudentRecords", methods=['POST'])
+def uploadStudentRecords():
+	excel_doc = request.get_array(field_name='file')
+	#print("----------\n\n", excel_doc, "\n\n---------------")
+	firstRow = True
+	for row in excel_doc:
+		if firstRow:   # First row is just column names
+			firstRow = False
+			continue
+		if row[0] == "":
+			# we've hit the EOF or there's an empty line
+			continue
+		rdNum = row[5]
+		if rdNum == "":
+			rdNum = 0
+		print("DSJLKDJKLSDJFKLLDKJFD")
+		print(row)
+		query = 'INSERT INTO Users (userName, firstName, lastName, role, sex, roomDrawNum, studentId) VALUES ("{}", "{}", "{}", "{}", "{}", "{}", "{}") ON DUPLICATE KEY UPDATE firstName="{}", lastName="{}", role="{}", sex="{}", roomDrawNum="{}", studentId="{}"'
+		db.engine.execute(text(query.format(row[4].split("@")[0], row[1], row[2], row[6], row[3], rdNum, row[0], row[1], row[2], row[6], row[3], rdNum, row[0])))
+	return redirect("/importExport")
+
+@app.route("/uploadRoomRecords", methods=['POST'])
+def uploadRoomRecords():
+	print("----------\n\n", request.get_array(field_name='file'), "\n\n---------------")
+	return redirect("/importExport")
+
+@app.route("/exportStudentRecords", methods=['GET'])
+def export_records():
+	return excel.make_response_from_array([[1,2], [3, 4]], "xlsx", file_name="student_records")
 
 @app.route('/saveDeadlinePreferences', methods=['POST'])
 def saveDeadlinePreferences():
@@ -569,6 +657,8 @@ def saveDeadlinePreferences():
 	gd = req['groupsDeadline']
 	gdt = datetime.datetime(gd['year'], gd['month'], gd['day'])
 	interval = req['timeInterval']
+
+	sched.add_date_job(hitDeadline, gdt, id="groupDeadline",replace_existing=True) #updates the APSechduler for when autoReg is called
 
 	st = req['startTime']
 	stt = datetime.datetime(1111, 1, 1, st['hour'], st['minute'])
@@ -613,3 +703,6 @@ def fetchDeadlinesPreferences(fromPy=False):
 		return deadlinePrefs
 
 	return jsonify(deadlinePrefs=deadlinePrefs)
+
+
+assignRoomDrawTimes()
